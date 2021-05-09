@@ -6,3 +6,4 @@
 /.eslintcache
 coverage
 dist
+**/tsconfig.tsbuildinfo
