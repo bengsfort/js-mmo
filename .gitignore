@@ -2,7 +2,7 @@
 **/node_modules
 *.log
 *.cache
-/build
+**/build
 /.eslintcache
 coverage
 dist

@@ -10,5 +10,13 @@
   },
   "author": "Matt Bengston <bengsfort@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "tsc -w -d --preserveWatchOutput",
+    "build": "tsc -b",
+    "clean": "rimraf {build,tsconfig.tsbuildinfo}"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }
