@@ -1,0 +1,14 @@
+{
+  "name": "@js-mmo/engine",
+  "version": "0.0.1",
+  "description": "The underlying engine for the js-mmo.",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bengsfort/js-mmo.git",
+    "directory": "packages/engine"
+  },
+  "author": "Matt Bengston <bengsfort@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

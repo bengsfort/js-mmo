@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.base.json",
+    "include": [
+        "./packages/engine/src/**/*.ts",
+        "./packages/renderer/src/**/*.ts",
+        "./packages/game/src/**/*.ts",
+    ],
+    "compilerOptions": {
+        "paths": {
+            "@js-mmo/engine": [ "./packages/engine/src" ],
+            "@js-mmo/renderer": [ "./packages/renderer/src" ],
+            "@js-mmo/game": [ "./packages/game/src" ],
+        }
+    }
+  }
+  

@@ -1,0 +1,14 @@
+{
+  "name": "@js-mmo/game",
+  "version": "0.0.1",
+  "description": "The actual game implementation.",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bengsfort/js-mmo.git",
+    "directory": "packages/game"
+  },
+  "author": "Matt Bengston <bengsfort@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

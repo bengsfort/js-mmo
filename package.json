@@ -1,0 +1,37 @@
+{
+  "name": "js-mmo",
+  "version": "0.0.1",
+  "description": "Javascript-based MMO framework.",
+  "repository": "git@github.com:bengsfort/js-mmo.git",
+  "author": "Matt Bengston <bengsfort@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "eslint",
+    "packages/engine",
+    "packages/renderer",
+    "packages/game"
+  ],
+  "devDependencies": {
+    "@js-mmo/eslint-config-internal": "*",
+    "eslint": "^7.26.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.4"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --format=codeframe"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "scripts": {
+    "lint": "eslint ./packages/**/src --ext .js,.ts --max-warnings=0",
+    "fix": "yarn lint --fix"
+  }
+}
