@@ -1,0 +1,98 @@
+import * as Time from "./core/time";
+
+import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
+
+let idCounter = 0;
+let rafId = 0;
+let tickLoopId = 0;
+
+type LoopHandler = (timestamp: number) => void;
+
+// Update handlers are what most client side things will use, things like
+// Client Side movement prediction/lerping/UI/etc.
+const updateHandlers = new Map<number, LoopHandler>();
+
+// Post update handlers are meant for things like rendering, that
+// happen after entity/controller state has been updated.
+const postUpdateHandlers = new Map<number, LoopHandler>();
+
+// Fixed update handlers are meant for things like state management, physics,
+// and networking.
+const fixedUpdateHandlers = new Map<number, LoopHandler>();
+
+// Handler Registration/Management
+export const registerUpdateHandler = (handler: (timestamp?: number) => void): number => {
+  const handlerId = ++idCounter;
+  updateHandlers.set(handlerId, handler);
+  return handlerId;
+};
+
+export const removeUpdateHandler = (id: number): boolean => {
+  if (updateHandlers.has(id)) {
+    updateHandlers.delete(id);
+    return true;
+  }
+  return false;
+};
+
+export const registerPostUpdateHandler = (handler: (timestamp?: number) => void): number => {
+  const handlerId = ++idCounter;
+  updateHandlers.set(handlerId, handler);
+  return handlerId;
+};
+
+export const removePostUpdateHandler = (id: number): boolean => {
+  if (postUpdateHandlers.has(id)) {
+    postUpdateHandlers.delete(id);
+    return true;
+  }
+  return false;
+};
+
+export const registerFixedUpdateHandler = (handler: (timestamp?: number) => void): number => {
+  const handlerId = ++idCounter;
+  fixedUpdateHandlers.set(handlerId, handler);
+  return handlerId;
+};
+
+export const removeFixedUpdateHandler = (id: number): boolean => {
+  if (fixedUpdateHandlers.has(id)) {
+    fixedUpdateHandlers.delete(id);
+    return true;
+  }
+  return false;
+};
+
+// Game Loops
+export function update(timestamp = 0): void {
+  Time.frameStart();
+  rafId = requestAnimationFrame(update);
+  const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values()];
+  for (let i = 0; i < handlers.length; i++) {
+    handlers[i](timestamp);
+  }
+}
+
+export function fixedUpdate(timestamp = 0): void {
+  const handlers = [...fixedUpdateHandlers.values()];
+  for (let i = 0; i < handlers.length; i++) {
+    handlers[i](timestamp);
+  }
+}
+
+export const start = (): void => {
+  console.log("Game loop started");
+  Time.runtimeStart();
+  tickLoopId = setInterval(fixedUpdate, TICKS_PER_SECOND);
+  if (!FIXED_UPDATE_ONLY) {
+    rafId = requestAnimationFrame(update);
+  }
+};
+
+export const stop = (): void => {
+  console.log("Stopping game loop.");
+  if (!FIXED_UPDATE_ONLY) {
+    cancelAnimationFrame(rafId);
+  }
+  clearInterval(tickLoopId);
+};
