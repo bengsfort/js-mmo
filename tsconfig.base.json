@@ -28,7 +28,7 @@
   },
   "exclude": [
     "**/node_modules",
-    "**/dist",
+    "**/build",
     "types",
     "**/*.test.*",
     "**/__tests__"

@@ -1,6 +1,18 @@
 {
     "extends": "./tsconfig.base.json",
-    "include": [".eslintrc.js", "packages/**/*", "types/**/*"],
-    "exclude": ["**/node_modules", "**/dist"],
+    "include": [
+      "./packages/engine/src/**/*.ts",
+      "./packages/renderer/src/**/*.ts",
+      "./packages/game/src/**/*.ts",
+      "types/**/*"
+    ],
+    "exclude": ["**/node_modules", "**/build"],
+    "compilerOptions": {
+        "paths": {
+            "@js-mmo/engine": [ "./packages/engine/src" ],
+            "@js-mmo/renderer": [ "./packages/renderer/src" ],
+            "@js-mmo/game": [ "./packages/game/src" ],
+        }
+    }
   }
   

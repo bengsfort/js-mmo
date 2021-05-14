@@ -1,8 +1,20 @@
 {
     "files.exclude": {
-        "**/build": true,
+        // "**/build": true,
         "**/node_modules": true,
         "**/tsconfig.tsbuildinfo": true
     },
-    "prettier.endOfLine": "lf"
+    "prettier.endOfLine": "lf",
+    "eslint.format.enable": true,
+    "eslint.packageManager": "yarn",
+    "javascript.format.enable": true,
+    "prettier.configPath": ".prettierrc",
+    "prettier.enable": false,
+    "editor.codeLens": true,
+    "javascript.referencesCodeLens.enabled": true,
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+    }
 }

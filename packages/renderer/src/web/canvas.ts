@@ -1,6 +1,6 @@
-import { PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
-
 import { Vector2 } from "@js-mmo/engine";
+
+import { PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
 import { logger } from "../logger";
 
 export function createCanvas(width?: number, height?: number): HTMLCanvasElement {

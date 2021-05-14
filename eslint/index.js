@@ -24,11 +24,10 @@ const config = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "no-prototype-builtins": "off",
-    "sort-imports": ["warn"],
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "prettier/prettier": [
@@ -37,6 +36,14 @@ const config = {
         endOfLine: "auto",
       },
     ],
+    "no-prototype-builtins": "off",
+    "sort-imports": "off",
+    "import/order": [
+      "warn",
+      {
+        "newlines-between": "always"
+      }
+    ]
   },
 };
 

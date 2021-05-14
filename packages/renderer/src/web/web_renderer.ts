@@ -1,6 +1,9 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
+import { DAttrs } from "../drawables/render_drawables";
+import { Drawable } from "../drawables/drawable";
+
 import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
@@ -8,13 +11,8 @@ let activeContext: CanvasRenderingContext2D;
 let resizeUnsub: UnsubscribeCallback;
 let isPaused = false;
 
-const registeredDrawables = [];
+const registeredDrawables: Drawable<DAttrs>[] = [];
 const registeredForceDraw: VoidFunction[] = [];
-
-// Public API
-export const pause = (val: boolean) => {
-  isPaused = val;
-};
 
 const renderLoop = (): void => {
   if (isPaused) return;
@@ -31,6 +29,11 @@ const renderLoop = (): void => {
   for (let f = 0; f < tickForceDraw.length; f++) {
     tickForceDraw[f]();
   }
+};
+
+// Public API
+export const pause = (val: boolean) => {
+  isPaused = val;
 };
 
 /**
@@ -61,6 +64,10 @@ export const create = (width?: number, height?: number) => {
 
 export const registerForceDraw = (func: VoidFunction) => {
   registeredForceDraw.push(func);
+};
+
+export const registerDrawable = <T extends DAttrs>(drawable: Drawable<T>) => {
+  registeredDrawables.push(drawable);
 };
 
 // Private API

@@ -1,6 +1,7 @@
-import { Node } from "./node";
 import { Transform } from "../math/transform";
 import { Vector2 } from "../math/vector2";
+
+import { Node } from "./node";
 
 export class Node2d extends Node {
   public readonly transform: Transform;
