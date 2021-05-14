@@ -16,6 +16,9 @@
     "build": "tsc -b",
     "clean": "rimraf {build,tsconfig.tsbuildinfo}"
   },
+  "dependencies": {
+    "@js-mmo/engine": "*"
+  },
   "devDependencies": {
     "rimraf": "^3.0.2"
   }

@@ -5,43 +5,63 @@ import { Vector2 } from "../math/vector2";
 export class Node2d extends Node {
   public readonly transform: Transform;
 
-  public parent: Node2d | null = null;
+  public parent: Node2d | undefined;
   public children: Node[] = [];
 
   // Getters
+  set localPosition(value: Vector2) {
+    this.transform.position.set(value.x, value.y);
+  }
   get localPosition(): Vector2 {
     return this.transform.position;
   }
+
+  set localRotation(value: number) {
+    this.transform.rotation = value;
+  }
   get localRotation(): number {
     return this.transform.rotation;
+  }
+
+  set localScale(value: Vector2) {
+    this.transform.scale.set(value.x, value.y);
   }
   get localScale(): Vector2 {
     return this.transform.scale;
   }
 
+  set position(value: Vector2) {
+    this.localPosition = value;
+  }
   get position(): Vector2 {
-    const parentPos = this.parent?.position;
-    if (parentPos) {
-      return Vector2.Add(this.transform.position, parentPos);
+    if (this.parent) {
+      return this.transform.getPositionRelativeToParent(this.parent.transform);
     }
     return this.transform.position;
   }
+
+  set rotation(value: number) {
+    this.localRotation = value;
+  }
   get rotation(): number {
-    const parentRot = this.parent?.rotation;
-    if (parentRot) {
-      return this.transform.rotation + parentRot;
+    if (this.parent) {
+      return this.transform.getRotationRelativeToParent(this.parent.transform);
     }
     return this.transform.rotation;
   }
+
+  set scale(value: Vector2) {
+    this.localScale = value;
+  }
   get scale(): Vector2 {
-    const parentScale = this.parent?.scale;
-    if (parentScale) {
-      return Vector2.Multiply(this.transform.scale, parentScale);
+    if (this.parent) {
+      return this.transform.getScaleRelativeToParent(this.parent.transform);
     }
     return this.transform.scale;
   }
 
-  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, parent = null) {
+  // Constructor
+  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, parent?: Node2d) {
     super(name, parent);
     this.transform = new Transform(pos, scale);
   }

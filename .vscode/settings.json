@@ -3,5 +3,6 @@
         "**/build": true,
         "**/node_modules": true,
         "**/tsconfig.tsbuildinfo": true
-    }
+    },
+    "prettier.endOfLine": "lf"
 }

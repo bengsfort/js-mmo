@@ -67,6 +67,11 @@ export class Vector2 implements V2 {
     this.y *= val;
   }
 
+  set(x: number, y: number): void {
+    this.x = x;
+    this.y = y;
+  }
+
   equals(val: V2): boolean {
     return val.x === this.x && val.y === this.y;
   }

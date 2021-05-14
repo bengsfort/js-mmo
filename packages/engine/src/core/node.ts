@@ -7,7 +7,7 @@ export class Node {
   public readonly id = idCounter++;
   public readonly name: string;
 
-  public parent: Node | null;
+  public parent: Node | undefined;
   public children: Node[];
 
   private _active: boolean;
@@ -22,9 +22,10 @@ export class Node {
   }
 
   // Constructor
-  constructor(name = "", parent = null) {
+  constructor(name = "", parent?: Node) {
     this.name = name || this.id.toString();
     this.parent = parent;
+    this.parent?.addChild(this);
     this.children = [];
     this._active = true;
   }
