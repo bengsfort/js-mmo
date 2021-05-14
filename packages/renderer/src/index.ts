@@ -1,1 +1,1 @@
-export const hello = "renderer";
+export * as RendererConfig from "./renderer_config";

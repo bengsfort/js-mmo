@@ -3,7 +3,7 @@ import { LOG_VERBOSE } from "../engine_config";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LogFunction = (...args: any[]) => void;
 
-interface Logger {
+export interface Logger {
   log: LogFunction;
   logInfo: LogFunction;
   logWarn: LogFunction;
@@ -31,16 +31,16 @@ export const makeLogger = (prefix: string): Logger => {
   const logWarn: LogFunction = (...args) => console.warn(`[${prefix}]`, ...args);
   const logError: LogFunction = (...args) => console.error(`[${prefix}]`, ...args);
   const verboseLog: LogFunction = (...args) => {
-    LOG_VERBOSE && log(...args);
+    LOG_VERBOSE && log("[VERBOSE]", ...args);
   };
   const verboseLogInfo: LogFunction = (...args) => {
-    LOG_VERBOSE && logInfo(...args);
+    LOG_VERBOSE && logInfo("[VERBOSE]", ...args);
   };
   const verboseLogWarn: LogFunction = (...args) => {
-    LOG_VERBOSE && logWarn(...args);
+    LOG_VERBOSE && logWarn("[VERBOSE]", ...args);
   };
   const verboseLogError: LogFunction = (...args) => {
-    LOG_VERBOSE && logError(...args);
+    LOG_VERBOSE && logError("[VERBOSE]", ...args);
   };
 
   const logFuncs: Logger = {
