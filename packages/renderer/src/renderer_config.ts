@@ -1,5 +1,6 @@
+/* eslint-disable prefer-const */
 import { Vector2 } from "@js-mmo/engine";
 
-export const PIXELS_PER_UNIT = new Vector2(32, 16);
-export const PIXEL_RATIO = window.devicePixelRatio;
-export const CLEAR_COLOR = "#000000";
+export let PIXEL_RATIO = window.devicePixelRatio;
+export let PIXELS_PER_UNIT = new Vector2(32, 16);
+export let CLEAR_COLOR = "#000000";

@@ -1,12 +1,12 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
-import { CLEAR_COLOR } from "../renderer_config";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+
+import { CLEAR_COLOR } from "../renderer_config";
 import { Drawable } from "../drawables/drawable";
 import { logger } from "../logger";
-
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
@@ -62,8 +62,8 @@ export const create = (width?: number, height?: number) => {
   activeContext = activeCanvas.getContext("2d") as CanvasRenderingContext2D;
 
   // Listen for events
-  document.addEventListener("blur", blurHandler);
-  document.addEventListener("focus", focusHandler);
+  window.addEventListener("blur", blurHandler);
+  window.addEventListener("focus", focusHandler);
   resizeUnsub = bindCanvasToWindowSize(activeCanvas);
 
   // Add to dom
