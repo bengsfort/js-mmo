@@ -1,8 +1,10 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
-import { DAttrs } from "../drawables/render_drawables";
+import { CLEAR_COLOR } from "../renderer_config";
+import { DAttrs, renderDrawable } from "../drawables/render_drawables";
 import { Drawable } from "../drawables/drawable";
+import { logger } from "../logger";
 
 import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
@@ -17,11 +19,13 @@ const registeredForceDraw: VoidFunction[] = [];
 const renderLoop = (): void => {
   if (isPaused) return;
   activeContext.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+  activeContext.fillStyle = CLEAR_COLOR;
+  activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
 
   // Drawables are consumed every frame, so empty the array and render what was in it.
   const tickDrawables = registeredDrawables.splice(0);
   for (let d = 0; d < tickDrawables.length; d++) {
-    // handle drawables
+    renderDrawable(tickDrawables[d], activeContext);
   }
 
   // Force draws are just constants, so just copy the array and render this frame.
@@ -32,8 +36,11 @@ const renderLoop = (): void => {
 };
 
 // Public API
+export const getActiveCanvas = () => activeCanvas;
+
 export const pause = (val: boolean) => {
   isPaused = val;
+  logger.logInfo(isPaused ? "Rendering paused." : "Rendering unpaused.");
 };
 
 /**
@@ -59,10 +66,14 @@ export const create = (width?: number, height?: number) => {
   document.addEventListener("focus", focusHandler);
   resizeUnsub = bindCanvasToWindowSize(activeCanvas);
 
+  // Add to dom
+  document.body.append(activeCanvas);
+
   return renderLoop;
 };
 
 export const registerForceDraw = (func: VoidFunction) => {
+  console.log("Got a function to force draw");
   registeredForceDraw.push(func);
 };
 
