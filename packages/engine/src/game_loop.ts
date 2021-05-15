@@ -1,4 +1,5 @@
 import * as Time from "./core/time";
+
 import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
 
 let idCounter = 0;
@@ -36,7 +37,7 @@ export const removeUpdateHandler = (id: number): boolean => {
 
 export const registerPostUpdateHandler = (handler: (timestamp?: number) => void): number => {
   const handlerId = ++idCounter;
-  updateHandlers.set(handlerId, handler);
+  postUpdateHandlers.set(handlerId, handler);
   return handlerId;
 };
 
