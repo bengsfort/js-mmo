@@ -13,3 +13,7 @@ export { now } from "./core/time_now";
 export * as Time from "./core/time";
 export { Node } from "./core/node";
 export { Node2d } from "./core/node_2d";
+
+// Input
+export { KeyboardKeys } from "./input/web/keys";
+export * as WebInput from "./input/web/web_input";
