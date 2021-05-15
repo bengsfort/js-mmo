@@ -78,6 +78,7 @@ export const registerForceDraw = (func: VoidFunction) => {
 };
 
 export const registerDrawable = <T extends DAttrs>(drawable: Drawable<T>) => {
+  logger.verboseLogInfo("Registering drawable:", drawable);
   registeredDrawables.push(drawable);
 };
 
