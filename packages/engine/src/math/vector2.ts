@@ -1,3 +1,5 @@
+import { clamp } from "./math";
+
 let id = 0;
 
 export interface V2 {
@@ -70,6 +72,19 @@ export class Vector2 implements V2 {
   set(x: number, y: number): void {
     this.x = x;
     this.y = y;
+  }
+
+  clamp(xMin: number, xMax: number, yMin: number, yMax: number): void {
+    this.clampX(xMin, xMax);
+    this.clampY(yMin, yMax);
+  }
+
+  clampX(min: number, max: number): void {
+    this.x = clamp(this.x, min, max);
+  }
+
+  clampY(min: number, max: number): void {
+    this.y = clamp(this.y, min, max);
   }
 
   equals(val: V2): boolean {

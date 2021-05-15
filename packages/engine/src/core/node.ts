@@ -27,7 +27,7 @@ export class Node {
     this.parent = parent;
     this.parent?.addChild(this);
     this.children = [];
-    this._active = true;
+    this._active = false;
   }
 
   // Public methods

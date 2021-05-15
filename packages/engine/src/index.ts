@@ -5,6 +5,7 @@ export * from "./constants";
 // Math
 export { Vector2 } from "./math/vector2";
 export { Transform } from "./math/transform";
+export * as Math from "./math/math";
 
 // Core
 export { makeLogger, Logger } from "./core/logging";

@@ -1,7 +1,6 @@
+import { Node } from "./node";
 import { Transform } from "../math/transform";
 import { Vector2 } from "../math/vector2";
-
-import { Node } from "./node";
 
 export class Node2d extends Node {
   public readonly transform: Transform;
@@ -36,7 +35,8 @@ export class Node2d extends Node {
   }
   get position(): Vector2 {
     if (this.parent) {
-      return this.transform.getPositionRelativeToParent(this.parent.transform);
+      const parentPos = this.parent.position;
+      return Vector2.Add(this.transform.position, parentPos);
     }
     return this.transform.position;
   }
@@ -46,7 +46,8 @@ export class Node2d extends Node {
   }
   get rotation(): number {
     if (this.parent) {
-      return this.transform.getRotationRelativeToParent(this.parent.transform);
+      const parentRot = this.parent.rotation;
+      return parentRot + this.transform.rotation;
     }
     return this.transform.rotation;
   }
@@ -54,16 +55,20 @@ export class Node2d extends Node {
   set scale(value: Vector2) {
     this.localScale = value;
   }
+  /**
+   * @todo: really need to think of a better way to do this recursion.
+   */
   get scale(): Vector2 {
-    if (this.parent) {
-      return this.transform.getScaleRelativeToParent(this.parent.transform);
+    if (typeof this.parent !== "undefined") {
+      const parentScale = this.parent.scale;
+      return Vector2.Multiply(this.transform.scale, parentScale);
     }
     return this.transform.scale;
   }
 
   // Constructor
-  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, parent?: Node2d) {
+  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, rot = 0, parent?: Node2d) {
     super(name, parent);
-    this.transform = new Transform(pos, scale);
+    this.transform = new Transform(pos, scale, rot);
   }
 }

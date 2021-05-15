@@ -5,9 +5,9 @@ export class Transform {
   rotation: number;
   scale: Vector2;
 
-  constructor(pos = new Vector2(0, 0), scale = new Vector2(1, 1)) {
+  constructor(pos = new Vector2(0, 0), scale = new Vector2(1, 1), rotation = 0) {
     this.position = pos;
-    this.rotation = 0;
+    this.rotation = rotation;
     this.scale = scale;
   }
 
