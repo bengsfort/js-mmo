@@ -2,11 +2,11 @@
 // Exported functions are the public API
 
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
-
 import { CLEAR_COLOR } from "../renderer_config";
 import { Drawable } from "../drawables/drawable";
 import { logger } from "../logger";
+
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;

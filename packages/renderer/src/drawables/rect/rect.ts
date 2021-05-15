@@ -1,8 +1,9 @@
+import { Vector2 } from "@js-mmo/engine";
+
 import { Drawable, DrawableType } from "../drawable";
+import { GET_ID } from "../../constants";
 
 import { DRect } from "./rect_internal";
-import { GET_ID } from "../../constants";
-import { Vector2 } from "@js-mmo/engine";
 
 // External
 export type RectOpts = Omit<DRect, "id"> & {

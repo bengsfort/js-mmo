@@ -1,8 +1,7 @@
-import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
-import { drawDebugText, drawOrigin } from "../helpers";
-
 import { Vector2 } from "@js-mmo/engine";
-import { logger } from "../../logger";
+
+import { drawDebugText, drawOrigin } from "../helpers";
+import { coordsToIsometricScreen } from "../../web/canvas";
 
 export interface DRect {
   id: string;
