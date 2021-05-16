@@ -4,7 +4,6 @@ import { RectDrawable, WebRenderer, createRect } from "@js-mmo/renderer";
 import { InputEvents } from "./input_events";
 
 export class MovingBox extends Node2d {
-  _postUpdateId = -1;
   _drawable: RectDrawable;
   _speed: number;
 
@@ -24,14 +23,6 @@ export class MovingBox extends Node2d {
     this._speed = speed;
     this.setActive(true);
   }
-
-  onActive = () => {
-    if (this.isActive) {
-      this._postUpdateId = GameLoop.registerPostUpdateHandler(this.postUpdate);
-    } else {
-      GameLoop.removePostUpdateHandler(this._postUpdateId);
-    }
-  };
 
   postUpdate = () => {
     this._drawable.data.position = this.position;

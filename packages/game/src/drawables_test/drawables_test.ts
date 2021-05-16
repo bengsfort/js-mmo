@@ -1,5 +1,6 @@
 import { Drawable, RendererConfig, WebRenderer, createRect } from "@js-mmo/renderer";
 import { EngineConfig, GameLoop, Node2d, Time, Vector2 } from "@js-mmo/engine";
+
 import { DRect } from "@js-mmo/renderer/build/drawables/rect/rect_internal";
 import { registerDrawable } from "@js-mmo/renderer/build/web/web_renderer";
 
@@ -27,8 +28,6 @@ interface TestNodeOpts {
   speed: number;
 }
 class TestNode extends Node2d {
-  _fixedHandlerId = -1;
-  _postUpdateHandler = -1;
   _drawable: Drawable<DRect>;
 
   _speed: number;
@@ -49,16 +48,6 @@ class TestNode extends Node2d {
     this._speed = speed;
     this.setActive(true);
   }
-
-  onActive = () => {
-    console.log("Yo");
-    if (this.isActive) {
-      this._postUpdateHandler = GameLoop.registerPostUpdateHandler(this.postUpdate);
-    } else {
-      GameLoop.removeFixedUpdateHandler(this._fixedHandlerId);
-      GameLoop.removePostUpdateHandler(this._postUpdateHandler);
-    }
-  };
 
   update = () => {
     this.localRotation += (this._speed + (window.SPEED as number)) / Time.getDeltaTime();

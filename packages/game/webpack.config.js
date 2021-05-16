@@ -11,8 +11,8 @@ module.exports = {
   },
   entry: {
     // This will likely have to change in the future! Testing purposes only!
-    // drawables: './src/drawables_test/drawables_test.ts',
-    main: './src/input_test/input_test.ts',
+    drawables: './src/drawables_test/drawables_test.ts',
+    input: './src/input_test/input_test.ts',
   },
   output: {
     path: path.resolve(__dirname, 'build'),
