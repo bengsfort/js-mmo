@@ -1,5 +1,9 @@
-import { KeyboardKeys } from "./keys";
+// Exports should adhere to InputSource interface (../input_source.ts)
+
+import { InputSource } from "../input_source";
 import { Vector2 } from "../../math/vector2";
+
+import { KeyboardKeys } from "./keys";
 
 const buttons = new Map<KeyboardKeys, boolean>();
 const pointerCoords = new Vector2(0, 0);
@@ -12,7 +16,6 @@ for (const control in KeyboardKeys) {
 // keyboard event handling
 if (window) {
   window.onkeydown = ({ key }: KeyboardEvent): void => {
-    console.log(key);
     if (buttons.has(key as KeyboardKeys)) {
       buttons.set(key as KeyboardKeys, true);
     }
@@ -39,18 +42,25 @@ if (window) {
   };
 }
 
-export function getButtonStates(): Map<KeyboardKeys, boolean> {
+function getButtonMap(): Map<KeyboardKeys, boolean> {
   return buttons;
 }
 
-export function getButtonDown(button: KeyboardKeys): boolean {
-  return buttons.get(button) || false;
+function getButtonDown(button: KeyboardKeys | string): boolean {
+  return buttons.get(button as KeyboardKeys) || false;
 }
 
-export function getMouseDown(): boolean {
+function getPointerDown(): boolean {
   return buttons.get(KeyboardKeys.Click) || false;
 }
 
-export function getPointerCoords(): Vector2 {
+function getPointerCoords(): Vector2 {
   return pointerCoords;
 }
+
+export const WebInputSource: InputSource = {
+  getButtonMap,
+  getButtonDown,
+  getPointerDown,
+  getPointerCoords,
+};

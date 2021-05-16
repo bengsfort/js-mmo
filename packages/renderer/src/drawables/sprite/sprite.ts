@@ -6,6 +6,7 @@ import { GET_ID } from "../../constants";
 import { DSprite } from "./sprite_internal";
 
 // External
+export type SpriteDrawable = Drawable<DSprite>;
 export type SpriteOpts = Omit<DSprite, "id"> & {
   origin?: Vector2;
   scale?: Vector2;

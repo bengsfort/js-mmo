@@ -1,6 +1,5 @@
 import { Drawable, RendererConfig, WebRenderer, createRect } from "@js-mmo/renderer";
 import { EngineConfig, GameLoop, Node2d, Time, Vector2 } from "@js-mmo/engine";
-
 import { DRect } from "@js-mmo/renderer/build/drawables/rect/rect_internal";
 import { registerDrawable } from "@js-mmo/renderer/build/web/web_renderer";
 
@@ -62,7 +61,7 @@ class TestNode extends Node2d {
   };
 
   update = () => {
-    this.localRotation += (this._speed + window.SPEED) / Time.getDeltaTime();
+    this.localRotation += (this._speed + (window.SPEED as number)) / Time.getDeltaTime();
   };
 
   postUpdate = () => {

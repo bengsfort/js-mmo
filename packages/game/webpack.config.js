@@ -6,25 +6,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   context: process.cwd(),
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   entry: {
     // This will likely have to change in the future! Testing purposes only!
-    main: ['./src/index.ts']
+    // drawables: './src/drawables_test/drawables_test.ts',
+    main: './src/input_test/input_test.ts',
   },
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].js',
   },
   plugins: [
-    // new ForkTsCheckerWebpackPlugin({
-    //   eslint: true,
-    // }),
-    // new ForkTsCheckerNotifierWebpackPlugin({
-    //   title: 'TypeScript',
-    //   excludeWarnings: false,
-    // }),
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'src/test_template.html'
+      template: 'src/test_template.html',
+      title: '@js-mmo/game',
     }),
   ],
   module: {

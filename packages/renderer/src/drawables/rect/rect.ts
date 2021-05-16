@@ -6,6 +6,7 @@ import { GET_ID } from "../../constants";
 import { DRect } from "./rect_internal";
 
 // External
+export type RectDrawable = Drawable<DRect>;
 export type RectOpts = Omit<DRect, "id"> & {
   origin?: Vector2;
   scale?: Vector2;

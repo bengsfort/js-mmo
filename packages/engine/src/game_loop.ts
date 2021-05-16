@@ -1,5 +1,6 @@
 import * as Time from "./core/time";
 import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
+import { inputSystemLoop } from "./input/input_system";
 
 let idCounter = 0;
 let rafId = 0;
@@ -66,6 +67,9 @@ export const removeFixedUpdateHandler = (id: number): boolean => {
 export function update(timestamp = 0): void {
   Time.frameStart();
   rafId = requestAnimationFrame(update);
+  // Sample input first
+  inputSystemLoop();
+  // Then go on to our custom handlers
   const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values()];
   for (let i = 0; i < handlers.length; i++) {
     handlers[i](timestamp);

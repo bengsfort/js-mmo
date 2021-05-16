@@ -17,3 +17,7 @@ export { Node2d } from "./core/node_2d";
 // Input
 export { KeyboardKeys } from "./input/web/keys";
 export * as WebInput from "./input/web/web_input";
+export { BuiltinInputCommands } from "./input/input_commands";
+export { InputPlatform } from "./input/platforms";
+export { InputSource } from "./input/input_source";
+export { InputSystem } from "./input/input_system";
