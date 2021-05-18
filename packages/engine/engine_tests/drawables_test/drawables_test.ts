@@ -1,8 +1,9 @@
 import { Drawable, RendererConfig, WebRenderer, createRect } from "@js-mmo/renderer";
 import { EngineConfig, GameLoop, Node2d, Time, Vector2 } from "@js-mmo/engine";
-
 import { DRect } from "@js-mmo/renderer/build/drawables/rect/rect_internal";
 import { registerDrawable } from "@js-mmo/renderer/build/web/web_renderer";
+
+import { RotatingBox } from "../engine_tests/drawables_test/rotating_box";
 
 window.TIME = Time;
 window.SPEED = 10;
@@ -20,45 +21,6 @@ const drawFps = () => {
   ctx.restore();
 };
 
-interface TestNodeOpts {
-  name: string;
-  pos: Vector2;
-  scale: number;
-  rot: number;
-  speed: number;
-}
-class TestNode extends Node2d {
-  _drawable: Drawable<DRect>;
-
-  _speed: number;
-
-  constructor({ name, pos, scale, rot = 0, speed = 0 }: TestNodeOpts, parent?: Node2d) {
-    super(name, pos, new Vector2(scale, scale), rot, parent);
-    this._drawable = createRect({
-      position: this.position,
-      width: 32,
-      height: 32,
-      origin: new Vector2(0.5, 0.5),
-      scale: this.scale,
-      rotation: this.rotation,
-      color: "#0000ff",
-      renderIsometric: false,
-      __DEBUG__SHOW_ORIGIN: true,
-    });
-    this._speed = speed;
-    this.setActive(true);
-  }
-
-  update = () => {
-    this.localRotation += (this._speed + (window.SPEED as number)) / Time.getDeltaTime();
-  };
-
-  postUpdate = () => {
-    this._drawable.data.rotation = this.rotation;
-    registerDrawable(this._drawable);
-  };
-}
-
 function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
@@ -72,13 +34,11 @@ function main() {
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
-  const root = new TestNode({ name: "test_node", pos: new Vector2(64, 128), scale: 1, rot: 45, speed: 5 });
+  const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 0, 45);
   const nodes = [root];
   for (let i = 0; i < 10; i++) {
     console.log("Node", i, "making the following its parent", nodes[i]);
-    nodes.push(
-      new TestNode({ name: `test_node_${i}`, pos: new Vector2(32, 32), scale: 1.2, rot: 0, speed: 0 }, nodes[i])
-    );
+    nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, 0, nodes[i]));
   }
   window.NODES = nodes;
 }

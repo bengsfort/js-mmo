@@ -22,9 +22,6 @@ export class Node {
   public children: Node[];
 
   private _active: boolean;
-  private _updateHandlerId = -1;
-  private _postUpdateHandlerId = -1;
-  private _fixedUpdateHandlerId = -1;
 
   // Getters
   get isActive(): boolean {
@@ -46,15 +43,6 @@ export class Node {
   // Public methods
   public setActive(active: boolean): void {
     if (active !== this._active) {
-      if (active) {
-        this._updateHandlerId = registerUpdateHandler(this.update);
-        this._postUpdateHandlerId = registerPostUpdateHandler(this.postUpdate);
-        this._fixedUpdateHandlerId = registerFixedUpdateHandler(this.fixedUpdate);
-      } else {
-        removeUpdateHandler(this._updateHandlerId);
-        removePostUpdateHandler(this._postUpdateHandlerId);
-        removeFixedUpdateHandler(this._fixedUpdateHandlerId);
-      }
       this._active = active;
       this.onActive();
     }
@@ -88,7 +76,4 @@ export class Node {
 
   // Overrides
   onActive = (): void => {};
-  update = (): void => {};
-  postUpdate = (): void => {};
-  fixedUpdate = (): void => {};
 }

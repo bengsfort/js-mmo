@@ -1,4 +1,11 @@
-import { registerFixedUpdateHandler, registerPostUpdateHandler, registerUpdateHandler, removeFixedUpdateHandler, removePostUpdateHandler, removeUpdateHandler } from "game_loop";
+import {
+  registerFixedUpdateHandler,
+  registerPostUpdateHandler,
+  registerUpdateHandler,
+  removeFixedUpdateHandler,
+  removePostUpdateHandler,
+  removeUpdateHandler,
+} from "../game_loop";
 import { Node2d } from "../core/node_2d";
 
 export class SceneObject extends Node2d {
@@ -19,5 +26,8 @@ export class SceneObject extends Node2d {
       removeFixedUpdateHandler(this._fixedUpdateHandlerId);
     }
   }
-  }
+
+  update = (): void => {};
+  postUpdate = (): void => {};
+  fixedUpdate = (): void => {};
 }

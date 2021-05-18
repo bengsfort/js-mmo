@@ -11,8 +11,8 @@ module.exports = {
   },
   entry: {
     // This will likely have to change in the future! Testing purposes only!
-    drawables: './src/drawables_test/drawables_test.ts',
-    input: './src/input_test/input_test.ts',
+    drawables: './engine_tests/drawables_test/drawables_test.ts',
+    input: './engine_tests/input_test/input_test.ts',
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -21,7 +21,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'src/test_template.html',
+      template: 'engine_tests/test_template.html',
       title: '@js-mmo/game',
     }),
   ],
@@ -30,7 +30,12 @@ module.exports = {
       {
         test: /.ts$/,
         use: [
-          { loader: 'ts-loader', options: { transpileOnly: true } }
+          {
+            loader: 'ts-loader', options: {
+              transpileOnly: true,
+              configFile: "tsconfig.tests.json"
+            }
+          }
         ]
       },
     ]

@@ -1,12 +1,12 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-      "rootDir": "src",
+      "rootDir": "engine_tests",
       "outDir": "build",
-      "baseUrl": "./src"
+      "baseUrl": "./engine_tests"
     },
     "exclude": [
-      "./engine_tests"
-    ]
+        "./src"
+      ]
   }
   

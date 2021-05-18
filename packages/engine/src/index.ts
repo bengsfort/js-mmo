@@ -14,6 +14,11 @@ export * as Time from "./core/time";
 export { Node } from "./core/node";
 export { Node2d } from "./core/node_2d";
 
+// Scenes
+export { Scene } from "./scene/scene";
+export { Group } from "./scene/group";
+export { SceneObject } from "./scene/scene_object";
+
 // Input
 export { KeyboardKeys } from "./input/web/keys";
 export * as WebInput from "./input/web/web_input";

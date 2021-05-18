@@ -26,9 +26,9 @@ describe("Node2d", () => {
 
   it("should contain references for children and parent nodes", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", Vector2.Zero, Vector2.One, root);
-    const child2 = new Node2d("child2", Vector2.Zero, Vector2.One, child1);
-    const child3 = new Node2d("child3", Vector2.Zero, Vector2.One, child1);
+    const child1 = new Node2d("child1", Vector2.Zero, Vector2.One, 0, root);
+    const child2 = new Node2d("child2", Vector2.Zero, Vector2.One, 0, child1);
+    const child3 = new Node2d("child3", Vector2.Zero, Vector2.One, 0, child1);
 
     // Check root...
     expect(root.parent).toBeUndefined();
@@ -55,7 +55,7 @@ describe("Node2d", () => {
 
   it("should return transform vectors relative to parents", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", new Vector2(5, 5), new Vector2(1.5, 1.5), root);
+    const child1 = new Node2d("child1", new Vector2(5, 5), new Vector2(1.5, 1.5), 0, root);
 
     // Check that no parent still returns correctly
     expect(root.position.x).toEqual(0);
