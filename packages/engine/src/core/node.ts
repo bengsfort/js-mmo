@@ -1,12 +1,3 @@
-import {
-  registerFixedUpdateHandler,
-  registerPostUpdateHandler,
-  registerUpdateHandler,
-  removeFixedUpdateHandler,
-  removePostUpdateHandler,
-  removeUpdateHandler,
-} from "../game_loop";
-
 import { makeLogger } from "./logging";
 
 const log = makeLogger("CORE");

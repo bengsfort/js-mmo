@@ -1,13 +1,9 @@
-import { Drawable, RendererConfig, WebRenderer, createRect } from "@js-mmo/renderer";
-import { EngineConfig, GameLoop, Node2d, Time, Vector2 } from "@js-mmo/engine";
-import { DRect } from "@js-mmo/renderer/build/drawables/rect/rect_internal";
-import { registerDrawable } from "@js-mmo/renderer/build/web/web_renderer";
+import { RendererConfig, WebRenderer } from "@js-mmo/renderer";
+import { EngineConfig, GameLoop, Time, Vector2 } from "@js-mmo/engine";
 
-import { RotatingBox } from "../engine_tests/drawables_test/rotating_box";
+import { RotatingBox } from "./rotating_box";
 
 window.TIME = Time;
-window.SPEED = 10;
-window.BUFFER = 35;
 let debugCanvas: HTMLCanvasElement;
 
 const drawFps = () => {
@@ -34,11 +30,11 @@ function main() {
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
-  const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 0, 45);
+  const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 45, 15);
   const nodes = [root];
   for (let i = 0; i < 10; i++) {
     console.log("Node", i, "making the following its parent", nodes[i]);
-    nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, 0, nodes[i]));
+    nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, i - 5, nodes[i]));
   }
   window.NODES = nodes;
 }

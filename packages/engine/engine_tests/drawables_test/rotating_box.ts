@@ -25,7 +25,7 @@ export class RotatingBox extends SceneObject {
   }
 
   update = () => {
-    this.localRotation += (this._speed + (window.SPEED as number)) / Time.getDeltaTime();
+    this.localRotation += this._speed / Time.getDeltaTime();
   };
 
   postUpdate = () => {

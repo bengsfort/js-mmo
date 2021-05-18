@@ -38,7 +38,7 @@ function main() {
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
-  const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 25);
+  const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 5);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).MOVING_BOX = box;
 }

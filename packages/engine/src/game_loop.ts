@@ -72,14 +72,14 @@ export function update(timestamp = 0): void {
   // Then go on to our custom handlers
   const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values()];
   for (let i = 0; i < handlers.length; i++) {
-    handlers[i](timestamp);
+    if (handlers[i]) handlers[i](timestamp);
   }
 }
 
 export function fixedUpdate(timestamp = 0): void {
   const handlers = [...fixedUpdateHandlers.values()];
   for (let i = 0; i < handlers.length; i++) {
-    handlers[i](timestamp);
+    if (handlers[i]) handlers[i](timestamp);
   }
 }
 

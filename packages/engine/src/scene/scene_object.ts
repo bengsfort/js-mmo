@@ -1,11 +1,12 @@
-import {
-  registerFixedUpdateHandler,
-  registerPostUpdateHandler,
-  registerUpdateHandler,
-  removeFixedUpdateHandler,
-  removePostUpdateHandler,
-  removeUpdateHandler,
-} from "../game_loop";
+// import {
+//   registerFixedUpdateHandler,
+//   registerPostUpdateHandler,
+//   registerUpdateHandler,
+//   removeFixedUpdateHandler,
+//   removePostUpdateHandler,
+//   removeUpdateHandler,
+// } from "../game_loop";
+import * as GameLoop from "../game_loop";
 import { Node2d } from "../core/node_2d";
 
 export class SceneObject extends Node2d {
@@ -17,13 +18,13 @@ export class SceneObject extends Node2d {
   public setActive(active: boolean): void {
     if (active === this.isActive) return;
     if (active) {
-      this._updateHandlerId = registerUpdateHandler(this.update);
-      this._postUpdateHandlerId = registerPostUpdateHandler(this.postUpdate);
-      this._fixedUpdateHandlerId = registerFixedUpdateHandler(this.fixedUpdate);
+      this._updateHandlerId = GameLoop.registerUpdateHandler(() => this.update());
+      this._postUpdateHandlerId = GameLoop.registerPostUpdateHandler(() => this.postUpdate());
+      this._fixedUpdateHandlerId = GameLoop.registerFixedUpdateHandler(() => this.fixedUpdate());
     } else {
-      removeUpdateHandler(this._updateHandlerId);
-      removePostUpdateHandler(this._postUpdateHandlerId);
-      removeFixedUpdateHandler(this._fixedUpdateHandlerId);
+      GameLoop.removeUpdateHandler(this._updateHandlerId);
+      GameLoop.removePostUpdateHandler(this._postUpdateHandlerId);
+      GameLoop.removeFixedUpdateHandler(this._fixedUpdateHandlerId);
     }
   }
 

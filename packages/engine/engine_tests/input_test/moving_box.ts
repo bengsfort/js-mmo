@@ -1,9 +1,9 @@
-import { GameLoop, InputSystem, Node2d, Time, Vector2 } from "@js-mmo/engine";
+import { SceneObject, InputSystem, Time, Vector2 } from "@js-mmo/engine";
 import { RectDrawable, WebRenderer, createRect } from "@js-mmo/renderer";
 
 import { InputEvents } from "./input_events";
 
-export class MovingBox extends Node2d {
+export class MovingBox extends SceneObject {
   _drawable: RectDrawable;
   _speed: number;
 
