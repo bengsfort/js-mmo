@@ -1,5 +1,6 @@
 import { Vector2 } from "@js-mmo/engine";
 
+import { DEBUG_SHOW_ORIGINS } from "../../renderer_config";
 import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
 import { drawOrigin } from "../helpers";
 
@@ -12,11 +13,10 @@ export interface DSprite {
   origin: Vector2;
   scale: Vector2;
   renderIsometric: boolean;
-  __DEBUG__SHOW_ORIGIN: boolean;
 }
 
 export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D) => {
-  const { width, height, image, position, scale, origin, renderIsometric, __DEBUG__SHOW_ORIGIN } = drawable;
+  const { width, height, image, position, scale, origin, renderIsometric } = drawable;
 
   context.save();
 
@@ -27,7 +27,7 @@ export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D)
 
   context.drawImage(image, pos.x - orig.x, pos.y - orig.y, width * scale.x, height * scale.y);
 
-  if (__DEBUG__SHOW_ORIGIN) {
+  if (DEBUG_SHOW_ORIGINS) {
     drawOrigin(context, pos, orig, scale, width, height);
   }
 

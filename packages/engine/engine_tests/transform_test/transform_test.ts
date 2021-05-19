@@ -1,9 +1,16 @@
+// eslint-disable @typescript-eslint/no-explicit-any
+
 import { RendererConfig, WebRenderer } from "@js-mmo/renderer";
-import { EngineConfig, GameLoop, Time, Vector2 } from "@js-mmo/engine";
+import { EngineConfig, GameLoop, Time, Vector2, Node2d } from "@js-mmo/engine";
 
 import { RotatingBox } from "./rotating_box";
 
-window.TIME = Time;
+declare global {
+  interface Window {
+    NODES: Node2d[];
+  }
+}
+
 let debugCanvas: HTMLCanvasElement;
 
 const drawFps = () => {

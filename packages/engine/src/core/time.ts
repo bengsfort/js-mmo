@@ -1,6 +1,6 @@
 import { now } from "./time_now";
 
-interface Time {
+export interface Time {
   uptime: number;
   timeSinceLoaded: number;
   time: number;

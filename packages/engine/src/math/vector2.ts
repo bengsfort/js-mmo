@@ -9,12 +9,24 @@ export interface V2 {
 
 export class Vector2 implements V2 {
   // Helpers
-  public static readonly Down = new Vector2(0, -1);
-  public static readonly Up = new Vector2(0, 1);
-  public static readonly Left = new Vector2(-1, 0);
-  public static readonly Right = new Vector2(1, 0);
-  public static readonly One = new Vector2(1, 1);
-  public static readonly Zero = new Vector2(0, 0);
+  public static get Down() {
+    return new Vector2(0, -1);
+  }
+  public static get Up() {
+    return new Vector2(0, 1);
+  }
+  public static get Left() {
+    return new Vector2(-1, 0);
+  }
+  public static get Right() {
+    return new Vector2(1, 0);
+  }
+  public static get One() {
+    return new Vector2(1, 1);
+  }
+  public static get Zero() {
+    return new Vector2(0, 0);
+  }
 
   // Static Helpers
   public static Add(v1: Vector2, v2: Vector2): Vector2 {

@@ -10,13 +10,11 @@ export type SpriteDrawable = Drawable<DSprite>;
 export type SpriteOpts = Omit<DSprite, "id"> & {
   origin?: Vector2;
   scale?: Vector2;
-  renderIsometric?: boolean;
 };
 
 const DEFAULT_OPTS = {
   scale: Vector2.One,
   origin: Vector2.Zero,
-  __DEBUG__SHOW_ORIGIN: false,
 };
 
 export const createSprite = (opts: SpriteOpts): Drawable<DSprite> => {

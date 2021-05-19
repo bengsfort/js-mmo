@@ -1,8 +1,23 @@
-import { EngineConfig, GameLoop, InputPlatform, InputSystem, KeyboardKeys, Time, Vector2 } from "@js-mmo/engine";
+import {
+  EngineConfig,
+  GameLoop,
+  InputPlatform,
+  InputSystem,
+  KeyboardKeys,
+  SceneObject,
+  Time,
+  Vector2,
+} from "@js-mmo/engine";
 import { RendererConfig, WebRenderer } from "@js-mmo/renderer";
 
 import { InputEvents } from "./input_events";
 import { MovingBox } from "./moving_box";
+
+declare global {
+  interface Window {
+    MOVING_BOX: SceneObject;
+  }
+}
 
 let debugCanvas: HTMLCanvasElement;
 
@@ -39,8 +54,7 @@ function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 5);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).MOVING_BOX = box;
+  window.MOVING_BOX = box;
 }
 
 main();

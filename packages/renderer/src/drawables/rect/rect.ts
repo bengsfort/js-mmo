@@ -20,7 +20,6 @@ const DEFAULT_OPTS = {
   origin: Vector2.Zero,
   color: "#ff00ff",
   rotation: 0,
-  __DEBUG__SHOW_ORIGIN: false,
 };
 
 export const createRect = (opts: RectOpts): Drawable<DRect> => {

@@ -1,6 +1,5 @@
+import { createRect, RectDrawable, WebRenderer } from "@js-mmo/renderer";
 import { SceneObject, Vector2, Time } from "@js-mmo/engine";
-import { createRect, RectDrawable } from "@js-mmo/renderer";
-import { registerDrawable } from "@js-mmo/renderer/build/web/web_renderer";
 
 let counter = 0;
 
@@ -19,7 +18,6 @@ export class RotatingBox extends SceneObject {
       rotation: this.rotation,
       color: "#0000ff",
       renderIsometric: false,
-      __DEBUG__SHOW_ORIGIN: true,
     });
     this._speed = speed;
   }
@@ -30,6 +28,6 @@ export class RotatingBox extends SceneObject {
 
   postUpdate = () => {
     this._drawable.data.rotation = this.rotation;
-    registerDrawable(this._drawable);
+    WebRenderer.registerDrawable(this._drawable);
   };
 }

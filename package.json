@@ -8,6 +8,7 @@
   "private": true,
   "workspaces": [
     "eslint",
+    "webpack",
     "packages/engine",
     "packages/renderer",
     "packages/game"

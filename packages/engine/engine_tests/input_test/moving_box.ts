@@ -18,7 +18,6 @@ export class MovingBox extends SceneObject {
       rotation: this.rotation,
       color: "#0000ff",
       renderIsometric: false,
-      __DEBUG__SHOW_ORIGIN: true,
     });
     this._speed = speed;
     this.setActive(true);
