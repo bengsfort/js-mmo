@@ -27,7 +27,7 @@ const drawFps = () => {
 function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
-  RendererConfig.PIXELS_PER_UNIT = new Vector2(32, 32);
+  RendererConfig.PIXELS_PER_UNIT = 32;
   GameLoop.start();
 
   // Create renderer and add it to the update loop

@@ -1,6 +1,6 @@
 import { Vector2 } from "@js-mmo/engine";
 
-import { PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
+import { ISOMETRIC_PIXELS_PER_UNIT, PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
 import { logger } from "../logger";
 
 export function createCanvas(width?: number, height?: number): HTMLCanvasElement {
@@ -31,12 +31,12 @@ export function bindCanvasToWindowSize(canvas: HTMLCanvasElement): UnsubscribeCa
 }
 
 export const coordsToScreen = (x: number, y: number): Vector2 => {
-  return new Vector2(x * PIXELS_PER_UNIT.x, y * PIXELS_PER_UNIT.y);
+  return new Vector2(x * PIXELS_PER_UNIT, y * PIXELS_PER_UNIT);
 };
 
 export const coordsToIsometricScreen = (canvas: HTMLCanvasElement, x: number, y: number): Vector2 => {
   return new Vector2(
-    (PIXELS_PER_UNIT.x / 2) * (x - y) + canvas.width / PIXEL_RATIO / 2,
-    (PIXELS_PER_UNIT.y / 2) * (x + y)
+    (ISOMETRIC_PIXELS_PER_UNIT.x / 2) * (x - y) + canvas.width / PIXEL_RATIO / 2,
+    (ISOMETRIC_PIXELS_PER_UNIT.y / 2) * (x + y)
   );
 };

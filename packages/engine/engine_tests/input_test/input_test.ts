@@ -35,7 +35,8 @@ const drawFps = () => {
 function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
-  RendererConfig.PIXELS_PER_UNIT = new Vector2(32, 32);
+  RendererConfig.PIXELS_PER_UNIT = 32;
+
   void InputSystem.registerInputPlatform(InputPlatform.Web);
   InputSystem.registerInputMap({
     [InputEvents.MoveUp]: [KeyboardKeys.W, KeyboardKeys.ArrowUp],
