@@ -36,7 +36,6 @@ export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D)
   context.translate(flipX ? scaledWidth : 0, flipY ? scaledHeight : 0);
   context.scale(xModifier, yModifier);
   context.drawImage(image, (pos.x - orig.x) * xModifier, (pos.y - orig.y) * yModifier, scaledWidth, scaledHeight);
-  // context.drawImage(image, -width, -height);
   context.restore();
 
   if (DEBUG_SHOW_ORIGINS) {
