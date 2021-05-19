@@ -73,12 +73,10 @@ export const create = (width?: number, height?: number) => {
 };
 
 export const registerForceDraw = (func: VoidFunction) => {
-  console.log("Got a function to force draw");
   registeredForceDraw.push(func);
 };
 
 export const registerDrawable = <T extends DAttrs>(drawable: Drawable<T>) => {
-  logger.verboseLogInfo("Registering drawable:", drawable);
   registeredDrawables.push(drawable);
 };
 

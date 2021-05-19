@@ -10,11 +10,15 @@ export type SpriteDrawable = Drawable<DSprite>;
 export type SpriteOpts = Omit<DSprite, "id"> & {
   origin?: Vector2;
   scale?: Vector2;
+  flipX?: boolean;
+  flipY?: boolean;
 };
 
 const DEFAULT_OPTS = {
   scale: Vector2.One,
   origin: Vector2.Zero,
+  flipX: false,
+  flipY: false,
 };
 
 export const createSprite = (opts: SpriteOpts): Drawable<DSprite> => {

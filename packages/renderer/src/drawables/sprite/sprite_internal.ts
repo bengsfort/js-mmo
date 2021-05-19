@@ -12,11 +12,13 @@ export interface DSprite {
   position: Vector2;
   origin: Vector2;
   scale: Vector2;
+  flipX: boolean;
+  flipY: boolean;
   renderIsometric: boolean;
 }
 
 export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D) => {
-  const { width, height, image, position, scale, origin, renderIsometric } = drawable;
+  const { width, height, image, position, scale, origin, renderIsometric, flipX, flipY } = drawable;
 
   context.save();
 
@@ -25,7 +27,17 @@ export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D)
     ? coordsToIsometricScreen(context.canvas, position.x * scale.x, position.y * scale.y)
     : coordsToScreen(position.x * scale.x, position.y * scale.y);
 
-  context.drawImage(image, pos.x - orig.x, pos.y - orig.y, width * scale.x, height * scale.y);
+  const xModifier = flipX ? -1 : 1;
+  const yModifier = flipY ? -1 : 1;
+  const scaledWidth = width * scale.x;
+  const scaledHeight = height * scale.y;
+
+  context.save();
+  context.translate(flipX ? scaledWidth : 0, flipY ? scaledHeight : 0);
+  context.scale(xModifier, yModifier);
+  context.drawImage(image, (pos.x - orig.x) * xModifier, (pos.y - orig.y) * yModifier, scaledWidth, scaledHeight);
+  // context.drawImage(image, -width, -height);
+  context.restore();
 
   if (DEBUG_SHOW_ORIGINS) {
     drawOrigin(context, pos, orig, scale, width, height);

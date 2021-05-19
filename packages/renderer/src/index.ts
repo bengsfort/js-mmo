@@ -6,5 +6,9 @@ export * from "./drawables/drawable";
 export * from "./drawables/rect/rect";
 export * from "./drawables/sprite/sprite";
 
+// Assets
+export * from "./asset_management/asset_manager";
+export { ImageManager } from "./asset_management/image_manager";
+
 // Helper Classes
 export { Sprite2d } from "./scene_objects/sprite2d";
