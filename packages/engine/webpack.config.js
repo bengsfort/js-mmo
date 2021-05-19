@@ -2,6 +2,7 @@ const path = require('path');
 const {makeWebpackConfig} = require('@js-mmo/webpack-config-internal');
 
 const entry = {
+  drawables: './engine_tests/drawable_tests/drawable_tests.ts',
   transform: './engine_tests/transform_test/transform_test.ts',
   input: './engine_tests/input_test/input_test.ts',
 };

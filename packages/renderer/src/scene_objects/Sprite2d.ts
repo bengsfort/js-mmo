@@ -1,10 +1,11 @@
 import { SceneObject, Vector2 } from "@js-mmo/engine";
+import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
 
+import { logger } from "logger";
 import { registerDrawable } from "../web/web_renderer";
-import { createSprite, SpriteDrawable } from "../drawables/sprite/sprite";
 
 export class Sprite2d extends SceneObject {
-  texture: ImageBitmap;
+  texture?: ImageBitmap;
   size = Vector2.Zero;
   origin = Vector2.Zero;
 
@@ -22,9 +23,9 @@ export class Sprite2d extends SceneObject {
     return this._drawable;
   }
 
-  constructor(name = "", texture: ImageBitmap, size: Vector2, isometric?: boolean, parent?: SceneObject) {
+  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean, parent?: SceneObject) {
     super(name, Vector2.Zero, Vector2.One, 0, parent);
-    this.texture = texture;
+    this.texture = typeof texture === "string" ? this.createTexture(texture) : texture;
     this.size = size;
     this._drawable = createSprite({
       image: this.texture,
@@ -35,6 +36,18 @@ export class Sprite2d extends SceneObject {
       scale: this.scale,
       renderIsometric: isometric as boolean,
     });
+  }
+
+  async createTexture(src: string): Promise<ImageBitmap> {
+    try {
+      const img = new Image();
+      img.src = src;
+      const bitmap = await createImageBitmap(img);
+      return bitmap;
+    } catch (e) {
+      logger.logError("There was an error creating bitmap from given texture.", e);
+    }
+    return new ImageBitmap();
   }
 
   postUpdate = () => {
