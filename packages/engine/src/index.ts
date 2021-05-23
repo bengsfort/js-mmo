@@ -26,3 +26,7 @@ export { BuiltinInputCommands } from "./input/input_commands";
 export { InputPlatform } from "./input/platforms";
 export { InputSource } from "./input/input_source";
 export { InputSystem } from "./input/input_system";
+
+// Tiled support
+export * from "./tilemaps/tiled_types";
+export * as TiledUtils from "./tilemaps/tiled_utils";
