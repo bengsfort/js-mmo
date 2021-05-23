@@ -16,5 +16,4 @@ const imageLoader = async (src: string): Promise<ImageBitmap> => {
   });
 };
 
-// @todo: Different version of asset manager for supporting tilesheets?
 export const ImageManager = new AssetManager<ImageBitmap>(imageLoader, PINK_1x1);

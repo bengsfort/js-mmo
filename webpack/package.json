@@ -4,9 +4,9 @@
     "description": "Internal webpack config for js-mmo.",
     "main": "./webpack.config.js",
     "repository": {
-      "type": "git",
-      "url": "https://github.com/bengsfort/js-mmo.git",
-      "directory": "webpack"
+        "type": "git",
+        "url": "https://github.com/bengsfort/js-mmo.git",
+        "directory": "webpack"
     },
     "author": "Matt Bengston <bengsfort@gmail.com>",
     "license": "MIT",
@@ -22,8 +22,7 @@
         "webpack-dev-server": "^3.11.2"
     },
     "scripts": {
-      "clean": "echo 'Nothing to clean, skipping'",
-      "build": "echo 'Nothing to build, skipping'"
+        "clean": "echo 'Nothing to clean, skipping'",
+        "build": "echo 'Nothing to build, skipping'"
     }
-  }
-  
+}
