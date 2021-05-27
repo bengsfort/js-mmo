@@ -1,12 +1,14 @@
 import * as Time from "./core/time";
+
 import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
+
 import { inputSystemLoop } from "./input/input_system";
 
 let idCounter = 0;
 let rafId = 0;
 let tickLoopId = 0;
 
-type LoopHandler = (timestamp: number) => void;
+type LoopHandler = (timestamp?: number) => void;
 
 // Update handlers are what most client side things will use, things like
 // Client Side movement prediction/lerping/UI/etc.
@@ -20,8 +22,14 @@ const postUpdateHandlers = new Map<number, LoopHandler>();
 // and networking.
 const fixedUpdateHandlers = new Map<number, LoopHandler>();
 
+let renderHandler: LoopHandler = () => {};
+
 // Handler Registration/Management
-export const registerUpdateHandler = (handler: (timestamp?: number) => void): number => {
+export const registerRenderer = (handler: LoopHandler): void => {
+  renderHandler = handler;
+};
+
+export const registerUpdateHandler = (handler: LoopHandler): number => {
   const handlerId = ++idCounter;
   updateHandlers.set(handlerId, handler);
   return handlerId;
@@ -35,7 +43,7 @@ export const removeUpdateHandler = (id: number): boolean => {
   return false;
 };
 
-export const registerPostUpdateHandler = (handler: (timestamp?: number) => void): number => {
+export const registerPostUpdateHandler = (handler: LoopHandler): number => {
   const handlerId = ++idCounter;
   postUpdateHandlers.set(handlerId, handler);
   return handlerId;
@@ -49,7 +57,7 @@ export const removePostUpdateHandler = (id: number): boolean => {
   return false;
 };
 
-export const registerFixedUpdateHandler = (handler: (timestamp?: number) => void): number => {
+export const registerFixedUpdateHandler = (handler: LoopHandler): number => {
   const handlerId = ++idCounter;
   fixedUpdateHandlers.set(handlerId, handler);
   return handlerId;
@@ -70,7 +78,7 @@ export function update(timestamp = 0): void {
   // Sample input first
   inputSystemLoop();
   // Then go on to our custom handlers
-  const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values()];
+  const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values(), renderHandler];
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i]) handlers[i](timestamp);
   }

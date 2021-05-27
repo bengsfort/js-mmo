@@ -1,6 +1,5 @@
-import { RendererConfig, Sprite2d, WebRenderer, ImageManager } from "@js-mmo/renderer";
-
-import { EngineConfig, GameLoop, Group, Scene, Time, Vector2 } from "../../build";
+import { EngineConfig, GameLoop, Group, Time, Vector2 } from "../../build";
+import { ImageManager, RendererConfig, Scene, Sprite2d, WebRenderer } from "@js-mmo/renderer";
 
 import box from "./assets/box.png";
 import tile32 from "./assets/32x32.png";

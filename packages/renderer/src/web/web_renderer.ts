@@ -2,31 +2,40 @@
 // Exported functions are the public API
 
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+
 import { CLEAR_COLOR } from "../renderer_config";
 import { Drawable } from "../drawables/drawable";
+import { Scene } from "../scene/scene";
 import { logger } from "../logger";
-
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+import { traverseTree } from "../scene/scene_tree";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
 let resizeUnsub: UnsubscribeCallback;
 let isPaused = false;
 
+let activeScene: Scene | null = null;
+
 const registeredDrawables: Drawable<DAttrs>[] = [];
 const registeredForceDraw: VoidFunction[] = [];
 
 const renderLoop = (): void => {
   if (isPaused) return;
+
   activeContext.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
   activeContext.fillStyle = CLEAR_COLOR;
   activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
 
-  // Drawables are consumed every frame, so empty the array and render what was in it.
-  const tickDrawables = registeredDrawables.splice(0);
-  for (let d = 0; d < tickDrawables.length; d++) {
-    renderDrawable(tickDrawables[d], activeContext);
+  if (activeScene !== null) {
+    traverseTree(activeScene, activeContext);
   }
+
+  // Drawables are consumed every frame, so empty the array and render what was in it.
+  // const tickDrawables = registeredDrawables.splice(0);
+  // for (let d = 0; d < tickDrawables.length; d++) {
+  //   renderDrawable(tickDrawables[d], activeContext);
+  // }
 
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];
@@ -36,6 +45,10 @@ const renderLoop = (): void => {
 };
 
 // Public API
+export const setActiveRender = (scene: Scene) => {
+  activeScene = scene;
+};
+
 export const getActiveCanvas = () => activeCanvas;
 
 export const pause = (val: boolean) => {

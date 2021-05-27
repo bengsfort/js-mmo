@@ -15,7 +15,6 @@ export { Node } from "./core/node";
 export { Node2d } from "./core/node_2d";
 
 // Scenes
-export { Scene } from "./scene/scene";
 export { Group } from "./scene/group";
 export { SceneObject } from "./scene/scene_object";
 

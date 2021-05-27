@@ -1,7 +1,7 @@
 // eslint-disable @typescript-eslint/no-explicit-any
 
-import { RendererConfig, WebRenderer } from "@js-mmo/renderer";
-import { EngineConfig, GameLoop, Time, Vector2, Node2d } from "@js-mmo/engine";
+import { EngineConfig, GameLoop, Node2d, Time, Vector2 } from "@js-mmo/engine";
+import { RendererConfig, Scene, WebRenderer } from "@js-mmo/renderer";
 
 import { RotatingBox } from "./rotating_box";
 
@@ -31,18 +31,23 @@ function main() {
   GameLoop.start();
 
   // Create renderer and add it to the update loop
-  GameLoop.registerPostUpdateHandler(WebRenderer.create());
+  GameLoop.registerRenderer(WebRenderer.create());
 
   // Force-draw the FPS to the top left corner
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
+  const scene = new Scene();
+  scene.background = "#212121";
   const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 45, 15);
+  scene.addChild(root);
   const nodes = [root];
   for (let i = 0; i < 10; i++) {
     console.log("Node", i, "making the following its parent", nodes[i]);
     nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, i - 5, nodes[i]));
   }
+
+  WebRenderer.setActiveRender(scene);
   window.NODES = nodes;
 }
 
