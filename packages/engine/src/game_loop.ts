@@ -1,7 +1,5 @@
 import * as Time from "./core/time";
-
 import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
-
 import { inputSystemLoop } from "./input/input_system";
 
 let idCounter = 0;

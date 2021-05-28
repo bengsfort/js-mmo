@@ -1,7 +1,5 @@
 import { TiledTileset } from "@js-mmo/engine";
 
-import { logger } from "../logger";
-
 import { AssetManager } from "./asset_manager";
 
 // Expects the src to the tileset DEFINITION (.json file)

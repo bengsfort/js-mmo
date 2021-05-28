@@ -1,11 +1,3 @@
-// import {
-//   registerFixedUpdateHandler,
-//   registerPostUpdateHandler,
-//   registerUpdateHandler,
-//   removeFixedUpdateHandler,
-//   removePostUpdateHandler,
-//   removeUpdateHandler,
-// } from "../game_loop";
 import * as GameLoop from "../game_loop";
 import { Node2d } from "../core/node_2d";
 

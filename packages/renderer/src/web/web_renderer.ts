@@ -2,16 +2,20 @@
 // Exported functions are the public API
 
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
-
 import { CLEAR_COLOR } from "../renderer_config";
 import { Drawable } from "../drawables/drawable";
+import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
+import { Sprite2d } from "../scene_objects/sprite2d";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
 
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
+
+// eslint-disable-next-line
 let resizeUnsub: UnsubscribeCallback;
 let isPaused = false;
 
@@ -27,15 +31,22 @@ const renderLoop = (): void => {
   activeContext.fillStyle = CLEAR_COLOR;
   activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
 
+  // Traverse through the tree
   if (activeScene !== null) {
-    traverseTree(activeScene, activeContext);
+    const tree = traverseTree(activeScene);
+    let drawOrder: IteratorResult<RenderingNode<Drawable<unknown>> | Scene> = tree.next();
+    while (!drawOrder.done) {
+      if (drawOrder.value.type === "scene") {
+        activeContext.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+        activeContext.fillStyle = (drawOrder.value as Scene).background;
+        activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
+      }
+      if (drawOrder.value.type === "draw") {
+        renderDrawable((drawOrder.value as Sprite2d).drawable, activeContext);
+      }
+      drawOrder = tree.next();
+    }
   }
-
-  // Drawables are consumed every frame, so empty the array and render what was in it.
-  // const tickDrawables = registeredDrawables.splice(0);
-  // for (let d = 0; d < tickDrawables.length; d++) {
-  //   renderDrawable(tickDrawables[d], activeContext);
-  // }
 
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];

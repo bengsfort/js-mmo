@@ -1,19 +1,22 @@
 import { SceneObject, Vector2 } from "@js-mmo/engine";
 
-import { ImageManager } from "../asset_management/image_manager";
 import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
+import { ImageManager } from "../asset_management/image_manager";
+import { RenderingNode } from "../drawables/rendering_node";
 import { registerDrawable } from "../web/web_renderer";
 
-export class Sprite2d extends SceneObject {
-  texture: ImageBitmap;
-  size = Vector2.Zero;
-  origin = Vector2.Zero;
-  flipX = false;
-  flipY = false;
+export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawable> {
+  public readonly type = "draw";
 
-  _drawable: SpriteDrawable;
+  public texture: ImageBitmap;
+  public size = Vector2.Zero;
+  public origin = Vector2.Zero;
+  public flipX = false;
+  public flipY = false;
 
-  private get drawable(): SpriteDrawable {
+  private _drawable: SpriteDrawable;
+
+  public get drawable(): SpriteDrawable {
     this._drawable.data = {
       ...this._drawable.data,
       image: this.texture,

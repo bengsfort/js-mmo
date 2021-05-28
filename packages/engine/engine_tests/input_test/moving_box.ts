@@ -1,11 +1,21 @@
-import { SceneObject, InputSystem, Time, Vector2 } from "@js-mmo/engine";
-import { RectDrawable, WebRenderer, createRect } from "@js-mmo/renderer";
+import { InputSystem, SceneObject, Time, Vector2 } from "@js-mmo/engine";
+import { RectDrawable, RenderingNode, createRect } from "@js-mmo/renderer";
 
 import { InputEvents } from "./input_events";
 
-export class MovingBox extends SceneObject {
-  _drawable: RectDrawable;
-  _speed: number;
+export class MovingBox extends SceneObject implements RenderingNode<RectDrawable> {
+  public type = "draw";
+
+  private _drawable: RectDrawable;
+  private _speed: number;
+
+  public get drawable(): RectDrawable {
+    this._drawable.data = {
+      ...this._drawable.data,
+      position: this.position,
+    };
+    return this._drawable;
+  }
 
   constructor(pos: Vector2, scale: Vector2, speed = 20) {
     super("MovingBox", pos, scale, 0);
@@ -22,11 +32,6 @@ export class MovingBox extends SceneObject {
     this._speed = speed;
     this.setActive(true);
   }
-
-  postUpdate = () => {
-    this._drawable.data.position = this.position;
-    WebRenderer.registerDrawable(this._drawable);
-  };
 
   update = () => {
     if (InputSystem.inputEventDown(InputEvents.MoveUp)) {

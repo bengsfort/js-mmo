@@ -3,6 +3,7 @@ export * as WebRenderer from "./web/web_renderer";
 
 // Drawables
 export * from "./drawables/drawable";
+export * from "./drawables/rendering_node";
 export * from "./drawables/rect/rect";
 export * from "./drawables/sprite/sprite";
 

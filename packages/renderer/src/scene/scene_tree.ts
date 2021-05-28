@@ -1,30 +1,37 @@
+import { Node } from "@js-mmo/engine";
+
+import { Drawable } from "../drawables/drawable";
+import { RenderingNode } from "../drawables/rendering_node";
+
 import { Scene } from "./scene";
 
-export function traverseTree(scene: Scene, context: CanvasRenderingContext2D) {
-  //   const context: CanvasRenderingContext2D = yield;
-
+export function* traverseTree(scene: Scene) {
   // Draw scene
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-  context.fillStyle = scene.background;
-  context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+  let root: Node | Scene = scene;
+  const nextRoots: Node[] = [];
+  yield root as Scene;
 
-  // generator function maybe just keeps returning draw orders to the renderer????
-  // renderer is like:
-  //let drawCall = traverseTree.next();
-  // while (!drawCall.done) {
-  // renderDrawable(drawCall.value)
-  // drawCall = traverseTree.next();
-  // }
-  // and this is just like:
-  // ...iterating through children like brrrrrrrrrr...
-  // finds something with a drawable
-  // yield return <that drawable>;
+  while (root.childCount > 0) {
+    // Draw all of the current children that are drawable
+    for (let i = 0; i < root.childCount; i++) {
+      // If this child has children, queue it up
+      const node = root.children[i];
+      if (node.childCount > 0) {
+        nextRoots.push(node);
+      }
 
-  //   const node = scene;
-  //   while (node.childCount > 0) {
-  //     if (node.type === "scene") {
+      if (root.children[i].type === "draw") {
+        //  Cast to unknown casue my types are bad
+        const renderingNode = node as unknown;
+        yield renderingNode as RenderingNode<Drawable<unknown>>;
+      }
+    }
 
-  //     }
-  //     yield;
-  //   }
+    if (nextRoots.length > 0) {
+      root = nextRoots.shift() as Node;
+    } else {
+      // We're done!
+      break;
+    }
+  }
 }

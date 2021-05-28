@@ -1,5 +1,6 @@
-import { EngineConfig, GameLoop, Group, Time, Vector2 } from "../../build";
 import { ImageManager, RendererConfig, Scene, Sprite2d, WebRenderer } from "@js-mmo/renderer";
+
+import { EngineConfig, GameLoop, Group, Time, Vector2 } from "../../build";
 
 import box from "./assets/box.png";
 import tile32 from "./assets/32x32.png";
@@ -57,14 +58,16 @@ function main() {
 
   // Normal variants
   const group2 = new Group("normal_sprites", new Vector2(5, 5), Vector2.One, 0, scene);
-  const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, scene);
-  const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, scene);
+  const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, group2);
+  const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, group2);
   forceDefault.localPosition.set(32, 0);
 
-  const flipped = new Sprite2d("flipped", tile32, new Vector2(32, 32), false, scene);
+  const flipped = new Sprite2d("flipped", tile32, new Vector2(32, 32), false, group2);
   flipped.flipX = false;
   flipped.flipY = true;
   flipped.localPosition.set(64, 0);
+
+  WebRenderer.setActiveRender(scene);
 
   window.__SPRITES__ = {
     normal,

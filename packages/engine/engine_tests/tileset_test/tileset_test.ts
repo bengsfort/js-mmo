@@ -1,5 +1,6 @@
-import { EngineConfig, GameLoop, Time, Vector2 } from "../../build";
 import { RendererConfig, Scene, Sprite2d, TilesetManager, WebRenderer } from "@js-mmo/renderer";
+
+import { EngineConfig, GameLoop, Time, Vector2 } from "../../build";
 
 declare global {
   interface Window {
@@ -49,6 +50,8 @@ async function main() {
     tile4.localPosition.set(96, 0);
     window.__STATIC_SPRITE__ = tile;
   }
+
+  WebRenderer.setActiveRender(scene);
 }
 
 void main();
