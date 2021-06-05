@@ -1,0 +1,15 @@
+{
+    "columns": 8,
+    "image": "./assets/dev_env_sheet.png",
+    "imageheight": 256,
+    "imagewidth": 256,
+    "margin": 0,
+    "name": "DevEnv",
+    "spacing": 0,
+    "tilecount": 64,
+    "tiledversion": "1.4.2",
+    "tileheight": 32,
+    "tilewidth": 32,
+    "type": "tileset",
+    "version": 1.4
+  }
