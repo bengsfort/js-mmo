@@ -21,6 +21,7 @@
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.6",
     "typescript": "^4.2.4"
@@ -36,6 +37,11 @@
     }
   },
   "scripts": {
+    "dev": "run-p dev:engine dev:renderer",
+    "predev": "yarn clean && yarn workspace @js-mmo/engine build",
+    "dev:engine": "yarn workspace @js-mmo/engine start",
+    "dev:renderer": "yarn workspace @js-mmo/renderer start",
+    "engine:tests": "yarn workspace @js-mmo/engine dev-server",
     "lint": "eslint . --ext .ts --max-warnings=0",
     "fix": "yarn lint --fix",
     "clean": "yarn workspaces run clean",

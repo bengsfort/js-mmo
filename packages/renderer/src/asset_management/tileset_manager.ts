@@ -1,5 +1,6 @@
 import { TiledTileset } from "@js-mmo/engine";
 
+import { PINK_1x1 } from "./image_manager";
 import { AssetManager } from "./asset_manager";
 
 // Expects the src to the tileset DEFINITION (.json file)
@@ -13,6 +14,8 @@ const tilesetLoader = async (src: string): Promise<ImageBitmap[]> => {
       // Grab all of the items
       const cols = tilesetDef.columns;
       const rows = tilesetDef.imageheight / tilesetDef.tileheight;
+
+      // @todo: Inject the default 1x1 pink pixel in at the beginning of the array
       const sprites = [];
 
       // Iterate through all of the tiles and create them

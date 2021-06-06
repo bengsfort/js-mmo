@@ -2,30 +2,32 @@ import { Vector2 } from "../math/vector2";
 
 import { TiledLayerType, TiledMap, TiledMapLayer, TiledRenderOrder } from "./tiled_types";
 
-export const getTileX = (index: number, layer: TiledMapLayer, renderOrder: TiledRenderOrder): number => {
-  const width = layer.width || 100;
+export const getTileX = (index: number, layerWidth = 100, renderOrder = TiledRenderOrder.LeftDown): number => {
   switch (renderOrder) {
     case TiledRenderOrder.RightDown:
     case TiledRenderOrder.RightUp:
-      return width - (index % width);
+      return layerWidth - (index % layerWidth);
     case TiledRenderOrder.LeftDown:
     case TiledRenderOrder.LeftUp:
     default:
-      return index % width;
+      return index % layerWidth;
   }
 };
 
-export const getTileY = (index: number, layer: TiledMapLayer, renderOrder: TiledRenderOrder): number => {
-  const width = layer.width || 100;
-  const height = layer.height || 100;
+export const getTileY = (
+  index: number,
+  layerWidth = 100,
+  layerHeight = 100,
+  renderOrder = TiledRenderOrder.LeftDown
+): number => {
   switch (renderOrder) {
     case TiledRenderOrder.LeftUp:
     case TiledRenderOrder.RightUp:
-      return height - Math.floor(index / width);
+      return layerHeight - Math.floor(index / layerWidth);
     case TiledRenderOrder.LeftDown:
     case TiledRenderOrder.RightDown:
     default:
-      return Math.floor(index / width);
+      return Math.floor(index / layerWidth);
   }
 };
 
@@ -51,8 +53,8 @@ export const forTileInLayer = (layer: TiledMapLayer, map: TiledMap, cb: TileCall
       continue;
     }
 
-    x = getTileX(i, layer, map.renderorder as TiledRenderOrder);
-    y = getTileY(i, layer, map.renderorder as TiledRenderOrder);
+    x = getTileX(i, layer.width, map.renderorder as TiledRenderOrder);
+    y = getTileY(i, layer.width, layer.height, map.renderorder as TiledRenderOrder);
     cb(new Vector2(x, y), layer, map);
   }
 };

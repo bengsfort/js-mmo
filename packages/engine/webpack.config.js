@@ -7,6 +7,7 @@ const entry = {
   transform: './engine_tests/transform_test/transform_test.ts',
   input: './engine_tests/input_test/input_test.ts',
   tilesets: './engine_tests/tileset_test/tileset_test.ts',
+  tilemaps: './engine_tests/tilemap_test/tilemap_test.ts',
 };
 const output = {
   path: path.resolve(__dirname, 'build'),
@@ -19,6 +20,7 @@ config.plugins.push(
   new CopyPlugin({
     patterns: [
       { from: "engine_tests/tileset_test/assets", to: "assets" },
+      { from: "engine_tests/tilemap_test/assets", to: "assets" },
     ]
   })
 )
