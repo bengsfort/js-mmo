@@ -40,13 +40,13 @@ async function main() {
 
   window.__TILESET_MANAGER__ = TilesetManager;
   if (await TilesetManager.load("./assets/dev_env_sheet.json")) {
-    const tileset = TilesetManager.get("./assets/dev_env_sheet.json");
-    const tile = new Sprite2d("tile1", tileset[0], new Vector2(32, 32), false, scene);
-    const tile2 = new Sprite2d("tile2", tileset[1], new Vector2(32, 32), false, scene);
+    const { tiles } = TilesetManager.get("./assets/dev_env_sheet.json");
+    const tile = new Sprite2d("tile1", tiles[0], new Vector2(32, 32), false, scene);
+    const tile2 = new Sprite2d("tile2", tiles[1], new Vector2(32, 32), false, scene);
     tile2.localPosition.set(32, 0);
-    const tile3 = new Sprite2d("tile3", tileset[2], new Vector2(32, 32), false, scene);
+    const tile3 = new Sprite2d("tile3", tiles[2], new Vector2(32, 32), false, scene);
     tile3.localPosition.set(64, 0);
-    const tile4 = new Sprite2d("tile4", tileset[3], new Vector2(32, 32), false, scene);
+    const tile4 = new Sprite2d("tile4", tiles[3], new Vector2(32, 32), false, scene);
     tile4.localPosition.set(96, 0);
     window.__STATIC_SPRITE__ = tile;
   }

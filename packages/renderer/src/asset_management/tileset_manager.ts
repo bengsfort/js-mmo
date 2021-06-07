@@ -3,9 +3,15 @@ import { TiledTileset } from "@js-mmo/engine";
 import { PINK_1x1 } from "./image_manager";
 import { AssetManager } from "./asset_manager";
 
+export interface RuntimeTileset {
+  tileWidth: number;
+  tileHeight: number;
+  tiles: ImageBitmap[];
+}
+
 // Expects the src to the tileset DEFINITION (.json file)
 // @todo: Add support for `spacing` and `margin`
-const tilesetLoader = async (src: string): Promise<ImageBitmap[]> => {
+const tilesetLoader = async (src: string): Promise<RuntimeTileset> => {
   const tilesetDef = (await (await fetch(src)).json()) as TiledTileset;
 
   return new Promise((resolve, reject) => {
@@ -33,7 +39,13 @@ const tilesetLoader = async (src: string): Promise<ImageBitmap[]> => {
         }
       }
 
-      resolve(Promise.all(sprites));
+      resolve(
+        Promise.all(sprites).then(tiles => ({
+          tiles,
+          tileHeight: tilesetDef.tileheight,
+          tileWidth: tilesetDef.tilewidth,
+        }))
+      );
     };
     img.onerror = e => {
       reject(e);
@@ -42,4 +54,4 @@ const tilesetLoader = async (src: string): Promise<ImageBitmap[]> => {
   });
 };
 
-export const TilesetManager = new AssetManager<ImageBitmap[]>(tilesetLoader);
+export const TilesetManager = new AssetManager<RuntimeTileset>(tilesetLoader);

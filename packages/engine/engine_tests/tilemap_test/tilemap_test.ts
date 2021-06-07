@@ -2,7 +2,7 @@ import { RendererConfig, Scene, Tilemap, TilesetManager, WebRenderer } from "@js
 
 import { EngineConfig, GameLoop, Time, Vector2, TiledMap, TiledRenderOrder } from "../../build";
 
-import rawDevMap from "./assets/dev_sandbox_map.json";
+import devMap from "./assets/dev_sandbox_map.json";
 
 declare global {
   interface Window {
@@ -45,17 +45,8 @@ async function main() {
 
   if (await TilesetManager.load(TILESET_PATH)) {
     const tileset = TilesetManager.get(TILESET_PATH);
-    const devMap = rawDevMap as TiledMap;
 
-    const map = new Tilemap(
-      "BaseLayer",
-      devMap.layers[0],
-      tileset,
-      true,
-      TiledRenderOrder.LeftDown,
-      Vector2.Zero,
-      scene
-    );
+    const map = new Tilemap("BaseLayer", devMap as TiledMap, tileset, 0, Vector2.Zero, scene);
     window.__TILEMAP__ = map;
   }
 

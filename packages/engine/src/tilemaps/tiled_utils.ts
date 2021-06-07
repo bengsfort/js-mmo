@@ -38,7 +38,7 @@ export const forLayerInMap = (map: TiledMap, cb: LayerCallback): void => {
   }
 };
 
-export type TileCallback = (pos: Vector2, layer: TiledMapLayer, map: TiledMap) => void;
+export type TileCallback = (pos: Vector2, tile: number, layer: TiledMapLayer, map: TiledMap) => void;
 export const forTileInLayer = (layer: TiledMapLayer, map: TiledMap, cb: TileCallback): void => {
   if (!layer?.data || layer?.type === TiledLayerType.Object) {
     return;
@@ -55,6 +55,6 @@ export const forTileInLayer = (layer: TiledMapLayer, map: TiledMap, cb: TileCall
 
     x = getTileX(i, layer.width, map.renderorder as TiledRenderOrder);
     y = getTileY(i, layer.width, layer.height, map.renderorder as TiledRenderOrder);
-    cb(new Vector2(x, y), layer, map);
+    cb(new Vector2(x, y), layer.data[i], layer, map);
   }
 };

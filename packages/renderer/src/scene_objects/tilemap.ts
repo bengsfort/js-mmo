@@ -1,12 +1,13 @@
-import { SceneObject, TiledLayerType, TiledMapLayer, TiledRenderOrder, Vector2 } from "@js-mmo/engine";
+import { SceneObject, TiledLayerType, TiledMap, TiledMapLayer, TiledRenderOrder, Vector2 } from "@js-mmo/engine";
 
 import { logger } from "../logger";
 import { RenderingNode } from "../drawables/rendering_node";
 import { createTilemap, TilemapDrawable } from "../drawables/tilemap/tilemap";
+import { RuntimeTileset } from "../asset_management/tileset_manager";
 
 export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawable> {
   readonly type = "draw";
-  readonly map: TiledMapLayer;
+  readonly map: TiledMap;
 
   public origin = Vector2.Zero;
 
@@ -15,7 +16,6 @@ export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawabl
     this._drawable.data = {
       ...this._drawable.data,
       position: this.position,
-      origin: this.origin,
       scale: this.scale,
     };
     return this._drawable;
@@ -25,10 +25,9 @@ export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawabl
   // @todo: remove all  the other nonsense
   constructor(
     name: string,
-    tilemap: TiledMapLayer,
-    tileset: ImageBitmap[],
-    renderIsometric = false,
-    renderOrder = TiledRenderOrder.LeftDown,
+    tilemap: TiledMap,
+    tileset: RuntimeTileset,
+    layer: number,
     position?: Vector2,
     parent?: SceneObject
   ) {
@@ -38,14 +37,10 @@ export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawabl
       logger.logError(`Tried passing a tilemap object layer to a tilemap renderer! (${name})`);
     }
     this._drawable = createTilemap({
-      renderOrder,
-      renderIsometric,
-      map: tilemap.data as number[],
-      width: tilemap.width as number,
-      height: tilemap.height as number,
+      tilemap,
+      layer,
       tileset: tileset,
       position: this.position,
-      origin: this.origin,
       scale: this.scale,
     });
   }
