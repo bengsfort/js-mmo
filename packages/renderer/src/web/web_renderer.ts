@@ -1,15 +1,16 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
+import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
-
-import { CLEAR_COLOR } from "../renderer_config";
+import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
+
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
@@ -19,6 +20,7 @@ let resizeUnsub: UnsubscribeCallback;
 let isPaused = false;
 
 let activeScene: Scene | null = null;
+let activeCamera: Camera | null = null;
 
 const registeredDrawables: Drawable<DAttrs>[] = [];
 const registeredForceDraw: VoidFunction[] = [];
@@ -32,6 +34,24 @@ const renderLoop = (): void => {
 
   // Traverse through the tree
   if (activeScene !== null) {
+    // @todo: translate 0,0 to middle of screen
+    if (activeCamera !== null) {
+      const cameraOffset = activeCamera.position;
+
+      // isometric HERE
+      // activeContext.canvas.width / 2 -
+      // activeContext.canvas.height / 2 -
+      // scale -> rotate -> translate
+      activeContext.setTransform(
+        activeCamera.zoom * PIXEL_RATIO,
+        0,
+        0,
+        activeCamera.zoom * PIXEL_RATIO,
+        cameraOffset.x * activeCamera.zoom * PIXEL_RATIO,
+        cameraOffset.y * activeCamera.zoom * PIXEL_RATIO
+      );
+    }
+
     const tree = traverseTree(activeScene);
     let drawOrder: IteratorResult<RenderingNode | Scene> = tree.next();
     while (!drawOrder.done) {
@@ -47,6 +67,11 @@ const renderLoop = (): void => {
     }
   }
 
+  if (activeCamera !== null) {
+    // this is fucking everything up, but is necessary
+    activeContext.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
+  }
+
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];
   for (let f = 0; f < tickForceDraw.length; f++) {
@@ -57,6 +82,10 @@ const renderLoop = (): void => {
 // Public API
 export const setActiveRender = (scene: Scene) => {
   activeScene = scene;
+};
+
+export const setActiveCamera = (camera: Camera) => {
+  activeCamera = camera;
 };
 
 export const getActiveCanvas = () => activeCanvas;

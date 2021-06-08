@@ -1,14 +1,14 @@
-import { RendererConfig, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
+import { Camera, RendererConfig, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
 
-import { EngineConfig, GameLoop, Time, Vector2, TiledMap, TiledRenderOrder } from "../../build";
+import { EngineConfig, GameLoop, TiledMap, Time, Vector2 } from "../../build";
 
 import devMap from "./assets/dev_sandbox_map.json";
 
 declare global {
   interface Window {
     __SCENE__: Scene;
-    __TILESET;
     __TILEMAP__: Tilemap;
+    __CAMERA__: Camera;
   }
 }
 
@@ -40,8 +40,11 @@ async function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene("Main");
-  scene.position = new Vector2(1, 1);
+  scene.position = new Vector2(0, 0);
   window.__SCENE__ = scene;
+
+  const cam = new Camera("Main Camera", new Vector2(0, 0), Vector2.One, 0, scene);
+  window.__CAMERA__ = cam;
 
   if (await TilesetManager.load(TILESET_PATH)) {
     const tileset = TilesetManager.get(TILESET_PATH);
@@ -51,6 +54,7 @@ async function main() {
   }
 
   WebRenderer.setActiveRender(scene);
+  WebRenderer.setActiveCamera(cam);
 }
 
 void main();

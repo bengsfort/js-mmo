@@ -1,6 +1,5 @@
 import { TiledTileset } from "@js-mmo/engine";
 
-import { PINK_1x1 } from "./image_manager";
 import { AssetManager } from "./asset_manager";
 
 export interface RuntimeTileset {

@@ -17,3 +17,6 @@ export { TilesetManager } from "./asset_management/tileset_manager";
 export { Scene } from "./scene/scene";
 export { Sprite2d } from "./scene_objects/sprite2d";
 export { Tilemap } from "./scene_objects/tilemap";
+
+// Cameras
+export { Camera } from "./camera/camera";

@@ -1,11 +1,9 @@
-import { Vector2, TiledUtils, TiledMap, TiledOrientation, TiledRenderOrder } from "@js-mmo/engine";
+import { TiledMap, TiledOrientation, Vector2 } from "@js-mmo/engine";
 import { forTileInLayer } from "@js-mmo/engine/build/tilemaps/tiled_utils";
 
-import { logger } from "../../logger";
 import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
-import { DEBUG_SHOW_ORIGINS } from "../../renderer_config";
-import { drawOrigin } from "../helpers";
 import { RuntimeTileset } from "../../asset_management/tileset_manager";
+import { logger } from "../../logger";
 
 export interface DTilemap {
   id: string;
@@ -35,7 +33,7 @@ export const drawTilemap = (drawable: DTilemap, context: CanvasRenderingContext2
   const scaledWidth = tileset.tileWidth * scale.x;
   const scaledHeight = tileset.tileHeight * scale.y;
 
-  forTileInLayer(tilemap.layers[layer], tilemap, (pos, tile) => {
+  forTileInLayer(tilemap.layers[layer], tilemap, (pos: Vector2, tile: number) => {
     const tileSrcIdx = Math.max(tile - 1, 0);
     let screenPos: Vector2;
     if (tilemap.orientation === TiledOrientation.Isometric) {

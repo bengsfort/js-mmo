@@ -1,9 +1,9 @@
-import { SceneObject, TiledLayerType, TiledMap, TiledMapLayer, TiledRenderOrder, Vector2 } from "@js-mmo/engine";
+import { Node2d, SceneObject, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
 
-import { logger } from "../logger";
+import { TilemapDrawable, createTilemap } from "../drawables/tilemap/tilemap";
 import { RenderingNode } from "../drawables/rendering_node";
-import { createTilemap, TilemapDrawable } from "../drawables/tilemap/tilemap";
 import { RuntimeTileset } from "../asset_management/tileset_manager";
+import { logger } from "../logger";
 
 export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawable> {
   readonly type = "draw";
@@ -29,7 +29,7 @@ export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawabl
     tileset: RuntimeTileset,
     layer: number,
     position?: Vector2,
-    parent?: SceneObject
+    parent?: Node2d
   ) {
     super(name, position || Vector2.Zero, Vector2.One, 0, parent);
     this.map = tilemap;

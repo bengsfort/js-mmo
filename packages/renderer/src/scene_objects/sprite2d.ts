@@ -1,4 +1,4 @@
-import { SceneObject, Vector2 } from "@js-mmo/engine";
+import { Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
 
 import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
 import { ImageManager } from "../asset_management/image_manager";
@@ -31,7 +31,7 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
     return this._drawable;
   }
 
-  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean, parent?: SceneObject) {
+  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean, parent?: Node2d) {
     super(name, Vector2.Zero, Vector2.One, 0, parent);
 
     if (typeof texture === "string") {

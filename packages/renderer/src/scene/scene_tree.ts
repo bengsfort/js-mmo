@@ -1,5 +1,7 @@
 import { Node } from "@js-mmo/engine";
+
 import { RenderingNode } from "../drawables/rendering_node";
+
 import { Scene } from "./scene";
 
 export function* traverseTree(scene: Scene) {
