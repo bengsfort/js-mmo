@@ -1,8 +1,8 @@
 import { TiledMap, TiledOrientation, Vector2 } from "@js-mmo/engine";
-import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
-
-import { RuntimeTileset } from "../../asset_management/tileset_manager";
 import { forTileInLayer } from "@js-mmo/engine/build/tilemaps/tiled_utils";
+
+import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
+import { RuntimeTileset } from "../../asset_management/tileset_manager";
 import { logger } from "../../logger";
 
 export interface DTilemap {

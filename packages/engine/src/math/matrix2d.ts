@@ -1,13 +1,39 @@
 import { Vector2 } from "./vector2";
 
-const id = 0;
-
 // This is an implementation of a 3x3 matrix for use with the 2D rendering context.
 // It makes assumptions, and is likely missing a lot, as we only care about what we absolutely need.
 // @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
 export class Matrix2D {
-  public static get Identity(): Matrix2D {
-    return new Matrix2D(1, 0, 0, 0, 1, 0, 0, 0, 1);
+  static readonly Identity = new Matrix2D(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+  /**
+   * Add two Matrix2D's, creating a new Matrix2D instance with the result.
+   * @param m1 {Matrix2D} The first Matrix2D.
+   * @param m2 {Matrix2D} The second Matrix2D.
+   * @returns {Matrix2D} The result Matrix2D.
+   */
+  public static Add(m1: Matrix2D, m2: Matrix2D): Matrix2D {
+    return m1.clone().add(m2);
+  }
+
+  /**
+   * Subtract two Matrix2D's, creating a new Matrix2D instance with the result.
+   * @param m1 {Matrix2D} The first Matrix2D.
+   * @param m2 {Matrix2D} The second Matrix2D.
+   * @returns {Matrix2D} The result Matrix2D.
+   */
+  public static Subtract(m1: Matrix2D, m2: Matrix2D): Matrix2D {
+    return m1.clone().subtract(m2);
+  }
+
+  /**
+   * Multiply two Matrix2D's, creating a new Matrix2D instance with the result.
+   * @param m1 {Matrix2D} The first Matrix2D.
+   * @param m2 {Matrix2D} The second Matrix2D.
+   * @returns {Matrix2D} The result Matrix2D.
+   */
+  public static Multiply(m1: Matrix2D, m2: Matrix2D): Matrix2D {
+    return m1.clone().multiply(m2);
   }
 
   public static fromPoints(pos: Vector2, scale: Vector2): Matrix2D;
@@ -23,6 +49,10 @@ export class Matrix2D {
       return Matrix2D.Identity;
     }
     return new Matrix2D(sx, 0, x as number, 0, sy, y as number, 0, 0, 1);
+  }
+
+  public static fromArray(arr: number[]): Matrix2D {
+    return new Matrix2D(...arr);
   }
 
   private _values: number[];
@@ -65,6 +95,18 @@ export class Matrix2D {
         3=vk 4=sy 5=dy
         6=0  7=0  8=1
     */
+
+  set(arr: number[]): Matrix2D;
+  set(a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number): Matrix2D;
+  set(a: number[] | number, ...args: number[]): Matrix2D {
+    if (typeof a !== "number") {
+      this._values = [...a];
+      return this;
+    }
+    const fullArgs = [a, ...args];
+    this._values = [...fullArgs];
+    return this;
+  }
 
   /**
    * Generally used for X scaling
@@ -294,40 +336,114 @@ export class Matrix2D {
    * @returns {Matrix2D} Self.
    */
   multiply(other: Matrix2D): Matrix2D {
-    const { values: m1 } = this;
-    const { values: m2 } = other;
+    // Could use destructuring + for loop here, but it is actually less performant
+    const r11 = this[0] * other[0] + this[1] * other[3] + this[2] * other[6];
+    const r12 = this[0] * other[1] + this[1] * other[4] + this[2] * other[7];
+    const r13 = this[0] * other[2] + this[1] * other[5] + this[2] * other[8];
+    const r21 = this[3] * other[0] + this[4] * other[3] + this[5] * other[6];
+    const r22 = this[3] * other[1] + this[4] * other[4] + this[5] * other[7];
+    const r23 = this[3] * other[2] + this[4] * other[5] + this[5] * other[8];
+    const r31 = this[6] * other[0] + this[7] * other[3] + this[8] * other[6];
+    const r32 = this[6] * other[1] + this[7] * other[4] + this[8] * other[7];
+    const r33 = this[6] * other[2] + this[7] * other[5] + this[8] * other[8];
 
-    const result: number[] = [];
-    for (let row = 0; row < 7; row += 3) {
-      for (let col = 0; col < 3; col++) {
-        result[row + col] = m1[row] * m2[col] + m1[row + 1] * m2[col + 3] + m1[row + 2] * m2[col + 6];
-      }
-    }
-
-    this._values = result;
+    this._values = [r11, r12, r13, r21, r22, r23, r31, r32, r33];
     return this;
   }
 
   /**
+   * Get the determinant of the matrix.
+   * @returns {number} The determinant of the matrix.
+   */
+  determinant(): number {
+    const [a, b, c, d, e, f, g, h, i] = this.values;
+    return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+  }
+
+  /**
    * Returns the inverse of this Matrix2D.
+   * This shit sucks.
+   * @see: https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
+   * @see: https://www.mathsisfun.com/algebra/matrix-determinant.html
    * @returns {Matrix2D} The inverse of this Matrix2D.
    */
   inverse(): Matrix2D {
-    // @see: https://www.mathsisfun.com/algebra/matrix-inverse-minors-cofactors-adjugate.html
-    // @see: https://www.mathsisfun.com/algebra/matrix-determinant.html
-    const minors = [
-      this[4] * this[8] - this[5] * this[7],
-      this[3] * this[8] - this[5] * this[6],
-      this[3] * this[7] - this[4] * this[6],
-      this[1] * this[8] - this[2] * this[7],
-      this[0] * this[8] - this[6] * this[8],
-      this[0] * this[7] - this[2] * this[6],
-      this[1] * this[5] - this[2] * this[4],
-      this[0] * this[5] - this[2] * this[3],
-      this[0] * this[4] - this[1] * this[3],
-    ];
-    // Now do step 2 (cofactors);
-    // then step 3 (adjugate)
-    // then mult by 1/determinate
+    // Calculate cofactors and determinate
+    const c1 = this[4] * this[8] - this[5] * this[7];
+    const c2 = this[3] * this[8] - this[5] * this[6];
+    const c3 = this[3] * this[7] - this[4] * this[6];
+    const det = this[0] * c1 + this[1] * c2 + this[2] * c3;
+
+    // Early out if it's zero
+    if (det === 0) return new Matrix2D(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+    const invDet = 1 / det;
+
+    // Get a matrix of the cofactors
+    const m11 = c1;
+    const m12 = -c2;
+    const m13 = c3;
+    const m21 = -(this[1] * this[8] - this[2] * this[7]);
+    const m22 = this[0] * this[8] - this[2] * this[6];
+    const m23 = -(this[0] * this[7] - this[1] * this[6]);
+    const m31 = this[1] * this[5] - this[2] * this[4];
+    const m32 = -(this[0] * this[5] - this[2] * this[3]);
+    const m33 = this[0] * this[4] - this[1] * this[3];
+
+    // Transpose + multiply by determinant
+    return new Matrix2D(
+      m11 * invDet,
+      m21 * invDet,
+      m31 * invDet,
+      m12 * invDet,
+      m22 * invDet,
+      m32 * invDet,
+      m13 * invDet,
+      m23 * invDet,
+      m33 * invDet
+    );
+  }
+
+  /**
+   * Transpose the current matrix (swap along diagnol).
+   * @returns {Matrix2D} Self.
+   */
+  transpose(): Matrix2D {
+    const transposed = [this[0], this[3], this[6], this[1], this[4], this[7], this[2], this[5], this[8]];
+    this._values = transposed;
+    return this;
+  }
+
+  /**
+   * Returns the matrix as a normal array.
+   * @returns {number[]} The matrix values as an array.
+   */
+  toArray(): number[] {
+    return [...this._values];
+  }
+
+  /**
+   * Copies this Matrices values to the target matrix.
+   * @param target {Matrix2D} The target matrix to copy to.
+   */
+  copy(target: Matrix2D): void {
+    target.set(this._values);
+  }
+
+  /**
+   * Clones the current matrix to a new Matrix2D instance.
+   * @returns {Matrix2D} A new Matrix2D with the same values.
+   */
+  clone(): Matrix2D {
+    return Matrix2D.fromArray(this.toArray());
+  }
+
+  /**
+   * Checks whether the values in two Matrix2D instances are the same.
+   * @param matrix {Matrix2D} The other Matrix to check.
+   * @returns {boolean} Whether the two are equal.
+   */
+  equals(matrix: Matrix2D): boolean {
+    return this.values.every((v, index) => v === matrix.values[index]);
   }
 }
