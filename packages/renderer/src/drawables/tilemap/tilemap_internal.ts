@@ -1,8 +1,8 @@
 import { TiledMap, TiledOrientation, Vector2 } from "@js-mmo/engine";
-import { forTileInLayer } from "@js-mmo/engine/build/tilemaps/tiled_utils";
-
 import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
+
 import { RuntimeTileset } from "../../asset_management/tileset_manager";
+import { forTileInLayer } from "@js-mmo/engine/build/tilemaps/tiled_utils";
 import { logger } from "../../logger";
 
 export interface DTilemap {
@@ -33,6 +33,7 @@ export const drawTilemap = (drawable: DTilemap, context: CanvasRenderingContext2
   const scaledWidth = tileset.tileWidth * scale.x;
   const scaledHeight = tileset.tileHeight * scale.y;
 
+  // @todo: Need to re-think isometric rendering, it should hopefully be global
   forTileInLayer(tilemap.layers[layer], tilemap, (pos: Vector2, tile: number) => {
     const tileSrcIdx = Math.max(tile - 1, 0);
     let screenPos: Vector2;
