@@ -36,9 +36,9 @@ export class Matrix2D {
     return m1.clone().multiply(m2);
   }
 
-  public static fromPoints(pos: Vector2, scale: Vector2): Matrix2D;
-  public static fromPoints(x: number, y: number, sx?: number, sy?: number): Matrix2D;
-  public static fromPoints(x: number | Vector2, y: number | Vector2, sx = 1, sy = 1): Matrix2D {
+  public static compose(pos: Vector2, scale: Vector2): Matrix2D;
+  public static compose(x: number, y: number, sx?: number, sy?: number): Matrix2D;
+  public static compose(x: number | Vector2, y: number | Vector2, sx = 1, sy = 1): Matrix2D {
     if (x instanceof Vector2 && y instanceof Vector2) {
       const pos = x;
       const scale = y;
@@ -337,6 +337,7 @@ export class Matrix2D {
    */
   multiply(other: Matrix2D): Matrix2D {
     // Could use destructuring + for loop here, but it is actually less performant
+    // @see
     const r11 = this[0] * other[0] + this[1] * other[3] + this[2] * other[6];
     const r12 = this[0] * other[1] + this[1] * other[4] + this[2] * other[7];
     const r13 = this[0] * other[2] + this[1] * other[5] + this[2] * other[8];

@@ -45,6 +45,18 @@ describe("Matrix2D", () => {
     // With args.
     m1.set(1, 2, 3, 4, 5, 6, 7, 8, 9);
     expect(m1.values).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    // Manually.
+    m1[0] = 2;
+    m1[1] = 0;
+    m1[2] = 0;
+    m1[3] = 0;
+    m1[4] = 2;
+    m1[5] = 0;
+    m1[6] = 0;
+    m1[7] = 0;
+    m1[8] = 2;
+    expect(m1.values).toEqual([2, 0, 0, 0, 2, 0, 0, 0, 2]);
   });
 
   it("Should allow for copying and cloning", () => {
@@ -93,9 +105,9 @@ describe("Matrix2D", () => {
     });
   });
 
-  describe(".fromPoints", () => {
+  describe(".compose", () => {
     it("Should allow for generating a matrix with from Vector2's", () => {
-      const m1 = Matrix2D.fromPoints(new Vector2(15, 30), new Vector2(1, 2));
+      const m1 = Matrix2D.compose(new Vector2(15, 30), new Vector2(1, 2));
       expect(m1.dx).toEqual(15);
       expect(m1.dy).toEqual(30);
       expect(m1.sx).toEqual(1);
@@ -103,7 +115,7 @@ describe("Matrix2D", () => {
     });
 
     it("Should allow for generating a matrix with from numbers", () => {
-      const m1 = Matrix2D.fromPoints(15, 30, 1, 2);
+      const m1 = Matrix2D.compose(15, 30, 1, 2);
       expect(m1.dx).toEqual(15);
       expect(m1.dy).toEqual(30);
       expect(m1.sx).toEqual(1);
@@ -121,8 +133,8 @@ describe("Matrix2D", () => {
 
   describe("Arithmetic", () => {
     it("Should add matrices correctly", () => {
-      const m1 = Matrix2D.fromPoints(15, 15, 1, 1);
-      const m2 = Matrix2D.fromPoints(15, 15, 0, 0);
+      const m1 = Matrix2D.compose(15, 15, 1, 1);
+      const m2 = Matrix2D.compose(15, 15, 0, 0);
 
       m2[8] = 0;
       m1.add(m2);
@@ -135,8 +147,8 @@ describe("Matrix2D", () => {
     });
 
     it("Should subtract matrices correctly", () => {
-      const m1 = Matrix2D.fromPoints(30, 30, 1.5, 1.5);
-      const m2 = Matrix2D.fromPoints(15, 15, 1, 1);
+      const m1 = Matrix2D.compose(30, 30, 1.5, 1.5);
+      const m2 = Matrix2D.compose(15, 15, 1, 1);
 
       m2[8] = 0;
 
@@ -179,17 +191,17 @@ describe("Matrix2D", () => {
     it("Should return the inverse", () => {
       const m1 = new Matrix2D(3, 0, 2, 2, 0, -2, 0, 1, 1);
       const inverse = m1.inverse();
-      expect(inverse[0]).toEqual(0.2);
-      expect(inverse[1]).toEqual(0.2);
-      expect(inverse[2]).toEqual(-0); // JS is so weird sometimes.
+      expect(inverse[0]).toBeCloseTo(0.2);
+      expect(inverse[1]).toBeCloseTo(0.2);
+      expect(inverse[2]).toBeCloseTo(0);
 
-      expect(inverse[3]).toEqual(-0.2);
-      expect(inverse[4]).toEqual(0.30000000000000004); // Did I mention JS is weird?
-      expect(inverse[5]).toEqual(1);
+      expect(inverse[3]).toBeCloseTo(-0.2);
+      expect(inverse[4]).toBeCloseTo(0.3);
+      expect(inverse[5]).toBeCloseTo(1);
 
-      expect(inverse[6]).toEqual(0.2);
-      expect(inverse[7]).toEqual(-0.30000000000000004); // Nice, dude.
-      expect(inverse[8]).toEqual(0);
+      expect(inverse[6]).toBeCloseTo(0.2);
+      expect(inverse[7]).toBeCloseTo(-0.3);
+      expect(inverse[8]).toBeCloseTo(0);
     });
 
     it("Should transpose correctly", () => {
@@ -202,8 +214,8 @@ describe("Matrix2D", () => {
 
   describe("Static Arithmetic", () => {
     it("Should add 2 Matrix2D instances together without touching the sources", () => {
-      const m1 = Matrix2D.fromPoints(15, 15, 1, 1);
-      const m2 = Matrix2D.fromPoints(15, 15, 0, 0);
+      const m1 = Matrix2D.compose(15, 15, 1, 1);
+      const m2 = Matrix2D.compose(15, 15, 0, 0);
       m2[8] = 0;
 
       const result = Matrix2D.Add(m1, m2);
@@ -230,8 +242,8 @@ describe("Matrix2D", () => {
     });
 
     it("Should subtract 2 Matrix2D instances together without touching the sources", () => {
-      const m1 = Matrix2D.fromPoints(30, 30, 2, 2);
-      const m2 = Matrix2D.fromPoints(15, 15, 1, 1);
+      const m1 = Matrix2D.compose(30, 30, 2, 2);
+      const m2 = Matrix2D.compose(15, 15, 1, 1);
       m2[8] = 0;
 
       const result = Matrix2D.Subtract(m1, m2);

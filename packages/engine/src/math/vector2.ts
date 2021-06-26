@@ -49,6 +49,14 @@ export class Vector2 implements V2 {
     return v1.x === v2.x && v1.y === v2.y;
   }
 
+  public static Lerp(v1: V2, v2: V2, t: number): Vector2 {
+    return new Vector2(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
+  }
+
+  public static Normalize(vector: V2): Vector2 {
+    return new Vector2(vector.x, vector.y).normalize();
+  }
+
   public x = 0;
   public y = 0;
 
@@ -62,6 +70,10 @@ export class Vector2 implements V2 {
     return x * x + y * y;
   }
 
+  public get length(): number {
+    return Math.sqrt(this.magnitude);
+  }
+
   constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
@@ -71,32 +83,66 @@ export class Vector2 implements V2 {
     return new Vector2(this.x, this.y);
   }
 
-  add(other: V2): void {
+  add(other: V2): Vector2 {
     this.x += other.x;
     this.y += other.y;
+    return this;
   }
 
-  multiply(val: number): void {
+  multiply(other: V2): Vector2 {
+    this.x *= other.x;
+    this.y *= other.y;
+    return this;
+  }
+
+  multiplyScalar(val: number): Vector2 {
     this.x *= val;
     this.y *= val;
+    return this;
   }
 
-  set(x: number, y: number): void {
+  divideScalar(val: number): Vector2 {
+    this.x /= val;
+    this.y /= val;
+    return this;
+  }
+
+  divide(other: V2): Vector2 {
+    this.x /= other.x;
+    this.y /= other.y;
+    return this;
+  }
+
+  set(x: number, y: number): Vector2 {
     this.x = x;
     this.y = y;
+    return this;
   }
 
-  clamp(xMin: number, xMax: number, yMin: number, yMax: number): void {
+  normalize(): Vector2 {
+    return this.divideScalar(this.length || 1);
+  }
+
+  lerp(target: V2, t: number): Vector2 {
+    this.x += (target.x - this.x) * t;
+    this.y += (target.y - this.y) * t;
+    return this;
+  }
+
+  clamp(xMin: number, xMax: number, yMin: number, yMax: number): Vector2 {
     this.clampX(xMin, xMax);
     this.clampY(yMin, yMax);
+    return this;
   }
 
-  clampX(min: number, max: number): void {
+  clampX(min: number, max: number): Vector2 {
     this.x = clamp(this.x, min, max);
+    return this;
   }
 
-  clampY(min: number, max: number): void {
+  clampY(min: number, max: number): Vector2 {
     this.y = clamp(this.y, min, max);
+    return this;
   }
 
   equals(val: V2): boolean {

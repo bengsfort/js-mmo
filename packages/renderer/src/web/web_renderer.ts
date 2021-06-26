@@ -3,14 +3,14 @@
 
 import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+
 import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
-
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
@@ -41,6 +41,7 @@ const renderLoop = (): void => {
       // isometric HERE
       // activeContext.canvas.width / 2 -
       // activeContext.canvas.height / 2 -
+      // clip space = scale * rotation * translation * position * width * height
       // scale -> rotate -> translate
       activeContext.setTransform(
         activeCamera.zoom * PIXEL_RATIO,
