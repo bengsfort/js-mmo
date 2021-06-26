@@ -21,6 +21,7 @@ let isPaused = false;
 
 let activeScene: Scene | null = null;
 let activeCamera: Camera | null = null;
+// Multiple cameras (1 isometric (for ex.), 1 for ui?) Layers? Isometric layer + ui layer?
 
 const registeredDrawables: Drawable<DAttrs>[] = [];
 const registeredForceDraw: VoidFunction[] = [];
