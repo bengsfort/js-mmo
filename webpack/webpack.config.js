@@ -17,7 +17,7 @@ const makeWebpackConfig = (entry, output = DEFAULT_OUTPUT, mode = 'development',
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'engine_tests/test_template.html',
+      template: 'src/test_template.html',
       title: '@js-mmo/game',
     }),
   ],
@@ -29,7 +29,7 @@ const makeWebpackConfig = (entry, output = DEFAULT_OUTPUT, mode = 'development',
           {
             loader: 'ts-loader', options: {
               transpileOnly: true,
-              configFile: "tsconfig.tests.json"
+              configFile: "tsconfig.json"
             }
           }
         ]

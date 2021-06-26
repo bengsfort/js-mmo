@@ -1,6 +1,5 @@
+import { EngineConfig, GameLoop, Time, Vector2 } from "@js-mmo/engine";
 import { RendererConfig, Scene, Sprite2d, TilesetManager, WebRenderer } from "@js-mmo/renderer";
-
-import { EngineConfig, GameLoop, Time, Vector2 } from "../../build";
 
 declare global {
   interface Window {

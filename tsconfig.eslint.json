@@ -2,7 +2,7 @@
     "extends": "./tsconfig.base.json",
     "include": [
       "./packages/engine/src/**/*.ts",
-      "./packages/engine/engine_tests/**/*.ts",
+      "./packages/engine_tests/src/**/*.ts",
       "./packages/renderer/src/**/*.ts",
       "./packages/game/src/**/*.ts",
       "types/**/*"

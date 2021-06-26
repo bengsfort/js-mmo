@@ -1,6 +1,5 @@
 import { Camera, RendererConfig, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
-
-import { EngineConfig, GameLoop, TiledMap, Time, Vector2 } from "../../build";
+import { EngineConfig, GameLoop, TiledMap, Time, Vector2 } from "@js-mmo/engine";
 
 import devMap from "./assets/dev_sandbox_map.json";
 

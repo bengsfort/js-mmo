@@ -1,0 +1,37 @@
+{
+    "name": "@js-mmo/engine-tests",
+    "version": "0.0.1",
+    "description": "The underlying engine for the js-mmo.",
+    "main": "build/index.js",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/bengsfort/js-mmo.git",
+      "directory": "packages/engine_tests"
+    },
+    "author": "Matt Bengston <bengsfort@gmail.com>",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+      "start": "webpack serve --mode development --env development --config webpack.config.js",
+      "build": "webpack --mode production --env production --config webpack.config.js",
+      "clean": "rimraf {build,tsconfig.tsbuildinfo}"
+    },
+    "peerDependencies": {
+      "@js-mmo/engine": "*",
+      "@js-mmo/renderer": "*"
+    },
+    "dependencies": {
+      "@js-mmo/engine": "*",
+      "@js-mmo/renderer": "*"
+    },
+    "devDependencies": {
+      "@js-mmo/webpack-config-internal": "*",
+      "@types/node": "^15.0.2",
+      "copy-webpack-plugin": "^9.0.0",
+      "rimraf": "^3.0.2",
+      "ts-loader": "^9.1.2",
+      "webpack": "^5.37.0",
+      "webpack-cli": "^4.7.0"
+    }
+  }
+  

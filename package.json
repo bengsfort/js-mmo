@@ -11,6 +11,7 @@
     "webpack",
     "packages/engine",
     "packages/renderer",
+    "packages/engine_tests",
     "packages/game"
   ],
   "devDependencies": {
