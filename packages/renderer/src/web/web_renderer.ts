@@ -3,14 +3,14 @@
 
 import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
-
 import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
+
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
@@ -57,6 +57,7 @@ const renderLoop = (): void => {
     const tree = traverseTree(activeScene);
     let drawOrder: IteratorResult<RenderingNode | Scene> = tree.next();
     while (!drawOrder.done) {
+      activeContext.save();
       if (drawOrder.value.type === "scene") {
         activeContext.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
         activeContext.fillStyle = (drawOrder.value as Scene).background;
@@ -65,6 +66,7 @@ const renderLoop = (): void => {
       if (drawOrder.value.type === "draw") {
         renderDrawable((drawOrder.value as RenderingNode<Drawable<DAttrs>>).drawable, activeContext);
       }
+      activeContext.restore();
       drawOrder = tree.next();
     }
   }
@@ -77,7 +79,9 @@ const renderLoop = (): void => {
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];
   for (let f = 0; f < tickForceDraw.length; f++) {
+    activeContext.save();
     tickForceDraw[f]();
+    activeContext.restore();
   }
 };
 

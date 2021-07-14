@@ -19,7 +19,7 @@ export interface DRect {
 export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D) => {
   const { id, width, height, position, scale, origin, rotation, color, renderIsometric } = drawable;
 
-  context.save();
+  // context.save();
   context.fillStyle = color;
 
   const orig = new Vector2(origin.x * width, origin.y * height);
@@ -43,5 +43,5 @@ export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D) => 
     drawDebugText(context, id, pos, orig);
   }
 
-  context.restore();
+  // context.restore();
 };

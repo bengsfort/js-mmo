@@ -47,7 +47,7 @@ export class AssetManager<T> {
       }
       const asset = await this._loaderFunc(source);
       this._assets.set(source, asset);
-      logger.verboseLogInfo(`${source} loaded!`);
+      logger.verboseLogInfo(`Asset ${source} loaded!`);
       return true;
     } catch (e) {
       logger.logError(`There was an error loading asset ${source}!`, e);
