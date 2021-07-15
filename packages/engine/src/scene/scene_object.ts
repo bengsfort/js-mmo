@@ -1,8 +1,10 @@
 import * as GameLoop from "../game_loop";
+
 import { Node2d } from "../core/node_2d";
+import { NodeTypes } from "../constants";
 
 export class SceneObject extends Node2d {
-  type = "object";
+  type = NodeTypes.Node;
   private _updateHandlerId = -1;
   private _postUpdateHandlerId = -1;
   private _fixedUpdateHandlerId = -1;

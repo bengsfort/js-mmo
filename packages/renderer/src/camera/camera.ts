@@ -1,7 +1,7 @@
-import { Node2d, TiledOrientation } from "@js-mmo/engine";
+import { Node2d, NodeTypes, TiledOrientation } from "@js-mmo/engine";
 
 export class Camera extends Node2d {
-  type = "Camera";
+  type = NodeTypes.Camera;
   zoom = 1;
   orientation = TiledOrientation.Isometric;
 }

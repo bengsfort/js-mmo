@@ -1,12 +1,13 @@
 import { Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
-
 import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
+
 import { ImageManager } from "../asset_management/image_manager";
+import { NodeTypes } from "../../../engine/build";
 import { RenderingNode } from "../drawables/rendering_node";
 import { registerDrawable } from "../web/web_renderer";
 
 export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawable> {
-  public readonly type = "draw";
+  public readonly type = NodeTypes.Draw;
 
   public texture: ImageBitmap;
   public size = Vector2.Zero;
@@ -23,6 +24,7 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
       width: this.size.x,
       height: this.size.y,
       position: this.position,
+      rotation: this.rotation,
       origin: this.origin,
       scale: this.scale,
       flipX: this.flipX,
@@ -50,6 +52,7 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
       height: this.size.y,
       position: this.position,
       origin: this.origin,
+      rotation: this.rotation,
       scale: this.scale,
       flipX: this.flipX,
       flipY: this.flipY,

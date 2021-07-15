@@ -1,12 +1,12 @@
-import { Node2d, SceneObject, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
-
+import { Node2d, NodeTypes, SceneObject, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
 import { TilemapDrawable, createTilemap } from "../drawables/tilemap/tilemap";
+
 import { RenderingNode } from "../drawables/rendering_node";
 import { RuntimeTileset } from "../asset_management/tileset_manager";
 import { logger } from "../logger";
 
 export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawable> {
-  readonly type = "draw";
+  readonly type = NodeTypes.Draw;
   readonly map: TiledMap;
 
   public origin = Vector2.Zero;

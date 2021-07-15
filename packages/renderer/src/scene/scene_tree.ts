@@ -1,7 +1,6 @@
-import { Node } from "@js-mmo/engine";
+import { Node, NodeTypes } from "@js-mmo/engine";
 
 import { RenderingNode } from "../drawables/rendering_node";
-
 import { Scene } from "./scene";
 
 export function* traverseTree(scene: Scene) {
@@ -19,7 +18,7 @@ export function* traverseTree(scene: Scene) {
         nextRoots.push(node);
       }
 
-      if (root.children[i].type === "draw") {
+      if (root.children[i].type === NodeTypes.Draw) {
         //  Cast to unknown cause my types are bad
         const renderingNode = node as unknown;
         yield renderingNode as RenderingNode;

@@ -8,7 +8,7 @@ declare global {
   interface Window {
     __SCENE__: Scene;
     __IMAGE_MANAGER__: typeof ImageManager;
-    __SPRITES__: { [key: string]: Sprite2d };
+    __SPRITES__: { [key: string]: Sprite2d | Group };
     __STATIC_SPRITE__: Sprite2d;
     __FLIPPED_SPRITE__: Sprite2d;
     __DEFAULT_SPRITE__: Sprite2d;
@@ -28,10 +28,13 @@ const drawFps = () => {
   // ctx.restore();
 };
 
-function main() {
+async function main() {
   EngineConfig.LOG_VERBOSE = true;
   EngineConfig.FIXED_UPDATE_ONLY = false;
   RendererConfig.PIXELS_PER_UNIT = 1;
+
+  await ImageManager.preload([box, tile32]);
+
   GameLoop.start();
 
   GameLoop.registerPostUpdateHandler(WebRenderer.create());
@@ -45,26 +48,35 @@ function main() {
   window.__SCENE__ = scene;
 
   // Isometric
-  const group = new Group("isometric_test", new Vector2(0, 5), Vector2.One, 0, scene);
-  const tile1 = new Sprite2d("tile1", box, new Vector2(32, 32), true, group);
-  const tile2 = new Sprite2d("tile2", box, new Vector2(32, 32), true, group);
-  const tile3 = new Sprite2d("tile3", box, new Vector2(32, 32), true, group);
-  const tile4 = new Sprite2d("tile4", box, new Vector2(32, 32), true, group);
-  tile1.localPosition.set(0, 0);
-  tile2.localPosition.set(0, 1);
-  tile3.localPosition.set(1, 0);
-  tile4.localPosition.set(1, 1);
+  // const group = new Group("isometric_test", new Vector2(0, 5), Vector2.One, 0, scene);
+  // const tile1 = new Sprite2d("tile1", box, new Vector2(32, 32), true, group);
+  // const tile2 = new Sprite2d("tile2", box, new Vector2(32, 32), true, group);
+  // const tile3 = new Sprite2d("tile3", box, new Vector2(32, 32), true, group);
+  // const tile4 = new Sprite2d("tile4", box, new Vector2(32, 32), true, group);
+  // tile1.localPosition.set(0, 0);
+  // tile2.localPosition.set(0, 1);
+  // tile3.localPosition.set(1, 0);
+  // tile4.localPosition.set(1, 1);
 
   // Normal variants
-  const group2 = new Group("normal_sprites", new Vector2(64, -64), Vector2.One, 0, scene);
+  const group2 = new Group("normal_sprites", new Vector2(64, 128), Vector2.One, 0, scene);
+
   const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, group2);
   const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, group2);
-  forceDefault.localPosition.set(32, 0);
+  forceDefault.origin.set(0.5, 0.5);
+  forceDefault.localPosition.set(88, 0);
 
   const flipped = new Sprite2d("flipped", tile32, new Vector2(32, 32), false, group2);
-  flipped.flipX = false;
+  flipped.flipX = true;
   flipped.flipY = true;
-  flipped.localPosition.set(64, 0);
+  flipped.localPosition.set(196, 0);
+  flipped.origin.set(0.5, 0.5);
+  flipped.localScale.set(1.5, 1.5);
+  flipped.rotation = (0 * Math.PI) / 360;
+
+  GameLoop.registerUpdateHandler(() => {
+    flipped.rotation += 1 / Time.getDeltaTime();
+  });
 
   WebRenderer.setActiveRender(scene);
 
@@ -72,8 +84,8 @@ function main() {
     normal,
     forceDefault,
     flipped,
-    group,
+    group2,
   };
 }
 
-main();
+void main();

@@ -1,7 +1,7 @@
-import { Node2d } from "@js-mmo/engine";
+import { Node2d, NodeTypes } from "@js-mmo/engine";
 
 export class Scene extends Node2d {
-  type = "scene";
+  type = NodeTypes.Scene;
   background = "#000";
   isScene = true;
   activeCamera = null;

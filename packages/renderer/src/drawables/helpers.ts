@@ -10,9 +10,9 @@ export const drawOrigin = (
 ) => {
   ctx.fillStyle = "#ff00ff";
   ctx.strokeStyle = "#ffff00";
-  const translatedX = position.x - origin.x * scale.x;
-  const translatedY = position.y - origin.y * scale.y;
-  ctx.strokeRect(translatedX, translatedY, width * scale.x, height * scale.y);
+  const offsetX = width * scale.x * origin.x;
+  const offsetY = height * scale.x * origin.x;
+  ctx.strokeRect(position.x - offsetX, position.y - offsetY, width * scale.x, height * scale.y);
   ctx.fillRect(position.x - 4, position.y - 4, 8, 8);
 };
 
