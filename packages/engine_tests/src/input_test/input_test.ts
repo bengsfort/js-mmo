@@ -43,6 +43,9 @@ function main() {
     [InputEvents.MoveDown]: [KeyboardKeys.S, KeyboardKeys.ArrowDown],
     [InputEvents.MoveLeft]: [KeyboardKeys.A, KeyboardKeys.ArrowLeft],
     [InputEvents.MoveRight]: [KeyboardKeys.D, KeyboardKeys.ArrowRight],
+    [InputEvents.Grow]: KeyboardKeys.E,
+    [InputEvents.Shrink]: KeyboardKeys.Q,
+    [InputEvents.Rotate]: KeyboardKeys.R,
   });
 
   GameLoop.start();

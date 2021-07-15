@@ -3,7 +3,13 @@
     "compilerOptions": {
       "rootDir": "src",
       "outDir": "build",
-      "baseUrl": "./src"
+      "baseUrl": "./src",
+      "paths": {
+        "@js-mmo/engine": ["../engine"]
+      }
     },
+    "references": [
+      { "path": "../engine" }
+    ]
   }
   

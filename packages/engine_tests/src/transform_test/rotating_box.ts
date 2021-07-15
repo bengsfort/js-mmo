@@ -1,10 +1,10 @@
 import { RectDrawable, RenderingNode, createRect } from "@js-mmo/renderer";
-import { SceneObject, Time, Vector2 } from "@js-mmo/engine";
+import { NodeTypes, SceneObject, Time, Vector2 } from "@js-mmo/engine";
 
 let counter = 0;
 
 export class RotatingBox extends SceneObject implements RenderingNode<RectDrawable> {
-  public type = "draw";
+  public type = NodeTypes.Draw;
 
   private _drawable: RectDrawable;
   private _speed: number;

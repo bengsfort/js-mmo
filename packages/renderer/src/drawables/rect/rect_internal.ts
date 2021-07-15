@@ -17,31 +17,23 @@ export interface DRect {
 }
 
 export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D) => {
-  const { id, width, height, position, scale, origin, rotation, color, renderIsometric } = drawable;
-
-  // context.save();
-  context.fillStyle = color;
+  const { id, width, height, position, scale, origin, rotation, color } = drawable;
 
   const orig = new Vector2(origin.x * width, origin.y * height);
-  const pos = renderIsometric
-    ? coordsToIsometricScreen(context.canvas, position.x * scale.x, position.y * scale.y)
-    : position;
 
-  // Rotate around origin
-  context.save();
-  context.translate(pos.x, pos.y);
+  // Position
+  context.translate(position.x, position.y);
   context.rotate((rotation * Math.PI) / 180);
-  context.translate(-pos.x, -pos.y);
+  context.scale(scale.x, scale.y);
 
-  // Fill
-  // @todo: I think I might have fucked this up for isometric...
-  context.fillRect(pos.x - orig.x * scale.x, pos.y - orig.y * scale.y, width * scale.x, height * scale.y);
-  context.restore();
+  // Draw
+  context.fillStyle = color;
+  context.fillRect(-orig.x, -orig.y, width, height);
 
   if (DEBUG_SHOW_ORIGINS) {
-    drawOrigin(context, pos, orig, scale, width, height);
-    drawDebugText(context, id, pos, orig);
+    context.restore();
+    context.save();
+    drawOrigin(context, position, origin, scale, width, height);
+    drawDebugText(context, id, position, origin);
   }
-
-  // context.restore();
 };

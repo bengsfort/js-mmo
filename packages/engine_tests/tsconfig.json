@@ -6,7 +6,15 @@
     "compilerOptions": {
       "rootDir": "src",
       "outDir": "build",
-      "baseUrl": "./src"
-    }
+      "baseUrl": "./src",
+      "paths": {
+        "@js-mmo/engine": ["../engine"],
+        "@js-mmo/renderer": ["../renderer"],
+      }
+    },
+    "references": [
+      { "path": "../engine" },
+      { "path": "../renderer" }
+    ]
   }
   

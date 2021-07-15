@@ -47,20 +47,7 @@ async function main() {
   scene.localPosition.set(0, 0);
   window.__SCENE__ = scene;
 
-  // Isometric
-  // const group = new Group("isometric_test", new Vector2(0, 5), Vector2.One, 0, scene);
-  // const tile1 = new Sprite2d("tile1", box, new Vector2(32, 32), true, group);
-  // const tile2 = new Sprite2d("tile2", box, new Vector2(32, 32), true, group);
-  // const tile3 = new Sprite2d("tile3", box, new Vector2(32, 32), true, group);
-  // const tile4 = new Sprite2d("tile4", box, new Vector2(32, 32), true, group);
-  // tile1.localPosition.set(0, 0);
-  // tile2.localPosition.set(0, 1);
-  // tile3.localPosition.set(1, 0);
-  // tile4.localPosition.set(1, 1);
-
-  // Normal variants
   const group2 = new Group("normal_sprites", new Vector2(64, 128), Vector2.One, 0, scene);
-
   const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, group2);
   const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, group2);
   forceDefault.origin.set(0.5, 0.5);
@@ -75,7 +62,7 @@ async function main() {
   flipped.rotation = (0 * Math.PI) / 360;
 
   GameLoop.registerUpdateHandler(() => {
-    flipped.rotation += 1 / Time.getDeltaTime();
+    flipped.rotation += 1 * 0.01666;
   });
 
   WebRenderer.setActiveRender(scene);
