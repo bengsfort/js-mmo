@@ -37,7 +37,7 @@ async function main() {
 
   GameLoop.start();
 
-  GameLoop.registerPostUpdateHandler(WebRenderer.create());
+  GameLoop.registerRenderer(WebRenderer.create());
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 

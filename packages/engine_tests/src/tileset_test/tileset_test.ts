@@ -29,7 +29,7 @@ async function main() {
   RendererConfig.DEBUG_SHOW_ORIGINS = false;
   GameLoop.start();
 
-  GameLoop.registerPostUpdateHandler(WebRenderer.create());
+  GameLoop.registerRenderer(WebRenderer.create());
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 

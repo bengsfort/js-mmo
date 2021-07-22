@@ -51,7 +51,7 @@ function main() {
   GameLoop.start();
 
   // Create renderer and add it to the update loop
-  GameLoop.registerPostUpdateHandler(WebRenderer.create());
+  GameLoop.registerRenderer(WebRenderer.create());
 
   // Force-draw the FPS to the top left corner
   debugCanvas = WebRenderer.getActiveCanvas();
