@@ -20,9 +20,7 @@ let activeContext: CanvasRenderingContext2D;
 let resizeUnsub: UnsubscribeCallback;
 let isPaused = false;
 
-let activeScene: Scene | null = null;
-let activeCamera: Camera | null = null;
-// Multiple cameras (1 isometric (for ex.), 1 for ui?) Layers? Isometric layer + ui layer?
+let renderCalls: [Scene, Camera?][] = [];
 
 const registeredDrawables: Drawable<DAttrs>[] = [];
 const registeredForceDraw: VoidFunction[] = [];
@@ -87,12 +85,13 @@ const renderLoop = (): void => {
 };
 
 // Public API
-export const setActiveRender = (scene: Scene) => {
-  activeScene = scene;
+export const addScene = (scene: Scene, camera?: Camera) => {
+  renderCalls.push([scene, camera]);
 };
 
-export const setActiveCamera = (camera: Camera) => {
-  activeCamera = camera;
+export const removeScene = (scene: Scene) => {
+  const renders = renderCalls.slice(0);
+  renderCalls = renders.filter(([s]) => s.id !== scene.id);
 };
 
 export const getActiveCanvas = () => activeCanvas;
