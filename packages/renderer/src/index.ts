@@ -20,3 +20,4 @@ export { Tilemap } from "./scene_objects/tilemap";
 
 // Cameras
 export { Camera } from "./camera/camera";
+export { IsometricCamera } from "./camera/isometric_camera";

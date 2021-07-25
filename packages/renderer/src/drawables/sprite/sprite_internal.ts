@@ -3,6 +3,7 @@ import { Vector2 } from "@js-mmo/engine";
 import { coordsToIsometricScreen, coordsToScreen } from "../../web/canvas";
 import { drawDebugText, drawOrigin } from "../helpers";
 import { DEBUG_SHOW_ORIGINS } from "../../renderer_config";
+import { Camera } from "../../camera/camera";
 
 export interface DSprite {
   id: string;
@@ -22,7 +23,7 @@ export interface DSprite {
 //   ? coordsToIsometricScreen(context.canvas, position.x * scale.x, position.y * scale.y)
 //   : coordsToScreen(position.x * scale.x, position.y * scale.y);
 
-export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D) => {
+export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D, camera?: Camera) => {
   const { width, height, image, position, scale, origin, rotation, flipX, flipY } = drawable;
 
   const modifiers = new Vector2(flipX ? -1 : 1, flipY ? -1 : 1);

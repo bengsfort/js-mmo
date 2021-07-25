@@ -1,5 +1,5 @@
 import { EngineConfig, GameLoop, Time, Vector2 } from "@js-mmo/engine";
-import { RendererConfig, Scene, Sprite2d, TilesetManager, WebRenderer } from "@js-mmo/renderer";
+import { Camera, RendererConfig, Scene, Sprite2d, TilesetManager, WebRenderer } from "@js-mmo/renderer";
 
 declare global {
   interface Window {
@@ -34,7 +34,7 @@ async function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene("Main");
-  scene.localPosition.set(128, 128);
+  const camera = new Camera("camera", new Vector2(128, 128));
   window.__SCENE__ = scene;
 
   window.__TILESET_MANAGER__ = TilesetManager;
@@ -50,7 +50,7 @@ async function main() {
     window.__STATIC_SPRITE__ = tile;
   }
 
-  WebRenderer.setActiveRender(scene);
+  WebRenderer.addScene(scene, camera);
 }
 
 void main();

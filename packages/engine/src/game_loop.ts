@@ -6,7 +6,7 @@ let idCounter = 0;
 let rafId = 0;
 let tickLoopId = 0;
 
-type LoopHandler = (timestamp?: number) => void;
+type LoopHandler = (timestamp: number) => void;
 
 // Update handlers are what most client side things will use, things like
 // Client Side movement prediction/lerping/UI/etc.

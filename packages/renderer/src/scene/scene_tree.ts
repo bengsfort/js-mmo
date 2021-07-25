@@ -1,13 +1,12 @@
 import { Node, NodeTypes } from "@js-mmo/engine";
 
 import { RenderingNode } from "../drawables/rendering_node";
+
 import { Scene } from "./scene";
 
 export function* traverseTree(scene: Scene) {
-  // Draw scene
-  let root: Node | Scene = scene;
+  let root: Node = scene;
   const nextRoots: Node[] = [];
-  yield root as Scene;
 
   while (root.childCount > 0) {
     // Draw all of the current children that are drawable

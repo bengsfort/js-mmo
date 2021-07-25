@@ -1,4 +1,5 @@
 import { logger } from "../logger";
+import { Camera } from "../camera/camera";
 
 import { DRect, drawRect } from "./rect/rect_internal";
 import { DSprite, drawSprite } from "./sprite/sprite_internal";
@@ -7,16 +8,20 @@ import { drawTilemap, DTilemap } from "./tilemap/tilemap_internal";
 
 export type DAttrs = DRect | DSprite | DTilemap;
 
-export const renderDrawable = <T extends DAttrs>(drawable: Drawable<T>, context: CanvasRenderingContext2D): void => {
+export const renderDrawable = <T extends DAttrs>(
+  drawable: Drawable<T>,
+  context: CanvasRenderingContext2D,
+  camera?: Camera
+): void => {
   switch (drawable.type) {
     case DrawableType.Tilemap:
-      drawTilemap((drawable as Drawable<DTilemap>).data, context);
+      drawTilemap((drawable as Drawable<DTilemap>).data, context, camera);
       break;
     case DrawableType.Sprite:
-      drawSprite((drawable as Drawable<DSprite>).data, context);
+      drawSprite((drawable as Drawable<DSprite>).data, context, camera);
       break;
     case DrawableType.Rect:
-      drawRect((drawable as Drawable<DRect>).data, context);
+      drawRect((drawable as Drawable<DRect>).data, context, camera);
       break;
     default:
       logger.logWarn("Drawable type unsupported:", drawable);

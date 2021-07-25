@@ -11,6 +11,9 @@
 		"jestrunner.jestPath": "${workspaceFolder}/node_modules/.bin/jest.js",
 		"jestrunner.projectPath": "${workspaceFolder}/packages/engine",
 		"jestrunner.codeLensSelector": "packages/engine/src/**/*.{test,spec}.{js,jsx,ts,tsx}",
-		"eslint.alwaysShowStatus": true
+		"eslint.alwaysShowStatus": true,
+		"typescript.referencesCodeLens.enabled": true,
+		"typescript.referencesCodeLens.showOnAllFunctions": true,
+		"typescript.implementationsCodeLens.enabled": true
 	}
 }

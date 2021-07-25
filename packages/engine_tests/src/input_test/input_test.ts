@@ -8,7 +8,7 @@ import {
   Time,
   Vector2,
 } from "@js-mmo/engine";
-import { RendererConfig, Scene, WebRenderer } from "@js-mmo/renderer";
+import { Camera, RendererConfig, Scene, WebRenderer } from "@js-mmo/renderer";
 
 import { InputEvents } from "./input_events";
 import { MovingBox } from "./moving_box";
@@ -58,10 +58,12 @@ function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene();
+  const camera = new Camera();
+
   const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 10);
   scene.addChild(box);
 
-  WebRenderer.setActiveRender(scene);
+  WebRenderer.addScene(scene, camera);
   window.MOVING_BOX = box;
 }
 

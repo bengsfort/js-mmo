@@ -1,8 +1,8 @@
 import { Vector2 } from "@js-mmo/engine";
 
 import { drawDebugText, drawOrigin } from "../helpers";
-import { coordsToIsometricScreen } from "../../web/canvas";
 import { DEBUG_SHOW_ORIGINS } from "../../renderer_config";
+import { Camera } from "../../camera/camera";
 
 export interface DRect {
   id: string;
@@ -16,7 +16,7 @@ export interface DRect {
   renderIsometric: boolean;
 }
 
-export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D) => {
+export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D, camera?: Camera) => {
   const { id, width, height, position, scale, origin, rotation, color } = drawable;
 
   const orig = new Vector2(origin.x * width, origin.y * height);

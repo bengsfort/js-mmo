@@ -1,17 +1,18 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
-import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
-import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
+import { NodeTypes, TiledOrientation, Vector2 } from "@js-mmo/engine";
 
 import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
-import { NodeTypes } from "@js-mmo/engine";
+import { DAttrs, renderDrawable } from "../drawables/render_drawables";
+import { CLEAR_COLOR, ISOMETRIC_PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
+
+import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
 let activeCanvas: HTMLCanvasElement;
 let activeContext: CanvasRenderingContext2D;
@@ -32,48 +33,40 @@ const renderLoop = (): void => {
   activeContext.fillStyle = CLEAR_COLOR;
   activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
 
-  // Traverse through the tree
-  if (activeScene !== null) {
-    // @todo: translate 0,0 to middle of screen
-    if (activeCamera !== null) {
-      const cameraOffset = activeCamera.position;
+  // Iterate through active scenes/cameras and draw all objects within them
+  renderCalls.forEach(([scene, camera]) => {
+    activeContext.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
+    activeContext.save();
 
-      // isometric HERE
-      // activeContext.canvas.width / 2 -
-      // activeContext.canvas.height / 2 -
-      // clip space = scale * rotation * translation * position * width * height
-      // scale -> rotate -> translate
-      activeContext.setTransform(
-        activeCamera.zoom * PIXEL_RATIO,
-        0,
-        0,
-        activeCamera.zoom * PIXEL_RATIO,
-        cameraOffset.x * activeCamera.zoom * PIXEL_RATIO,
-        cameraOffset.y * activeCamera.zoom * PIXEL_RATIO
-      );
+    if (scene.background !== "transparent") {
+      activeContext.fillStyle = scene.background;
+      activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
     }
 
-    const tree = traverseTree(activeScene);
-    let drawOrder: IteratorResult<RenderingNode | Scene> = tree.next();
+    const cameraOffset = camera?.getViewPosition(camera.position) ?? Vector2.Zero;
+    // @todo: This could probably be improved for isometric so that we don't have to do weird movement
+    if (camera?.orientation === TiledOrientation.Isometric) {
+      cameraOffset.x += activeCanvas.width / PIXEL_RATIO / 2;
+    }
+    const cameraScale = Math.max(0, camera?.zoom ?? 1);
+
+    // Move scene viewport to camera viewport
+    activeContext.translate(cameraOffset.x, cameraOffset.y);
+    activeContext.rotate(camera?.rotation ?? 0); // @todo, proper implementation
+    activeContext.scale(cameraScale * PIXEL_RATIO, cameraScale * PIXEL_RATIO);
+
+    const tree = traverseTree(scene);
+    let drawOrder: IteratorResult<RenderingNode> = tree.next();
     while (!drawOrder.done) {
       activeContext.save();
-      if (drawOrder.value.type === NodeTypes.Scene) {
-        activeContext.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-        activeContext.fillStyle = (drawOrder.value as Scene).background;
-        activeContext.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
-      }
-      if (drawOrder.value.type === NodeTypes.Draw) {
-        renderDrawable((drawOrder.value as RenderingNode<Drawable<DAttrs>>).drawable, activeContext);
-      }
+      renderDrawable(drawOrder.value.drawable, activeContext, camera);
+      // Restore camera viewport context, move to next drawable
       activeContext.restore();
       drawOrder = tree.next();
     }
-  }
 
-  if (activeCamera !== null) {
-    // this is fucking everything up, but is necessary
-    activeContext.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
-  }
+    activeContext.restore();
+  });
 
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];

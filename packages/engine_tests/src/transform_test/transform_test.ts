@@ -33,12 +33,6 @@ function main() {
   // Create renderer and add it to the update loop
   GameLoop.registerRenderer(WebRenderer.create());
 
-  // Want to do it like:
-  // const mainCamera = new IsometricCamera();
-  // GameLoop.setScenes([
-  //   [mainScene, mainCamera],
-  //   [uiScene],
-  // ])
   // renderer uses camera like:
   // camera.getViewPosition() <- does the transformation
   // ie. isometric camera .getViewPosition() === camera.x transformed to isometric pos
@@ -49,15 +43,17 @@ function main() {
 
   const scene = new Scene();
   scene.background = "#212121";
+
   const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 45, 15);
   scene.addChild(root);
+
   const nodes = [root];
   for (let i = 0; i < 10; i++) {
     console.log("Node", i, "making the following its parent", nodes[i]);
     nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, i - 5, nodes[i]));
   }
 
-  WebRenderer.setActiveRender(scene);
+  WebRenderer.addScene(scene);
   window.NODES = nodes;
 }
 
