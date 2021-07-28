@@ -30,7 +30,8 @@ export const drawSprite = (drawable: DSprite, context: CanvasRenderingContext2D,
   const orig = new Vector2(origin.x * width * modifiers.x, origin.y * height * modifiers.y);
 
   // Position
-  context.translate(position.x, position.y);
+  const viewPosition = camera?.getViewPosition(position) ?? position;
+  context.translate(viewPosition.x, viewPosition.y);
   context.rotate((rotation * Math.PI) / 180);
   context.scale(scale.x * modifiers.x, scale.y * modifiers.y);
 
