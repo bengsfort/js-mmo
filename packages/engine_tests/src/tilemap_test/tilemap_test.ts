@@ -56,7 +56,8 @@ async function main() {
   const uiScene = new Scene("UI");
   const uiCamera = new Camera("UICamera");
   const box = new Box(new Vector2(10, 38), new Vector2(0, 0.5), "#e0b834", 26, 160, uiScene);
-  const box2 = new Box(new Vector2(2, -10), new Vector2(0, 0), "#5abf0d", 20, 156, box);
+  const box2 = new Box(new Vector2(2, -10), new Vector2(0, 0), "#5abf0d", 20, 156);
+  box.addChild(box2);
 
   WebRenderer.addScene(scene, cam);
   WebRenderer.addScene(uiScene, uiCamera);

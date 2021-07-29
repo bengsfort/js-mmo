@@ -1,10 +1,9 @@
 import { Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
-import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
 
+import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
 import { ImageManager } from "../asset_management/image_manager";
 import { NodeTypes } from "../../../engine/build";
 import { RenderingNode } from "../drawables/rendering_node";
-import { registerDrawable } from "../web/web_renderer";
 
 export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawable> {
   public readonly type = NodeTypes.Draw;
@@ -64,10 +63,4 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
     await ImageManager.load(src);
     this.texture = ImageManager.get(src);
   }
-
-  postUpdate = () => {
-    if (this.drawable.data.image) {
-      registerDrawable(this.drawable);
-    }
-  };
 }

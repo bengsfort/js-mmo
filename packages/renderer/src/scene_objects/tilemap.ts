@@ -1,6 +1,6 @@
 import { Node2d, NodeTypes, SceneObject, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
-import { TilemapDrawable, createTilemap } from "../drawables/tilemap/tilemap";
 
+import { TilemapDrawable, createTilemap } from "../drawables/tilemap/tilemap";
 import { RenderingNode } from "../drawables/rendering_node";
 import { RuntimeTileset } from "../asset_management/tileset_manager";
 import { logger } from "../logger";

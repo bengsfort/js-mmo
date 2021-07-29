@@ -1,8 +1,9 @@
+import { Vector2 } from "@js-mmo/engine";
+
 import { Drawable, DrawableType } from "../drawable";
+import { GET_ID } from "../../constants";
 
 import { DSprite } from "./sprite_internal";
-import { GET_ID } from "../../constants";
-import { Vector2 } from "@js-mmo/engine";
 
 // External
 export type SpriteDrawable = Drawable<DSprite>;

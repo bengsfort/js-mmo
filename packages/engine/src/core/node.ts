@@ -1,4 +1,5 @@
 import { NodeTypes } from "../constants";
+
 import { makeLogger } from "./logging";
 
 const log = makeLogger("CORE");
@@ -7,7 +8,7 @@ let idCounter = 0;
 export class Node {
   // Properties
   public readonly id = idCounter++;
-  public readonly name: string;
+  public name: string;
 
   public type = NodeTypes.Node;
   public parent: Node | undefined;

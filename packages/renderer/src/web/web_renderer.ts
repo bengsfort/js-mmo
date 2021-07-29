@@ -1,12 +1,12 @@
 // This module is exported `export * as WebRenderer`, and is intended to be a singleton.
 // Exported functions are the public API
 
-import { NodeTypes, TiledOrientation, Vector2 } from "@js-mmo/engine";
+import { TiledOrientation, Vector2 } from "@js-mmo/engine";
 
 import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { CLEAR_COLOR, ISOMETRIC_PIXELS_PER_UNIT, PIXEL_RATIO } from "../renderer_config";
+import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";

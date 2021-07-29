@@ -22,7 +22,7 @@ const DEFAULT_OPTS = {
   rotation: 0,
 };
 
-export const createRect = (opts: RectOpts): Drawable<DRect> => {
+export const createRect = (opts: RectOpts): RectDrawable => {
   const id = `drawable::rect::${GET_ID()}`;
   const data = {
     ...DEFAULT_OPTS,

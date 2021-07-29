@@ -1,5 +1,4 @@
 import * as GameLoop from "../game_loop";
-
 import { Node2d } from "../core/node_2d";
 import { NodeTypes } from "../constants";
 

@@ -5,8 +5,9 @@ import { DRect, drawRect } from "./rect/rect_internal";
 import { DSprite, drawSprite } from "./sprite/sprite_internal";
 import { Drawable, DrawableType } from "./drawable";
 import { drawTilemap, DTilemap } from "./tilemap/tilemap_internal";
+import { drawText, DText } from "./text/text_internal";
 
-export type DAttrs = DRect | DSprite | DTilemap;
+export type DAttrs = DRect | DSprite | DTilemap | DText;
 
 export const renderDrawable = <T extends DAttrs>(
   drawable: Drawable<T>,
@@ -22,6 +23,9 @@ export const renderDrawable = <T extends DAttrs>(
       break;
     case DrawableType.Rect:
       drawRect((drawable as Drawable<DRect>).data, context, camera);
+      break;
+    case DrawableType.Text:
+      drawText((drawable as Drawable<DText>).data, context, camera);
       break;
     default:
       logger.logWarn("Drawable type unsupported:", drawable);
