@@ -50,7 +50,7 @@ async function main() {
   const scene = new Scene("Main", Vector2.Zero);
   const camera = new Camera("Camera", Vector2.Zero, Vector2.One);
 
-  const movingGroup = new TestPlayer("Bobby", new Vector2(64, 128), Vector2.One, 20);
+  const movingGroup = new TestPlayer("Kikkeli", new Vector2(64, 128), Vector2.One, 20);
   window.__TEST_PLAYER__ = movingGroup;
   scene.addChild(movingGroup);
 

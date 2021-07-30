@@ -15,7 +15,7 @@ const output = {
   filename: '[name].js',
 };
 
-const config = makeWebpackConfig(entry, output, 'development', 3000);
+const config = makeWebpackConfig(entry, output, 'development', 3000, "src/test_template.html");
 
 config.plugins.push(
   new CopyPlugin({

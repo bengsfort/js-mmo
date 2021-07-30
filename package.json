@@ -43,6 +43,7 @@
     "dev:engine": "yarn workspace @js-mmo/engine start",
     "dev:renderer": "yarn workspace @js-mmo/renderer start",
     "engine:tests": "yarn workspace @js-mmo/engine-tests start",
+    "game:run": "yarn workspace @js-mmo/game start",
     "lint": "eslint . --ext .ts --max-warnings=0",
     "fix": "yarn lint --fix",
     "clean": "yarn workspaces run clean",

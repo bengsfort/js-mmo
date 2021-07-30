@@ -16,7 +16,6 @@ export class IsometricCamera extends Camera {
   }
 
   public getViewPosition(pos: Vector2): Vector2 {
-    //  + getActiveCanvas().width / PIXEL_RATIO / 2
     return new Vector2(
       (ISOMETRIC_PIXELS_PER_UNIT.x / 2) * (pos.x - pos.y),
       (ISOMETRIC_PIXELS_PER_UNIT.y / 2) * (pos.x + pos.y)
