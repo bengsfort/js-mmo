@@ -1,7 +1,9 @@
 {
     "extends": "../../tsconfig.base.json",
     "include": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "src/assets/dev_sandbox_map.json",
+      "src/assets/dev_env_sheet.json",
     ],
     "compilerOptions": {
       "rootDir": "src",
@@ -17,4 +19,3 @@
       { "path": "../renderer" }
     ]
   }
-  

@@ -21,6 +21,7 @@
     "@js-mmo/renderer": "*"
   },
   "devDependencies": {
+    "@js-mmo/webpack-config-internal": "*",
     "fork-ts-checker-notifier-webpack-plugin": "^4.0.0",
     "fork-ts-checker-webpack-plugin": "^6.2.9",
     "html-webpack-plugin": "^5.3.1",
