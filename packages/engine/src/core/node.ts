@@ -27,8 +27,7 @@ export class Node {
   // Constructor
   constructor(name = "", parent?: Node) {
     this.name = name || this.id.toString();
-    this.parent = parent;
-    this.parent?.addChild(this);
+    parent?.addChild(this);
     this.children = [];
     this._active = false;
   }
@@ -49,6 +48,10 @@ export class Node {
     if (child === this) {
       log.logError("Can't add a node as a child of itself!");
       return;
+    }
+    if (typeof child.parent !== "undefined") {
+      console.log("parent:", child, child.parent);
+      child.parent.remove(child);
     }
 
     this.children.push(child);
