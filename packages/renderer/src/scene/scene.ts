@@ -4,5 +4,4 @@ export class Scene extends Node2d {
   type = NodeTypes.Scene;
   background = "transparent";
   isScene = true;
-  activeCamera = null;
 }

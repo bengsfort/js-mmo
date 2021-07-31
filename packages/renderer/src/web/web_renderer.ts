@@ -53,7 +53,7 @@ const renderLoop = (): void => {
     // Move scene viewport to camera viewport
     activeContext.translate(cameraOffset.x, cameraOffset.y);
     activeContext.rotate(camera?.rotation ?? 0); // @todo, proper implementation
-    activeContext.scale(cameraScale * PIXEL_RATIO, cameraScale * PIXEL_RATIO);
+    activeContext.scale(cameraScale, cameraScale);
 
     const tree = traverseTree(scene);
     let drawOrder: IteratorResult<RenderingNode> = tree.next();

@@ -16,9 +16,10 @@ export class IsometricCamera extends Camera {
   }
 
   public getViewPosition(pos: Vector2): Vector2 {
+    const diff = Vector2.Subtract(pos, this.position);
     return new Vector2(
-      (ISOMETRIC_PIXELS_PER_UNIT.x / 2) * (pos.x - pos.y),
-      (ISOMETRIC_PIXELS_PER_UNIT.y / 2) * (pos.x + pos.y)
+      (ISOMETRIC_PIXELS_PER_UNIT.x / 2) * (diff.x - diff.y),
+      (ISOMETRIC_PIXELS_PER_UNIT.y / 2) * (diff.x + diff.y)
     );
   }
 }
