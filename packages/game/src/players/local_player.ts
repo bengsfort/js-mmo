@@ -1,46 +1,25 @@
-import { InputSystem, SceneObject, Time, Vector2 } from "@js-mmo/engine";
+import { InputSystem, Math, SceneObject, Time, Vector2 } from "@js-mmo/engine";
 import { Sprite2d, Text2d, TextAlign, TilesetManager } from "@js-mmo/renderer";
 
+import { Ability, Aura } from "../abilities";
+import { Job } from "../jobs";
 import { InputEvents } from "../input/input_events";
 import { TILESET_PATH } from "../assets";
 
-export class LocalPlayer extends SceneObject {
-  // @todo: figure out where to store stuff like this
-  private _speed = 1;
+import { Character, CharacterStatus } from "./Character";
+import { Player } from "./player";
 
-  private _sprite: Sprite2d;
-  private _nameText: Text2d;
+export class LocalPlayer extends Player implements Character {
+  // Public state.
+  public readonly status = CharacterStatus.Friendly;
+  public abilities: Ability[] = [];
+  public auras: Aura[] = [];
 
   constructor(name: string, pos: Vector2) {
-    super(name, pos, Vector2.One, 0);
+    super(name, pos);
     const [sprite, nameText] = this._createVisuals();
     this._sprite = sprite;
     this._nameText = nameText;
-  }
-
-  private _createVisuals(): [Sprite2d, Text2d] {
-    // Setup sprite for player
-    const tileset = TilesetManager.get(TILESET_PATH);
-    const sprite = new Sprite2d(
-      `${this.name}-character`,
-      tileset.tiles[4],
-      new Vector2(tileset.tileWidth, tileset.tileHeight),
-      true,
-      this
-    );
-    sprite.origin = new Vector2(0.5, 0.5);
-    sprite.localPosition = Vector2.Zero;
-
-    // Setup text above player
-    const name = new Text2d(new Vector2(-1.5, -1.5), this.name, 10, "monospace", this);
-    name.align = TextAlign.Center;
-    name.color = "#ff8933";
-    name.fontWeight = "bold";
-
-    name.outline = "#383838";
-    name.outlineWidth = 2;
-
-    return [sprite, name];
   }
 
   update = () => {
@@ -61,5 +40,17 @@ export class LocalPlayer extends SceneObject {
       this.localPosition.x += movementSpeed;
       this.localPosition.y -= movementSpeed;
     }
+    // Temp
+    this.localPosition.clamp(0, 29, -1, 28);
+
+    if (InputSystem.inputEventDown(InputEvents.Hotbar1)) {
+      if (!this._casting && this.canCastAbility(this.abilities[0], this._target)) {
+        this._job?.cast(this.abilities[0], this, this._target as Character);
+      }
+    }
   };
+
+  canCastAbility(ability: Ability, target?: Character): boolean {
+    return this._power >= ability.cost && target?.status === ability.castOn;
+  }
 }
