@@ -1,6 +1,6 @@
-import { Time } from "@js-mmo/engine";
+import { Ability, ActiveAura, Aura, AuraEffector, CastTarget } from "../abilities";
 
-import { Ability, ActiveAura, Aura, AuraEffector } from "../abilities";
+import { Time } from "@js-mmo/engine";
 
 export enum CharacterStatus {
   Friendly,
@@ -24,6 +24,7 @@ export enum CharacterStatus {
 //   incrementHealth(val: number): void;
 // }
 
+// @todo: need to add physics + collisions for targeting
 export class Character {
   // General public state.
   public name: string;
@@ -54,6 +55,35 @@ export class Character {
   private _power = 1000;
   private _casting = false;
   private _activeAuras: ActiveAura[] = [];
+
+  canCast(ability: Ability, target?: Character): boolean {
+    const tar = target ?? this;
+    // Make sure we have enough resources
+    if (this._power < (ability.cost ?? 0)) {
+      console.log(
+        this.name,
+        "cannot cast",
+        ability.name,
+        "as they do not have enough power",
+        `(${this._power}/${ability.cost ?? 0})`
+      );
+      return false;
+    }
+    // Make sure the target is the correct status (friendly/hostile)
+    if (ability.castOn !== tar?.status) {
+      console.log(this.name, "cannot cast", ability.name, "on their target.");
+      return false;
+    }
+    // Make sure we are targeting the right thing
+    if (
+      (ability.castTarget === CastTarget.Target && tar === this) ||
+      (ability.castTarget === CastTarget.Self && tar !== this)
+    ) {
+      console.log(this.name, "cannot cast", ability.name, "on that target!");
+      return false;
+    }
+    return true;
+  }
 
   public applyAura(aura: Aura): void {
     console.log("Applying aura", aura.name, "to character", this.name);
