@@ -1,15 +1,13 @@
-import { InputSystem, Math, SceneObject, Time, Vector2 } from "@js-mmo/engine";
-import { Sprite2d, Text2d, TextAlign, TilesetManager } from "@js-mmo/renderer";
+import { InputSystem, Time, Vector2 } from "@js-mmo/engine";
 
 import { Ability, Aura } from "../abilities";
-import { Job } from "../jobs";
 import { InputEvents } from "../input/input_events";
-import { TILESET_PATH } from "../assets";
 
-import { Character, CharacterStatus } from "./Character";
+import { Character } from "./character";
+import { CharacterStatus } from "./status";
 import { Player } from "./player";
 
-export class LocalPlayer extends Player implements Character {
+export class LocalPlayer extends Player {
   // Public state.
   public readonly status = CharacterStatus.Friendly;
   public abilities: Ability[] = [];
@@ -23,7 +21,7 @@ export class LocalPlayer extends Player implements Character {
   }
 
   update = () => {
-    const movementSpeed = (this._speed / Time.getDeltaTime()) * 0.16;
+    const movementSpeed = this._speed / Time.getDeltaTime();
     if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
       this.localPosition.x -= movementSpeed;
       this.localPosition.y -= movementSpeed;
@@ -44,13 +42,20 @@ export class LocalPlayer extends Player implements Character {
     this.localPosition.clamp(0, 29, -1, 28);
 
     if (InputSystem.inputEventDown(InputEvents.Hotbar1)) {
-      if (!this._casting && this.canCastAbility(this.abilities[0], this._target)) {
-        this._job?.cast(this.abilities[0], this, this._target as Character);
+      // @todo: I dont think an array is going to work here, migrate to command pattern!
+      if (!this.character.isCasting && this.character.canCast(this.character.abilities[0], this._target)) {
+        this._job?.cast(this.character.abilities[0], this.character, this._target as Character);
+      }
+    } else if (InputSystem.inputEventDown(InputEvents.Hotbar2)) {
+      // @todo: I dont think an array is going to work here, migrate to command pattern!
+      if (!this.character.isCasting && this.character.canCast(this.character.abilities[1], this._target)) {
+        this._job?.cast(this.character.abilities[1], this.character, this._target as Character);
+      }
+    } else if (InputSystem.inputEventDown(InputEvents.Hotbar3)) {
+      // @todo: I dont think an array is going to work here, migrate to command pattern!
+      if (!this.character.isCasting && this.character.canCast(this.character.abilities[2], this._target)) {
+        this._job?.cast(this.character.abilities[2], this.character, this._target as Character);
       }
     }
   };
-
-  canCastAbility(ability: Ability, target?: Character): boolean {
-    return this._power >= ability.cost && target?.status === ability.castOn;
-  }
 }

@@ -1,6 +1,7 @@
-import { CharacterStatus } from "../players/Character";
+import { CharacterStatus } from "../players/status";
 
-import { Ability, AuraEffector, CastTarget } from "./ability";
+import { Ability, CastTarget } from "./ability";
+import { AuraEffector } from "./aura";
 
 export const __InstantDot: Ability = {
   name: "Instant DoT",

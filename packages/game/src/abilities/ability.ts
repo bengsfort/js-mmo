@@ -1,4 +1,4 @@
-import { CharacterStatus } from "../players/Character";
+import { CharacterStatus } from "../players/status";
 
 import { Aura } from "./aura";
 

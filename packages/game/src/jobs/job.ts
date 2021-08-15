@@ -1,5 +1,5 @@
-import { Character } from "../players/Character";
 import { Ability } from "../abilities/ability";
+import { Character } from "../players";
 
 export interface Job {
   name: string;

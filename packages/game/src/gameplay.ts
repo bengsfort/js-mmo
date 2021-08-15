@@ -11,9 +11,10 @@ import {
 } from "@js-mmo/engine";
 
 import { LocalPlayer } from "./players/local_player";
-import { inputMap } from "./input/input_mappings";
 import SandboxMap from "./assets/dev_sandbox_map.json";
 import { TILESET_PATH } from "./assets";
+import { __test_job } from "./jobs/test_job";
+import { inputMap } from "./input/input_mappings";
 
 declare global {
   interface Window {
@@ -72,6 +73,9 @@ async function main() {
   const tileset = TilesetManager.get(TILESET_PATH);
   const map = new Tilemap("Sandbox", SandboxMap as TiledMap, tileset, 0, Vector2.Zero, scene);
   const player = new LocalPlayer("Matt", new Vector2(3, 3));
+
+  // Temporary
+  player.character.setJob(__test_job);
 
   map.addChild(player);
   player.addChild(camera);

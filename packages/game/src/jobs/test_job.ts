@@ -1,9 +1,9 @@
-import { Character } from "../players/Character";
-import { Ability, __RangedSpell, __RangedHeal, __InstantDot } from "../abilities";
+import { Ability, __InstantDot, __RangedHeal, __RangedSpell } from "../abilities";
+import { Character } from "../players";
 
 import { Job } from "./job";
 
-export class TestJob implements Job {
+class TestJob implements Job {
   name = "Wizard";
   description = "A slinger of spells to deal damage.";
   abilities = [__RangedSpell, __InstantDot, __RangedHeal];
@@ -16,3 +16,5 @@ export class TestJob implements Job {
     console.info("Casting", ability.name, "from", source.name, "at", target.name);
   }
 }
+
+export const __test_job = new TestJob();

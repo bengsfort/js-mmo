@@ -1,11 +1,9 @@
+import { Math as MathUtils, Time } from "@js-mmo/engine";
+
 import { Ability, ActiveAura, Aura, AuraEffector, CastTarget } from "../abilities";
+import { Job } from "../jobs";
 
-import { Time } from "@js-mmo/engine";
-
-export enum CharacterStatus {
-  Friendly,
-  Enemy,
-}
+import { CharacterStatus } from "./status";
 
 // export interface Character {
 //   readonly name: string;
@@ -30,6 +28,8 @@ export class Character {
   public name: string;
   public target: Character | null = null;
   public status: CharacterStatus;
+  public abilities: Ability[] = [];
+  public auras: Aura[] = [];
 
   // Getters.
   public get maxHealth(): number {
@@ -56,7 +56,20 @@ export class Character {
   private _casting = false;
   private _activeAuras: ActiveAura[] = [];
 
-  canCast(ability: Ability, target?: Character): boolean {
+  constructor(name: string, status: CharacterStatus) {
+    this.name = name;
+    this.status = status;
+  }
+
+  public incrementPower(val: number): void {
+    this._power = MathUtils.clamp(this._power + val, 0, this.maxPower);
+  }
+
+  public incrementHealth(val: number): void {
+    this._hp = MathUtils.clamp(this._hp + val, 0, this.maxHealth);
+  }
+
+  public canCast(ability: Ability, target?: Character): boolean {
     const tar = target ?? this;
     // Make sure we have enough resources
     if (this._power < (ability.cost ?? 0)) {
@@ -111,5 +124,22 @@ export class Character {
         this._power += aura.amount;
         return;
     }
+  }
+
+  /**
+   * Apply a certain job to this player.
+   * @param {Job} job The Job to apply to the player.
+   */
+  setJob(job: Job): void {
+    const baseHp = 1000 * job.maxHealth;
+    const basePower = 1000 * job.maxPower;
+
+    this._maxHp = baseHp;
+    this._hp = baseHp;
+
+    this._maxPower = basePower;
+    this._power = job.generatesPower ? 0 : basePower;
+
+    this.abilities = [...job.abilities];
   }
 }
