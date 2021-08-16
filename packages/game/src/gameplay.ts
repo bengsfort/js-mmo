@@ -18,16 +18,17 @@ import {
   Time,
   Vector2,
 } from "@js-mmo/engine";
-import { LocalPlayer, Player } from "./players";
+import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
 
+import { LocalPlayer, Player } from "./players";
 import { HealingDummy } from "./npcs/healing_dummy";
 import { Hotbar } from "./ui/hotbar";
-import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
 import SandboxMap from "./assets/dev_sandbox_map.json";
 import { TILESET_PATH } from "./assets";
 import { TargetDummy } from "./npcs/damage_dummy";
 import { __test_job } from "./jobs/test_job";
 import { inputMap } from "./input/input_mappings";
+import { getNodeCount } from "./debug";
 
 declare global {
   interface Window {
@@ -48,7 +49,7 @@ declare global {
 let activeCanvas: HTMLCanvasElement;
 
 // Make a helper function to draw FPS at all times.
-const drawFps = () => {
+const drawDebug = () => {
   if (!activeCanvas) return;
   const ctx = activeCanvas.getContext("2d") as CanvasRenderingContext2D;
   ctx.save();
@@ -56,6 +57,8 @@ const drawFps = () => {
   ctx.fillStyle = "#ffffff";
   ctx.font = "16px monospace";
   ctx.fillText(`Current FPS: ${Time.getCurrentFps().toFixed(2)}`, 16, 48);
+  ctx.fillText(`Scene active nodes: ${getNodeCount(window.__SCENE__)}`, 16, 64);
+  ctx.fillText(`UI active nodes: ${getNodeCount(window.__UI__)}`, 16, 80);
   ctx.restore();
 };
 
@@ -80,7 +83,7 @@ async function main() {
   GameLoop.registerRenderer(WebRenderer.create());
 
   activeCanvas = WebRenderer.getActiveCanvas();
-  WebRenderer.registerForceDraw(drawFps);
+  WebRenderer.registerForceDraw(drawDebug);
 
   // Main scene
   const scene = new Scene("Main");
@@ -92,7 +95,7 @@ async function main() {
 
   // Temp
   const player = new LocalPlayer("Matt", new Vector2(7, 7));
-  const player2 = new Player("Client2", new Vector2(5, 5));
+  const player2 = new Player("Player2", new Vector2(5, 5));
 
   map.addChild(new TargetDummy("Target Dummy", new Vector2(4, 0)));
   map.addChild(new TargetDummy("Target Dummy", new Vector2(7, 0)));

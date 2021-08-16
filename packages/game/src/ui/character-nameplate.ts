@@ -25,7 +25,6 @@ export class Nameplate extends SceneObject {
   }
 
   createVisuals(): [Sprite2d, Sprite2d] {
-    console.log("bar:", ImageManager.get(BorderGreen));
     const borderSprite = new Sprite2d(
       `${this.name}:border`,
       ImageManager.get(BorderGreen),
@@ -44,6 +43,7 @@ export class Nameplate extends SceneObject {
     borderSprite.localPosition.set(0, 0);
 
     barSprite.origin = new Vector2(0, 0);
+    // @todo: Really need to find a better way of handling PPU.
     const offset = 6 / ISOMETRIC_PIXELS_PER_UNIT.x;
     barSprite.localPosition.set(-0.5 + 2 / ISOMETRIC_PIXELS_PER_UNIT.x - offset, 0.5 - offset);
     return [borderSprite, barSprite];

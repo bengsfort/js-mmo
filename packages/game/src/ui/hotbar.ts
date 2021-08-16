@@ -26,13 +26,15 @@ export class Hotbar extends SceneObject {
   }
 
   generateSprites(source: Character): void {
-    const size = this.iconSize * RendererConfig.PIXEL_RATIO;
+    // @todo: Need to find a better way of handling pixel ratio. This either looks good on my macbook (if pixel ratio used) OR my PC (if not used).
+    const size = this.iconSize;
     const defaultIcon = ImageManager.get(SpellIconBg);
     for (let i = 0; i < this.iconCount; i++) {
       const img = source.abilities[i]?.image ?? defaultIcon;
       const sprite = new Sprite2d(`${this.name}:${i + 1}`, img, new Vector2(size, size), false, this);
       sprite.localPosition.set((this.iconSize + this.iconSpacing) * i - this.barWidth / 2, 0);
-      new Text2d(new Vector2(2, 6), getHotbarKeyText(1, i + 1), 12, "Monospace", sprite);
+      // @todo: YUCK
+      new Text2d(new Vector2(4, 10), getHotbarKeyText(1, i + 1), 12, "Monospace", sprite);
     }
   }
 }
