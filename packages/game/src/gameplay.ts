@@ -1,4 +1,4 @@
-import { Camera, IsometricCamera, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
+import { AssetManager, Camera, IsometricCamera, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
 import {
   EngineConfig,
   GameLoop,
@@ -9,10 +9,13 @@ import {
   Time,
   Vector2,
 } from "@js-mmo/engine";
+import { LocalPlayer, Player } from "./players";
 
-import { LocalPlayer } from "./players/local_player";
+import { Nameplate } from "./ui/character-nameplate";
+import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
 import SandboxMap from "./assets/dev_sandbox_map.json";
 import { TILESET_PATH } from "./assets";
+import { TargetDummy } from "./npcs/damage_dummy";
 import { __test_job } from "./jobs/test_job";
 import { inputMap } from "./input/input_mappings";
 
@@ -22,6 +25,7 @@ declare global {
     __CAMERA__: Camera;
     __TILEMAP__: SceneObject;
     __PLAYER__: SceneObject;
+    __TILESET__: AssetManager<RuntimeTileset>;
   }
 }
 
@@ -72,12 +76,20 @@ async function main() {
 
   const tileset = TilesetManager.get(TILESET_PATH);
   const map = new Tilemap("Sandbox", SandboxMap as TiledMap, tileset, 0, Vector2.Zero, scene);
-  const player = new LocalPlayer("Matt", new Vector2(3, 3));
+
+  // Temp
+  const player = new LocalPlayer("Matt", new Vector2(3, 7));
+  const player2 = new Player("Client2", new Vector2(3, 3));
+
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(3, 0)));
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(6, 0)));
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(9, 0)));
 
   // Temporary
   player.character.setJob(__test_job);
 
   map.addChild(player);
+  map.addChild(player2);
   player.addChild(camera);
   camera.localPosition.set(-8, -8);
 
@@ -85,6 +97,7 @@ async function main() {
   window.__CAMERA__ = camera;
   window.__TILEMAP__ = map;
   window.__PLAYER__ = player;
+  window.__TILESET__ = TilesetManager;
 
   // UI Scene
   const uiScene = new Scene("UI");
