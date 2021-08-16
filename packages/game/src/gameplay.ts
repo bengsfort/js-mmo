@@ -1,4 +1,13 @@
-import { AssetManager, Camera, IsometricCamera, Scene, Tilemap, TilesetManager, WebRenderer } from "@js-mmo/renderer";
+import {
+  AssetManager,
+  Camera,
+  IsometricCamera,
+  RendererConfig,
+  Scene,
+  Tilemap,
+  TilesetManager,
+  WebRenderer,
+} from "@js-mmo/renderer";
 import {
   EngineConfig,
   GameLoop,
@@ -9,10 +18,11 @@ import {
   Time,
   Vector2,
 } from "@js-mmo/engine";
-import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
+import { LocalPlayer, Player } from "./players";
 
 import { HealingDummy } from "./npcs/healing_dummy";
-import { LocalPlayer, Player } from "./players";
+import { Hotbar } from "./ui/hotbar";
+import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
 import SandboxMap from "./assets/dev_sandbox_map.json";
 import { TILESET_PATH } from "./assets";
 import { TargetDummy } from "./npcs/damage_dummy";
@@ -26,6 +36,7 @@ declare global {
     __TILEMAP__: SceneObject;
     __PLAYER__: SceneObject;
     __TILESET__: AssetManager<RuntimeTileset>;
+    __UI__: Scene;
   }
 }
 
@@ -34,12 +45,12 @@ declare global {
  * it is strictly for development purposes to make sure that gameplay is able to be iterated on rapidly.
  */
 
-let debugCanvas: HTMLCanvasElement;
+let activeCanvas: HTMLCanvasElement;
 
 // Make a helper function to draw FPS at all times.
 const drawFps = () => {
-  if (!debugCanvas) return;
-  const ctx = debugCanvas.getContext("2d") as CanvasRenderingContext2D;
+  if (!activeCanvas) return;
+  const ctx = activeCanvas.getContext("2d") as CanvasRenderingContext2D;
   ctx.save();
   ctx.textAlign = "left";
   ctx.fillStyle = "#ffffff";
@@ -51,6 +62,8 @@ const drawFps = () => {
 async function main() {
   // Engine / Renderer configs.
   EngineConfig.LOG_VERBOSE = true;
+  RendererConfig.DEBUG_SHOW_ORIGINS = false;
+  RendererConfig.PIXELS_PER_UNIT = 1;
 
   // Setup and prepare input.
   void InputSystem.registerInputPlatform(InputPlatform.Web);
@@ -66,7 +79,7 @@ async function main() {
   GameLoop.start();
   GameLoop.registerRenderer(WebRenderer.create());
 
-  debugCanvas = WebRenderer.getActiveCanvas();
+  activeCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
   // Main scene
@@ -105,6 +118,17 @@ async function main() {
   // UI Scene
   const uiScene = new Scene("UI");
   const uiCamera = new Camera("UICamera", Vector2.Zero, Vector2.One, 0, uiScene);
+  uiCamera.zoom = 1;
+
+  const hotbar = new Hotbar(player.character);
+  hotbar.localPosition.set(
+    activeCanvas.clientWidth / 2 / RendererConfig.PIXEL_RATIO,
+    activeCanvas.clientHeight / RendererConfig.PIXEL_RATIO - 64
+  );
+  // hotbar.localPosition.set(0, 0);
+  uiScene.addChild(hotbar);
+
+  window.__UI__ = uiScene;
 
   WebRenderer.addScene(scene, camera);
   WebRenderer.addScene(uiScene, uiCamera);

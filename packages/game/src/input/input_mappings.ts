@@ -1,6 +1,5 @@
-import { KeyboardKeys } from "@js-mmo/engine";
-
 import { InputEvents } from "./input_events";
+import { KeyboardKeys } from "@js-mmo/engine";
 
 type InputDictionary = { [inputEvent: string]: KeyboardKeys | KeyboardKeys[] };
 export const inputMap: InputDictionary = {
@@ -25,5 +24,24 @@ export const inputMap: InputDictionary = {
 export function changeMapping(event: InputEvents, keys: KeyboardKeys | KeyboardKeys[]): void {
   if (inputMap[event]) {
     inputMap[event] = keys;
+  }
+}
+
+export function getHotbarKeyText(_hotbar: number, button: number): string {
+  switch (button) {
+    case 1:
+      return (inputMap[InputEvents.Hotbar1] as string).toUpperCase();
+    case 2:
+      return (inputMap[InputEvents.Hotbar2] as string).toUpperCase();
+    case 3:
+      return (inputMap[InputEvents.Hotbar3] as string).toUpperCase();
+    case 4:
+      return (inputMap[InputEvents.Hotbar4] as string).toUpperCase();
+    case 5:
+      return (inputMap[InputEvents.Hotbar5] as string).toUpperCase();
+    case 6:
+      return (inputMap[InputEvents.Hotbar6] as string).toUpperCase();
+    default:
+      return "";
   }
 }
