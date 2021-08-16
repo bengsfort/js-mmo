@@ -16,6 +16,8 @@ export enum CastOn {
 export interface Ability {
   name: string;
   description: string;
+  // TEMPORARY
+  image: string;
 
   applyAuras: Aura[];
   castTarget: CastTarget;

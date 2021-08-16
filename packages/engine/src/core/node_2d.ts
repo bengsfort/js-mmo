@@ -74,6 +74,5 @@ export class Node2d extends Node {
   constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, rot = 0, parent?: Node2d) {
     super(name, parent);
     this.transform = new Transform(pos, scale, rot);
-    this.setActive(true);
   }
 }

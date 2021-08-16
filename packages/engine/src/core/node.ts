@@ -12,9 +12,9 @@ export class Node {
 
   public type = NodeTypes.Node;
   public parent: Node | undefined;
-  public children: Node[];
+  public children: Node[] = [];
 
-  private _active: boolean;
+  protected _active = false;
 
   // Getters
   get isActive(): boolean {
@@ -28,15 +28,14 @@ export class Node {
   constructor(name = "", parent?: Node) {
     this.name = name || this.id.toString();
     parent?.addChild(this);
-    this.children = [];
-    this._active = false;
   }
 
   // Public methods
   public setActive(active: boolean): void {
     if (active !== this._active) {
       this._active = active;
-      this.onActive();
+      if (active) this.onActive();
+      else this.onInactive();
     }
   }
 
@@ -71,5 +70,6 @@ export class Node {
   }
 
   // Overrides
-  onActive = (): void => {};
+  onActive(): void {}
+  onInactive(): void {}
 }

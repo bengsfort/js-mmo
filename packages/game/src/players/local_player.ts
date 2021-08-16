@@ -1,4 +1,5 @@
 import { InputSystem, Time, Vector2 } from "@js-mmo/engine";
+import { TICKS_PER_SECOND } from "@js-mmo/engine/src/engine_config";
 
 import { Ability, Aura } from "../abilities";
 import { InputEvents } from "../input/input_events";
@@ -15,13 +16,10 @@ export class LocalPlayer extends Player {
 
   constructor(name: string, pos: Vector2) {
     super(name, pos);
-    const [sprite, nameText] = this._createVisuals();
-    this._sprite = sprite;
-    this._nameText = nameText;
   }
 
   update = () => {
-    const movementSpeed = this._speed / Time.getDeltaTime();
+    const movementSpeed = this._speed * (TICKS_PER_SECOND / 1000);
     if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
       this.localPosition.x -= movementSpeed;
       this.localPosition.y -= movementSpeed;

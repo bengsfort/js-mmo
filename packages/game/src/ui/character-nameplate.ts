@@ -1,14 +1,12 @@
 import { ImageManager, Sprite2d } from "@js-mmo/renderer";
 import { SceneObject, Vector2 } from "@js-mmo/engine";
+import { ISOMETRIC_PIXELS_PER_UNIT } from "@js-mmo/renderer/src/renderer_config";
 
 import BgGreen from "../assets/nameplate-big-green.png";
 import BgRed from "../assets/nameplate-big-red.png";
 import BorderGreen from "../assets/nameplate-border-big-green.png";
 import BorderRed from "../assets/nameplate-border-big-red.png";
 import { Character } from "../players";
-import { ISOMETRIC_PIXELS_PER_UNIT } from "@js-mmo/renderer/src/renderer_config";
-
-void ImageManager.preload([BgGreen, BgRed, BorderGreen, BorderRed]);
 
 export class Nameplate extends SceneObject {
   public width = 32;
@@ -46,7 +44,8 @@ export class Nameplate extends SceneObject {
     borderSprite.localPosition.set(0, 0);
 
     barSprite.origin = new Vector2(0, 0);
-    barSprite.localPosition.set(-0.5 + 2 / ISOMETRIC_PIXELS_PER_UNIT.x, 0.5);
+    const offset = 6 / ISOMETRIC_PIXELS_PER_UNIT.x;
+    barSprite.localPosition.set(-0.5 + 2 / ISOMETRIC_PIXELS_PER_UNIT.x - offset, 0.5 - offset);
     return [borderSprite, barSprite];
   }
 

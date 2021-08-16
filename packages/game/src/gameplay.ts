@@ -9,10 +9,10 @@ import {
   Time,
   Vector2,
 } from "@js-mmo/engine";
-import { LocalPlayer, Player } from "./players";
-
-import { Nameplate } from "./ui/character-nameplate";
 import { RuntimeTileset } from "@js-mmo/renderer/src/asset_management/tileset_manager";
+
+import { HealingDummy } from "./npcs/healing_dummy";
+import { LocalPlayer, Player } from "./players";
 import SandboxMap from "./assets/dev_sandbox_map.json";
 import { TILESET_PATH } from "./assets";
 import { TargetDummy } from "./npcs/damage_dummy";
@@ -78,12 +78,15 @@ async function main() {
   const map = new Tilemap("Sandbox", SandboxMap as TiledMap, tileset, 0, Vector2.Zero, scene);
 
   // Temp
-  const player = new LocalPlayer("Matt", new Vector2(3, 7));
-  const player2 = new Player("Client2", new Vector2(3, 3));
+  const player = new LocalPlayer("Matt", new Vector2(7, 7));
+  const player2 = new Player("Client2", new Vector2(5, 5));
 
-  map.addChild(new TargetDummy("Target Dummy", new Vector2(3, 0)));
-  map.addChild(new TargetDummy("Target Dummy", new Vector2(6, 0)));
-  map.addChild(new TargetDummy("Target Dummy", new Vector2(9, 0)));
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(4, 0)));
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(7, 0)));
+  map.addChild(new TargetDummy("Target Dummy", new Vector2(10, 0), true));
+  map.addChild(new HealingDummy("Healing Dummy", new Vector2(1, 3)));
+  map.addChild(new HealingDummy("Healing Dummy", new Vector2(1, 6)));
+  map.addChild(new HealingDummy("Healing Dummy", new Vector2(1, 9)));
 
   // Temporary
   player.character.setJob(__test_job);
