@@ -96,4 +96,76 @@ describe("Bounds", () => {
     expect(bounds.includesPoint(inBounds)).toEqual(true);
     expect(bounds.includesPoint(outOfBounds)).toEqual(false);
   });
+
+  it("should return whether or not a given Bounds is within it", () => {
+    // min 15, 15; max 25, 25
+    const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
+    // min 18, 18; max 22, 22
+    const included = new Bounds(new Vector2(20, 20), new Vector2(4, 4));
+    // min 27, 27; max: 33, 33
+    const excluded = new Bounds(new Vector2(30, 30), new Vector2(6, 6));
+
+    expect(bounds.includesBounds(included)).toEqual(true);
+    expect(bounds.includesBounds(excluded)).toEqual(false);
+  });
+
+  it("should return whether or not a given Bounds intersects", () => {
+    // min 15, 15; max 25, 25
+    const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
+
+    // min 24, 24;  max 30, 30
+    /*
+      +----+
+    +-|-+  |
+    | | |  |
+    | +-|--+
+    +---+
+    */
+    const intersectsNE = new Bounds(new Vector2(27, 27), new Vector2(6, 6));
+    expect(bounds.intersects(intersectsNE)).toEqual(true);
+
+    // min 10, 24;  max 16, 30
+    /*
+    +---+
+    |  +|--+
+    +--|+  |
+       +---+
+    */
+    const intersectsNW = new Bounds(new Vector2(13, 27), new Vector2(6, 6));
+    expect(bounds.intersects(intersectsNW)).toEqual(true);
+
+    // min 23, 10; max 31, 16
+    /*
+    +---+
+    |  +|--+
+    +--|+  |
+       +---+
+    */
+    const intersectsSE = new Bounds(new Vector2(27, 13), new Vector2(8, 6));
+    expect(bounds.intersects(intersectsSE)).toEqual(true);
+
+    // min 9, 10; max 17, 16
+    /*
+      +----+
+    +-|-+  |
+    | | |  |
+    | +-|--+
+    +---+
+    */
+    const intersectsSW = new Bounds(new Vector2(13, 13), new Vector2(8, 6));
+    expect(bounds.intersects(intersectsSW)).toEqual(true);
+
+    // min 8, 10; max 18, 30
+    /*
+    +--+
+    | +|--+
+    | ||  |
+    | +|--+
+    +--+
+    */
+    const intersectsTopBottom = new Bounds(new Vector2(13, 20), new Vector2(10, 20));
+    expect(bounds.intersects(intersectsTopBottom)).toEqual(true);
+  });
+
+  it("should return whether or not a given Bounds overlaps", () => {});
 });
