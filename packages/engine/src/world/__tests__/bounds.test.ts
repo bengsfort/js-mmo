@@ -7,8 +7,8 @@ describe("Bounds", () => {
     const size = new Vector2(10, 10);
     const bounds = new Bounds(pos, size);
     expect(bounds).toBeInstanceOf(Bounds);
-    expect(bounds).toHaveProperty("position", pos);
-    expect(bounds).toHaveProperty("size", size);
+    expect(bounds.position.toLiteral()).toEqual(pos.toLiteral());
+    expect(bounds.size.toLiteral()).toEqual(size.toLiteral());
   });
 
   it("should calculate its extents and expose them", () => {
@@ -54,16 +54,6 @@ describe("Bounds", () => {
     expect(bounds.max.toLiteral()).toEqual({ x: 5, y: 5 });
   });
 
-  it("should return whether or not a given point is included in its bounds", () => {
-    // min: 15, 15; max: 25, 25
-    const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
-
-    const inBounds = new Vector2(18, 23);
-    const outOfBounds = new Vector2(100, 20);
-    expect(bounds.includesPoint(inBounds)).toEqual(true);
-    expect(bounds.includesPoint(outOfBounds)).toEqual(false);
-  });
-
   it("should return its direction relative to a point", () => {
     // min: 15, 15; max: 25, 25
     const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
@@ -95,5 +85,15 @@ describe("Bounds", () => {
     expect(bounds.northWest.toLiteral()).toEqual({ x: 0, y: 10 });
     expect(bounds.southEast.toLiteral()).toEqual({ x: 10, y: 0 });
     expect(bounds.southWest.toLiteral()).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should return whether or not a given point is included in its bounds", () => {
+    // min: 15, 15; max: 25, 25
+    const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
+
+    const inBounds = new Vector2(18, 23);
+    const outOfBounds = new Vector2(100, 20);
+    expect(bounds.includesPoint(inBounds)).toEqual(true);
+    expect(bounds.includesPoint(outOfBounds)).toEqual(false);
   });
 });

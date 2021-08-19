@@ -65,8 +65,8 @@ export class Bounds {
   }
 
   constructor(position: Vector2, size: Vector2) {
-    this._pos = position;
-    this._size = size;
+    this._pos = position.copy();
+    this._size = size.copy();
     this._calculateExtents(position, size);
   }
 
@@ -86,10 +86,28 @@ export class Bounds {
     this._halfSize = half;
   }
 
+  // Inclusion + intersections
   public includesPoint(point: Vector2): boolean {
     return point.x >= this._min.x && point.y >= this._min.x && point.x <= this._max.x && point.y <= this._max.y;
   }
 
+  public includesBounds(other: Bounds): boolean {
+    return this.includesPoint(other.min) && this.includesPoint(other.max);
+  }
+
+  // @todo: implement
+  public intersects(other: Bounds): boolean {
+    // if one of the edges goes through this bounds
+    return false;
+  }
+
+  // @todo: implement
+  public overlaps(other: Bounds): boolean {
+    // if this is inside of the other bounds
+    return false;
+  }
+
+  // Directions
   public isLeftOf(point: Vector2): boolean {
     return point.x > this._max.x;
   }
