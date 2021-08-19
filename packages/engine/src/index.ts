@@ -14,6 +14,9 @@ export * as Time from "./core/time";
 export { Node } from "./core/node";
 export { Node2d } from "./core/node_2d";
 
+// Physics/Collisions
+export * from "./world/bounds";
+
 // Scenes
 export { Group } from "./scene/group";
 export { SceneObject } from "./scene/scene_object";

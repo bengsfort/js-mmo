@@ -109,6 +109,7 @@ describe("Bounds", () => {
     expect(bounds.includesBounds(excluded)).toEqual(false);
   });
 
+  // For a visual test, see engine_tests/bounds_test
   it("should return whether or not a given Bounds intersects", () => {
     // min 15, 15; max 25, 25
     const bounds = new Bounds(new Vector2(20, 20), new Vector2(10, 10));
@@ -166,6 +167,4 @@ describe("Bounds", () => {
     const intersectsTopBottom = new Bounds(new Vector2(13, 20), new Vector2(10, 20));
     expect(bounds.intersects(intersectsTopBottom)).toEqual(true);
   });
-
-  it("should return whether or not a given Bounds overlaps", () => {});
 });

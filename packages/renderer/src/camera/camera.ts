@@ -12,6 +12,10 @@ export class Camera extends Node2d {
   }
 
   public getViewPosition(pos: Vector2): Vector2 {
-    return Vector2.MultiplyScalar(pos, PIXEL_RATIO); // Should this be pixel_ratio instead?
+    return Vector2.MultiplyScalar(pos, PIXEL_RATIO);
+  }
+
+  public worldFromScreen(pos: Vector2): Vector2 {
+    return new Vector2(pos.x / PIXEL_RATIO, pos.y / PIXEL_RATIO);
   }
 }

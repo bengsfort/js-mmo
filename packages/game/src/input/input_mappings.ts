@@ -1,5 +1,6 @@
-import { InputEvents } from "./input_events";
 import { KeyboardKeys } from "@js-mmo/engine";
+
+import { InputEvents } from "./input_events";
 
 type InputDictionary = { [inputEvent: string]: KeyboardKeys | KeyboardKeys[] };
 export const inputMap: InputDictionary = {

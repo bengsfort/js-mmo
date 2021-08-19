@@ -1,5 +1,6 @@
+import { Vector2 } from "../math/vector2";
+
 import { Bounds } from "./bounds";
-import { Vector2 } from "math/vector2";
 
 // Quadtree
 export class PhysCell {

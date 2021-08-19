@@ -100,7 +100,7 @@ export class Bounds {
 
   // Inclusion + intersections
   public includesPoint(point: Vector2): boolean {
-    return point.x >= this._min.x && point.y >= this._min.x && point.x <= this._max.x && point.y <= this._max.y;
+    return point.x >= this.left && point.y > this.bottom && point.x < this.right && point.y < this.top;
   }
 
   public includesBounds(other: Bounds): boolean {
@@ -109,14 +109,7 @@ export class Bounds {
 
   // @todo: implement
   public intersects(other: Bounds): boolean {
-    // if one of the edges goes through this bounds
-    return false;
-  }
-
-  // @todo: implement
-  public overlaps(other: Bounds): boolean {
-    // if this is inside of the other bounds
-    return false;
+    return this.left < other.right && this.right > other.left && this.bottom < other.top && this.top > other.bottom;
   }
 
   // Directions

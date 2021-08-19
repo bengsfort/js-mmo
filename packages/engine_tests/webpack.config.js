@@ -3,6 +3,7 @@ const {makeWebpackConfig} = require('@js-mmo/webpack-config-internal');
 const CopyPlugin = require("copy-webpack-plugin");
 
 const entry = {
+  bounds_test: './src/bounds_test/bounds_test.ts',
   drawable_test: './src/drawable_test/drawable_test.ts',
   transform_test: './src/transform_test/transform_test.ts',
   input_test: './src/input_test/input_test.ts',
