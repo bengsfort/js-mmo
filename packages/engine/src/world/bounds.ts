@@ -63,6 +63,18 @@ export class Bounds {
   public get southWest(): Vector2 {
     return this._sw;
   }
+  public get left(): number {
+    return this._min.x;
+  }
+  public get right(): number {
+    return this._max.x;
+  }
+  public get top(): number {
+    return this._max.y;
+  }
+  public get bottom(): number {
+    return this._min.y;
+  }
 
   constructor(position: Vector2, size: Vector2) {
     this._pos = position.copy();
@@ -109,16 +121,16 @@ export class Bounds {
 
   // Directions
   public isLeftOf(point: Vector2): boolean {
-    return point.x > this._max.x;
+    return point.x > this.right;
   }
   public isRightOf(point: Vector2): boolean {
-    return point.x < this._min.x;
+    return point.x < this.left;
   }
   // @todo: might need to swap these
   public isAbove(point: Vector2): boolean {
-    return point.y < this._min.y;
+    return point.y < this.bottom;
   }
   public isBelow(point: Vector2): boolean {
-    return point.y > this._max.y;
+    return point.y > this.top;
   }
 }
