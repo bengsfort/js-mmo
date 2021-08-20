@@ -3,7 +3,7 @@
 ## Short Term
 
 ### Engine
-- [ ] Add additional (physics cell tests)[packages/engine/src/world/__tests__/phys_cell.test.ts] for querying and inclusion checks.
+- [X] Add additional (physics cell tests)[packages/engine/src/world/__tests__/phys_cell.test.ts] for querying and inclusion checks.
 - [ ] Create physics body class for automatic physics body management
     + [ ] Figure out how we are going to sync physics bodies with their Bounds....
 - [ ] Create physics world class for managing/storing the physics bodies, and inserting them/moving them throughout the physics cells automatically

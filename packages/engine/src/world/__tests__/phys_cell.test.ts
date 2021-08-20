@@ -118,4 +118,44 @@ describe("PhysCell", () => {
     expect(cell.nw?.nw?.totalChildCount).toEqual(1);
     expect(cell.nw?.se?.totalChildCount).toEqual(1);
   });
+
+  it("should return if a point or range is within it's boundaries", () => {
+    // -5, -5 : 5, 5
+    const cell = new PhysCell(Vector2.Zero, new Vector2(10, 10));
+    expect(cell.includesPoint(new Vector2(3, -2))).toEqual(true);
+    expect(cell.includesRegion(new Bounds(Vector2.One, Vector2.One))).toEqual(true);
+
+    expect(cell.includesPoint(new Vector2(5.5, 6))).toEqual(false);
+    expect(cell.includesRegion(new Bounds(new Vector2(10, 10), Vector2.One))).toEqual(false);
+  });
+
+  it("should return bodies within the given point/region", () => {
+    // -10, -10 : 10, 10
+    const cell = new PhysCell(Vector2.Zero, new Vector2(20, 20), 2);
+
+    const nwBody1 = new Bounds(new Vector2(-5, 5), Vector2.One);
+    const nwBody2 = new Bounds(new Vector2(-7.5, 7.5), new Vector2(2, 2));
+    const nwBody3 = new Bounds(new Vector2(-2.5, 2.5), Vector2.One);
+
+    const neBody1 = new Bounds(new Vector2(2.5, 5), Vector2.One);
+
+    cell.insert(nwBody1);
+    cell.insert(nwBody2);
+    cell.insert(nwBody3);
+    cell.insert(neBody1);
+
+    const pointQueryHit = cell.queryPoint(new Vector2(-8, 8));
+    expect(pointQueryHit).toHaveLength(1);
+    expect(pointQueryHit).toContain(nwBody2);
+
+    const pointQueryNoHit = cell.queryPoint(new Vector2(-3, -3));
+    expect(pointQueryNoHit).toHaveLength(0);
+
+    // -12, 4 : -4, 12
+    const hitRegion = new Bounds(new Vector2(-8, 8), new Vector2(8, 8));
+    const regionQueryHit = cell.queryRegion(hitRegion);
+    expect(regionQueryHit).toHaveLength(2);
+    expect(regionQueryHit).toContain(nwBody1);
+    expect(regionQueryHit).toContain(nwBody2);
+  });
 });

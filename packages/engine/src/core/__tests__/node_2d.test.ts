@@ -4,7 +4,6 @@ import { Node2d } from "../node_2d";
 describe("Node2d", () => {
   it("should return `undefined` if is root node", () => {
     const node = new Node2d("root");
-    expect(node).toHaveProperty("parent");
     expect(node.parent).toBeUndefined();
   });
 

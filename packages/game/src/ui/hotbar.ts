@@ -1,4 +1,4 @@
-import { ImageManager, RendererConfig, Sprite2d, Text2d } from "@js-mmo/renderer";
+import { ImageManager, Sprite2d, Text2d } from "@js-mmo/renderer";
 import { SceneObject, Vector2 } from "@js-mmo/engine";
 
 import { Character } from "../players";

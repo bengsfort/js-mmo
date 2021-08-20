@@ -1,4 +1,4 @@
-import { Bounds, NodeTypes, SceneObject, Time, Vector2 } from "@js-mmo/engine";
+import { Bounds, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
 import { RectDrawable, RendererConfig, RenderingNode, createRect } from "@js-mmo/renderer";
 
 let counter = 0;

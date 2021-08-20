@@ -1,5 +1,6 @@
-import { Bounds } from "./bounds";
 import { Vector2 } from "../math/vector2";
+
+import { Bounds } from "./bounds";
 
 // Quadtree
 export class PhysCell {
@@ -90,8 +91,8 @@ export class PhysCell {
   }
 
   private subdivide() {
-    const centerpoint = this.boundaries.position;
-    const quadrantSize = this.boundaries.halfSize;
+    const centerpoint = this.boundaries.position.copy();
+    const quadrantSize = this.boundaries.halfSize.copy();
     const quadrantOffset = Vector2.MultiplyScalar(quadrantSize, 0.5);
 
     this._nw = new PhysCell(
@@ -154,13 +155,12 @@ export class PhysCell {
     }
 
     // If there are subdivisions, find the one that includes this point.
-    if (this._nw?.includesRegion(region)) return this._nw.queryRegion(region);
-    if (this._ne?.includesRegion(region)) return this._ne.queryRegion(region);
-    if (this._sw?.includesRegion(region)) return this._sw.queryRegion(region);
-    if (this._se?.includesRegion(region)) return this._se.queryRegion(region);
-
-    // Return an empty array if nothing exists.
-    return [];
+    let hits: Bounds[] = [];
+    if (this._nw?.includesRegion(region)) hits = hits.concat(this._nw.queryRegion(region));
+    if (this._ne?.includesRegion(region)) hits = hits.concat(this._ne.queryRegion(region));
+    if (this._sw?.includesRegion(region)) hits = hits.concat(this._sw.queryRegion(region));
+    if (this._se?.includesRegion(region)) hits = hits.concat(this._se.queryRegion(region));
+    return hits;
   }
 
   // Is the point included in this cell?
