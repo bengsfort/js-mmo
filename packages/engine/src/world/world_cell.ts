@@ -3,27 +3,27 @@ import { Vector2 } from "../math/vector2";
 import { Bounds } from "./bounds";
 
 // Quadtree
-export class PhysCell {
+export class WorldCell {
   public readonly maxChildren: number;
   public boundaries: Bounds;
 
   public children: Bounds[]; // @todo: change to physics bodies
 
-  private _nw?: PhysCell;
-  private _ne?: PhysCell;
-  private _sw?: PhysCell;
-  private _se?: PhysCell;
+  private _nw?: WorldCell;
+  private _ne?: WorldCell;
+  private _sw?: WorldCell;
+  private _se?: WorldCell;
 
-  public get nw(): PhysCell | undefined {
+  public get nw(): WorldCell | undefined {
     return this._nw;
   }
-  public get ne(): PhysCell | undefined {
+  public get ne(): WorldCell | undefined {
     return this._ne;
   }
-  public get sw(): PhysCell | undefined {
+  public get sw(): WorldCell | undefined {
     return this._sw;
   }
-  public get se(): PhysCell | undefined {
+  public get se(): WorldCell | undefined {
     return this._se;
   }
 
@@ -95,22 +95,22 @@ export class PhysCell {
     const quadrantSize = this.boundaries.halfSize.copy();
     const quadrantOffset = Vector2.MultiplyScalar(quadrantSize, 0.5);
 
-    this._nw = new PhysCell(
+    this._nw = new WorldCell(
       new Vector2(centerpoint.x - quadrantOffset.x, centerpoint.y + quadrantOffset.y),
       quadrantSize,
       this.maxChildren
     );
-    this._ne = new PhysCell(
+    this._ne = new WorldCell(
       new Vector2(centerpoint.x + quadrantOffset.x, centerpoint.y + quadrantOffset.y),
       quadrantSize,
       this.maxChildren
     );
-    this._sw = new PhysCell(
+    this._sw = new WorldCell(
       new Vector2(centerpoint.x - quadrantOffset.x, centerpoint.y - quadrantOffset.y),
       quadrantSize,
       this.maxChildren
     );
-    this._se = new PhysCell(
+    this._se = new WorldCell(
       new Vector2(centerpoint.x + quadrantOffset.x, centerpoint.y - quadrantOffset.y),
       quadrantSize,
       this.maxChildren

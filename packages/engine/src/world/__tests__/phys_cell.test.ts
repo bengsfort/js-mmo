@@ -1,11 +1,11 @@
 import { Vector2 } from "../../math/vector2";
 import { Bounds } from "../bounds";
-import { PhysCell } from "../phys_cell";
+import { WorldCell } from "../world_cell";
 
-describe("PhysCell", () => {
+describe("WorldCell", () => {
   it("should create a cell with the given position and size", () => {
-    const cell = new PhysCell(Vector2.Zero, new Vector2(20, 20), 4);
-    expect(cell).toBeInstanceOf(PhysCell);
+    const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
+    expect(cell).toBeInstanceOf(WorldCell);
     expect(cell.totalChildCount).toEqual(0);
     expect(cell.boundaries.position.toLiteral()).toEqual({ x: 0, y: 0 });
     expect(cell.boundaries.size.toLiteral()).toEqual({ x: 20, y: 20 });
@@ -15,7 +15,7 @@ describe("PhysCell", () => {
 
   it("should store units who are within the boundaries", () => {
     // min -10, -10; max 10, 10
-    const cell = new PhysCell(Vector2.Zero, new Vector2(20, 20), 4);
+    const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
     expect(cell.totalChildCount).toEqual(0);
 
     const inRegion1 = new Bounds(Vector2.One, Vector2.One);
@@ -34,7 +34,7 @@ describe("PhysCell", () => {
 
   it("should subdivide after getting to the max child count", () => {
     // min -10, -10; max 10, 10
-    const cell = new PhysCell(Vector2.Zero, new Vector2(20, 20), 4);
+    const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
     expect(cell.totalChildCount).toEqual(0);
 
     const nw = new Bounds(new Vector2(-5, 3), Vector2.One);
@@ -61,7 +61,7 @@ describe("PhysCell", () => {
 
   it("Should insert children into it's subdivisions", () => {
     // min: -1, -1; max: 1, 1
-    const cell = new PhysCell(Vector2.Zero, new Vector2(2, 2), 1);
+    const cell = new WorldCell(Vector2.Zero, new Vector2(2, 2), 1);
 
     const nw = new Bounds(new Vector2(-0.75, 0.75), Vector2.One);
     const ne = new Bounds(new Vector2(0.5, 0.5), Vector2.One);
@@ -121,7 +121,7 @@ describe("PhysCell", () => {
 
   it("should return if a point or range is within it's boundaries", () => {
     // -5, -5 : 5, 5
-    const cell = new PhysCell(Vector2.Zero, new Vector2(10, 10));
+    const cell = new WorldCell(Vector2.Zero, new Vector2(10, 10));
     expect(cell.includesPoint(new Vector2(3, -2))).toEqual(true);
     expect(cell.includesRegion(new Bounds(Vector2.One, Vector2.One))).toEqual(true);
 
@@ -131,7 +131,7 @@ describe("PhysCell", () => {
 
   it("should return bodies within the given point/region", () => {
     // -10, -10 : 10, 10
-    const cell = new PhysCell(Vector2.Zero, new Vector2(20, 20), 2);
+    const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 2);
 
     const nwBody1 = new Bounds(new Vector2(-5, 5), Vector2.One);
     const nwBody2 = new Bounds(new Vector2(-7.5, 7.5), new Vector2(2, 2));
