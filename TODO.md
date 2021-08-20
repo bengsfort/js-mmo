@@ -22,6 +22,7 @@
     + [] visualization for bounds/rects
     + [] visualization for quadtree
     + [] Rendering time/game logic processing time
+    + [] scene hierarchy/scene graph
     + [] Draw calls?
     + [] # of nodes
     + [] # of bounds
