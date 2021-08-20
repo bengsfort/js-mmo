@@ -100,16 +100,15 @@ export class Bounds {
 
   // Inclusion + intersections
   public includesPoint(point: Vector2): boolean {
-    return point.x >= this.left && point.y > this.bottom && point.x < this.right && point.y < this.top;
+    return point.x >= this.left && point.y >= this.bottom && point.x <= this.right && point.y <= this.top;
   }
 
   public includesBounds(other: Bounds): boolean {
     return this.includesPoint(other.min) && this.includesPoint(other.max);
   }
 
-  // @todo: implement
   public intersects(other: Bounds): boolean {
-    return this.left < other.right && this.right > other.left && this.bottom < other.top && this.top > other.bottom;
+    return this.left <= other.right && this.right >= other.left && this.bottom <= other.top && this.top >= other.bottom;
   }
 
   // Directions
