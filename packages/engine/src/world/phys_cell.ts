@@ -1,6 +1,5 @@
-import { Vector2 } from "../math/vector2";
-
 import { Bounds } from "./bounds";
+import { Vector2 } from "../math/vector2";
 
 // Quadtree
 export class PhysCell {
@@ -90,7 +89,7 @@ export class PhysCell {
     return false;
   }
 
-  subdivide() {
+  private subdivide() {
     const centerpoint = this.boundaries.position;
     const quadrantSize = this.boundaries.halfSize;
     const quadrantOffset = Vector2.MultiplyScalar(quadrantSize, 0.5);
