@@ -5,6 +5,9 @@ import { makeLogger } from "./logging";
 const log = makeLogger("CORE");
 let idCounter = 0;
 
+// @todo: Maybe if this is a root node (scene), when a `child` is added, it tells the scene graph?
+// same as when it is removed....
+// @todo: OR add a `dirty` flag? That way we can do partial tree updates?
 export class Node {
   // Properties
   public readonly id = idCounter++;

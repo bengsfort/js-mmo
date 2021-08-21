@@ -3,6 +3,7 @@ import { Vector2 } from "../math/vector2";
 
 import { Node } from "./node";
 
+// @todo: See notes in node.ts. Do we need to re-think this?
 export class Node2d extends Node {
   public readonly transform: Transform;
 
