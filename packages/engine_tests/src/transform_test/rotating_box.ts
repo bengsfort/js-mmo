@@ -1,12 +1,9 @@
-import { RectDrawable, RenderingNode, createRect } from "@js-mmo/renderer";
-import { NodeTypes, SceneObject, Time, Vector2 } from "@js-mmo/engine";
+import { RectDrawable, createRect, RenderObject } from "@js-mmo/renderer";
+import { SceneObject, Time, Vector2 } from "@js-mmo/engine";
 
 let counter = 0;
 
-export class RotatingBox extends SceneObject implements RenderingNode<RectDrawable> {
-  public type = NodeTypes.Draw;
-
-  private _drawable: RectDrawable;
+export class RotatingBox extends RenderObject<RectDrawable> {
   private _speed: number;
 
   public get drawable(): RectDrawable {
@@ -20,7 +17,10 @@ export class RotatingBox extends SceneObject implements RenderingNode<RectDrawab
   }
 
   constructor(pos: Vector2, scale: Vector2, rotation: number, speed: number, parent?: SceneObject) {
-    super(`rotating_box_${counter++}`, pos, scale, rotation, parent);
+    super(`rotating_box_${counter++}`, parent);
+    this.position = pos;
+    this.scale = scale;
+    this.rotation = rotation;
     this._drawable = createRect({
       position: this.position,
       width: 32,

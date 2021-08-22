@@ -10,24 +10,26 @@ describe("Node2d", () => {
   it("should pass position and scale to it's transform", () => {
     const pos = new Vector2(5, 5);
     const scale = new Vector2(1.5, 1.5);
-    const node = new Node2d("root", pos, scale);
+    const node = new Node2d("root");
+    node.position = pos;
+    node.scale = scale;
     expect(node).toHaveProperty("transform");
 
     // Check shorthand
-    expect(node.localPosition).toEqual(pos);
-    expect(node.localScale).toEqual(scale);
+    expect(node.localPosition.toLiteral()).toEqual(pos.toLiteral());
+    expect(node.localScale.toLiteral()).toEqual(scale.toLiteral());
 
     // Check longhand
     const transform = node.transform;
-    expect(transform.position).toEqual(pos);
-    expect(transform.scale).toEqual(scale);
+    expect(transform.position.toLiteral()).toEqual(pos.toLiteral());
+    expect(transform.scale.toLiteral()).toEqual(scale.toLiteral());
   });
 
   it("should contain references for children and parent nodes", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", Vector2.Zero, Vector2.One, 0, root);
-    const child2 = new Node2d("child2", Vector2.Zero, Vector2.One, 0, child1);
-    const child3 = new Node2d("child3", Vector2.Zero, Vector2.One, 0, child1);
+    const child1 = new Node2d("child1", root);
+    const child2 = new Node2d("child2", child1);
+    const child3 = new Node2d("child3", child1);
 
     // Check root...
     expect(root.parent).toBeUndefined();
@@ -54,7 +56,9 @@ describe("Node2d", () => {
 
   it("should return transform vectors relative to parents", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", new Vector2(5, 5), new Vector2(1.5, 1.5), 0, root);
+    const child1 = new Node2d("child1", root);
+    child1.position = new Vector2(5, 5);
+    child1.scale = new Vector2(1.5, 1.5);
 
     // Check that no parent still returns correctly
     expect(root.position.x).toEqual(0);

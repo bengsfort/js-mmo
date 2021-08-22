@@ -39,17 +39,8 @@ function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene();
-  const camera = new Camera("Main", Vector2.Zero, Vector2.One, 0, scene);
+  const camera = new Camera("Main", scene);
   scene.background = "#212121";
-
-  //   const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 45, 15);
-  //   scene.addChild(root);
-
-  //   const nodes = [root];
-  //   for (let i = 0; i < 10; i++) {
-  //     console.log("Node", i, "making the following its parent", nodes[i]);
-  //     nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, i - 5, nodes[i]));
-  //   }
 
   const staticBox = new BoundingBox(
     new Vector2(
@@ -59,7 +50,7 @@ function main() {
     "#00f",
     scene
   );
-  const movingBox = new BoundingBox(new Vector2(0, 0), "#3a0", scene, 128);
+  const movingBox = new BoundingBox(new Vector2(0, 0), "#3a0", scene);
 
   GameLoop.registerUpdateHandler(() => {
     const worldPos = camera.worldFromScreen(InputSystem.getPointerCoords());

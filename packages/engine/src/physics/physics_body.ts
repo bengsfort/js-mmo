@@ -1,12 +1,12 @@
 import { SceneObject } from "../scene/scene_object";
 import { NodeTypes } from "../constants";
 import { Vector2 } from "../math/vector2";
-import { Bounds } from "../world/bounds";
+import { Bounds } from "../math/bounds";
 import { Node2d } from "../core/node_2d";
 
 // @todo: How the fuck does this update and stay synced with its connected node??
 export class PhysicsBody extends SceneObject {
-  type = NodeTypes.Physics;
+  type = NodeTypes.Query;
   private _bounds: Bounds;
 
   public get boundaries(): Bounds {

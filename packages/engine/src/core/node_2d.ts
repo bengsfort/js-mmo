@@ -3,15 +3,11 @@ import { Vector2 } from "../math/vector2";
 
 import { Node } from "./node";
 
-// @todo: See notes in node.ts. Do we need to re-think this?
 export class Node2d extends Node {
   public readonly transform: Transform;
 
   public parent: Node2d | undefined;
   public children: Node[] = [];
-
-  // Add a matrix here?
-  // Do the parent/child operations on the matrix instead of the vectors
 
   // Getters
   set localPosition(value: Vector2) {
@@ -72,8 +68,8 @@ export class Node2d extends Node {
   }
 
   // Constructor
-  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, rot = 0, parent?: Node2d) {
+  constructor(name = "", parent?: Node2d) {
     super(name, parent);
-    this.transform = new Transform(pos, scale, rot);
+    this.transform = new Transform(Vector2.Zero, Vector2.One, 0);
   }
 }

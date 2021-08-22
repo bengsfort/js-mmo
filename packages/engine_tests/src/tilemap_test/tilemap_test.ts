@@ -43,7 +43,7 @@ async function main() {
   scene.position = new Vector2(0, 0);
   window.__SCENE__ = scene;
 
-  const cam = new IsometricCamera("Main Camera", new Vector2(0, 0), Vector2.One, 0, scene);
+  const cam = new IsometricCamera("Main Camera", scene);
   window.__CAMERA__ = cam;
 
   if (await TilesetManager.load(TILESET_PATH)) {

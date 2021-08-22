@@ -5,17 +5,16 @@ export * from "./constants";
 // Math
 export { Vector2 } from "./math/vector2";
 export { Transform } from "./math/transform";
+export { Bounds } from "./math/bounds";
 export * as Math from "./math/math";
 
 // Core
 export { makeLogger, Logger } from "./core/logging";
 export { now } from "./core/time_now";
 export * as Time from "./core/time";
-export { Node } from "./core/node";
+export type { Node } from "./core/node";
 export { Node2d } from "./core/node_2d";
-
-// Physics/Collisions
-export * from "./world/bounds";
+export { QueryNode } from "./core/query_node";
 
 // Scenes
 export { Group } from "./scene/group";

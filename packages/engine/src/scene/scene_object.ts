@@ -12,8 +12,8 @@ export class SceneObject extends Node2d {
   private _activating = false;
   private _deactivating = false;
 
-  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, rot = 0, parent?: Node2d) {
-    super(name, pos, scale, rot, parent);
+  constructor(name = "", parent?: Node2d) {
+    super(name, parent);
     this.setActive(true);
   }
 

@@ -33,10 +33,6 @@ function main() {
   // Create renderer and add it to the update loop
   GameLoop.registerRenderer(WebRenderer.create());
 
-  // renderer uses camera like:
-  // camera.getViewPosition() <- does the transformation
-  // ie. isometric camera .getViewPosition() === camera.x transformed to isometric pos
-
   // Force-draw the FPS to the top left corner
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);

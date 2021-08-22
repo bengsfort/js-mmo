@@ -48,7 +48,7 @@ async function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene("Main", Vector2.Zero);
-  const camera = new Camera("Camera", Vector2.Zero, Vector2.One);
+  const camera = new Camera("Camera");
 
   const movingGroup = new TestPlayer("Kikkeli", new Vector2(64, 128), Vector2.One, 20);
   window.__TEST_PLAYER__ = movingGroup;

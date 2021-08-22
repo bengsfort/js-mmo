@@ -1,6 +1,5 @@
 import { Vector2 } from "../math/vector2";
-
-import { Bounds } from "./bounds";
+import { Bounds } from "../math/bounds";
 
 // Quadtree
 export class WorldCell {

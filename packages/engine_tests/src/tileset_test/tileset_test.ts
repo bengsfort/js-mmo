@@ -34,7 +34,9 @@ async function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene("Main");
-  const camera = new Camera("camera", new Vector2(128, 128));
+  const camera = new Camera("camera");
+  camera.position = new Vector2(128, 128);
+
   window.__SCENE__ = scene;
 
   window.__TILESET_MANAGER__ = TilesetManager;

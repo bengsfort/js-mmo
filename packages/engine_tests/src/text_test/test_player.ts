@@ -11,7 +11,10 @@ export class TestPlayer extends SceneObject {
   private _text: Text2d;
 
   constructor(name: string, pos: Vector2, scale: Vector2, speed = 20) {
-    super(name, pos, scale, 0);
+    super(name);
+    this.position = pos;
+    this.scale = scale;
+
     this._speed = speed;
     const boxSprite = new Sprite2d(`${name}-box`, box, new Vector2(32, 32), false, this);
     boxSprite.origin = new Vector2(0.5, 0.5);

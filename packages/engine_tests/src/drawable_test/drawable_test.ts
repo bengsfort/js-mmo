@@ -43,13 +43,14 @@ async function main() {
   window.__IMAGE_MANAGER__ = ImageManager;
 
   const scene = new Scene("Main", Vector2.Zero);
-  const camera = new Camera("MainCamera", Vector2.Zero, Vector2.One);
+  const camera = new Camera("MainCamera");
   window.__SCENE__ = scene;
   window.__CAMERA__ = camera;
 
   WebRenderer.addScene(scene, camera);
 
-  const group2 = new Group("normal_sprites", new Vector2(64, 128), Vector2.One, 0, scene);
+  const group2 = new Group("normal_sprites", scene);
+  group2.position = new Vector2(64, 128);
   const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, group2);
   const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, group2);
 

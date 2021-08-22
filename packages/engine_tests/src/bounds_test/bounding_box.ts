@@ -1,12 +1,9 @@
 import { Bounds, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
-import { RectDrawable, RendererConfig, RenderingNode, createRect } from "@js-mmo/renderer";
+import { RectDrawable, RendererConfig, RenderingNode, createRect, RenderObject } from "@js-mmo/renderer";
 
 let counter = 0;
 
-export class BoundingBox extends SceneObject implements RenderingNode<RectDrawable> {
-  public type = NodeTypes.Draw;
-
-  public bounds: Bounds;
+export class BoundingBox extends RenderObject<RectDrawable> {
   public color;
 
   private _defaultColor: string;
@@ -24,7 +21,8 @@ export class BoundingBox extends SceneObject implements RenderingNode<RectDrawab
   }
 
   constructor(pos: Vector2, color = "#00f", parent?: SceneObject) {
-    super(`bounding_box_${counter++}`, pos, Vector2.One, 0, parent);
+    super(`bounding_box_${counter++}`, parent);
+    this.position = pos;
     this._drawable = createRect({
       position: this.position,
       width: 64,
@@ -37,7 +35,7 @@ export class BoundingBox extends SceneObject implements RenderingNode<RectDrawab
     });
     this.color = color;
     this._defaultColor = color;
-    this.bounds = new Bounds(pos, new Vector2(64 / RendererConfig.PIXEL_RATIO, 64 / RendererConfig.PIXEL_RATIO));
+    this._bounds = new Bounds(pos, new Vector2(64 / RendererConfig.PIXEL_RATIO, 64 / RendererConfig.PIXEL_RATIO));
   }
 
   update = () => {

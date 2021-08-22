@@ -1,17 +1,18 @@
-import { Node2d, NodeTypes, SceneObject, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
+import { Bounds, Node2d, NodeTypes, TiledLayerType, TiledMap, Vector2 } from "@js-mmo/engine";
 
 import { TilemapDrawable, createTilemap } from "../drawables/tilemap/tilemap";
-import { RenderingNode } from "../drawables/rendering_node";
 import { RuntimeTileset } from "../asset_management/tileset_manager";
 import { logger } from "../logger";
 
-export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawable> {
+import { RenderObject } from "./render_object";
+
+export class Tilemap extends RenderObject<TilemapDrawable> {
   readonly type = NodeTypes.Draw;
   readonly map: TiledMap;
 
   public origin = Vector2.Zero;
 
-  private _drawable: TilemapDrawable;
+  protected _drawable: TilemapDrawable;
   public get drawable(): TilemapDrawable {
     this._drawable.data = {
       ...this._drawable.data,
@@ -31,11 +32,14 @@ export class Tilemap extends SceneObject implements RenderingNode<TilemapDrawabl
     position?: Vector2,
     parent?: Node2d
   ) {
-    super(name, position || Vector2.Zero, Vector2.One, 0, parent);
+    super(name, parent);
     this.map = tilemap;
     if (tilemap.type === TiledLayerType.Object) {
       logger.logError(`Tried passing a tilemap object layer to a tilemap renderer! (${name})`);
     }
+
+    this.position = position ?? Vector2.Zero;
+    this._bounds = new Bounds(this.position, new Vector2(tilemap.width, tilemap.height));
     this._drawable = createTilemap({
       tilemap,
       layer,

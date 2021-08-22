@@ -1,5 +1,5 @@
 import { NodeTypes } from "../constants";
-import { Bounds } from "../world/bounds";
+import { Bounds } from "../math/bounds";
 
 export interface PhysicsNode {
   type: NodeTypes;
