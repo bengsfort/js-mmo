@@ -14,7 +14,14 @@ export class Node {
   public name: string;
 
   public type = NodeTypes.Node;
-  public parent: Node | undefined;
+  // abstr _parent: Node | undefined;
+  // public get parent(): Node | undefined {
+  //   return this._parent;
+  // }
+  // public set parent(value: Node | undefined) {
+  //   this._parent = value;
+  // }
+  public abstract parent: Node | undefined;
   public children: Node[] = [];
 
   protected _active = false;

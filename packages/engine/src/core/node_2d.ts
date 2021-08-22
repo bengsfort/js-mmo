@@ -6,7 +6,14 @@ import { Node } from "./node";
 export class Node2d extends Node {
   public readonly transform: Transform;
 
-  public parent: Node2d | undefined;
+  private _parent?: Node2d;
+  public get parent(): Node2d | undefined {
+    return this._parent;
+  }
+  public set parent(value: Node2d | undefined) {
+    this._parent = value;
+  }
+
   public children: Node[] = [];
 
   // Getters

@@ -1,7 +1,6 @@
 import * as GameLoop from "../game_loop";
 import { Node2d } from "../core/node_2d";
 import { NodeTypes } from "../constants";
-import { Vector2 } from "../math/vector2";
 
 export class SceneObject extends Node2d {
   type = NodeTypes.Node;

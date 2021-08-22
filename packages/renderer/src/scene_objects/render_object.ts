@@ -1,7 +1,5 @@
 import { Bounds, Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
 
-import { createSprite } from "../drawables/sprite/sprite";
-import { ImageManager } from "../asset_management/image_manager";
 import { NodeTypes } from "../../../engine/build";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Drawable } from "../drawables/drawable";
