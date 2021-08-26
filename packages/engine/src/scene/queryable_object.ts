@@ -12,14 +12,6 @@ let idCounter = -1;
 export class QueryableObject extends SceneObject implements QueryNode {
   public readonly type = NodeTypes.Query;
 
-  private _parent?: Node2d;
-  public get parent(): Node2d | undefined {
-    return this._parent;
-  }
-  public set parent(value: Node2d | undefined) {
-    this._parent = value;
-  }
-
   public set size(value: Vector2) {
     this._bounds.size.set(value.x, value.y);
   }
