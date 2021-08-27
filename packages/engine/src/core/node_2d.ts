@@ -1,26 +1,13 @@
 import { Transform } from "../math/transform";
 import { Vector2 } from "../math/vector2";
 
-import { EngineEvent } from "./event_dispatcher";
 import { Node } from "./node";
-
-type NodeAddedEvent = EngineEvent<Node2d, Node2d>;
 
 export class Node2d extends Node {
   public readonly transform: Transform;
 
-  // public parent?: Node2d;
-  protected _parent?: Node2d;
   public get parent(): Node2d | undefined {
-    return this._parent;
-  }
-  public set parent(value: Node2d | undefined) {
-    this._parent = value;
-    this.dispatchEvent<NodeAddedEvent>({
-      type: "node_added",
-      data: this,
-      target: value,
-    });
+    if (this._parent) return this._parent as Node2d;
   }
 
   public children: Node[] = [];

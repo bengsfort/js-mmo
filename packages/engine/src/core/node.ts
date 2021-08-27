@@ -36,16 +36,9 @@ export class Node extends EventDispatcher<NodeEvents> {
   public name: string;
 
   public type = NodeTypes.Node;
-  protected _parent?: Node;
+  protected _parent: Node | null = null;
   public get parent(): Node | undefined {
-    return this._parent;
-  }
-  public set parent(value: Node | undefined) {
-    if (value) {
-      value.addChild(this);
-    } else {
-      this._parent?.remove(this);
-    }
+    if (this._parent) return this._parent;
   }
 
   public children: Node[] = [];
@@ -64,7 +57,7 @@ export class Node extends EventDispatcher<NodeEvents> {
   constructor(name = "", parent?: Node) {
     super();
     this.name = name || this.id.toString();
-    parent?.addChild(this);
+    if (parent) this.setParent(parent);
   }
 
   // Public methods
@@ -76,29 +69,40 @@ export class Node extends EventDispatcher<NodeEvents> {
     }
   }
 
-  public addChild(child: Node): void {
-    if (this.children.includes(child)) {
+  public setParent(parent: Node | null): void {
+    if (this._parent === parent) {
+      return;
+    }
+
+    this._parent?.remove(this);
+    this._parent = parent;
+    parent?.addChild(this);
+  }
+
+  public addChild(node: Node): void {
+    if (this.children.includes(node)) {
       log.logError("Can't re-add a node to it's current parent.");
       return;
     }
-    if (child === this) {
+    if (node === this) {
       log.logError("Can't add a node as a child of itself!");
       return;
     }
-    if (typeof child.parent !== "undefined") {
-      console.log("Re-parenting:", child, child.parent);
-      child.parent.remove(child);
+    if (typeof node.parent !== "undefined") {
+      if (node.parent !== this) node.parent.remove(node);
     }
 
     this.dispatchEvent("node_added", {
-      type = "node_added",
-      data: {
-        node: child,
-      },
+      type: "node_added",
+      data: { node },
       source: this,
     });
-    this.children.push(child);
-    child.parent = this;
+    this.children.push(node);
+
+    // Should never happen, but to be safe
+    if (node.parent !== this) {
+      node.setParent(this);
+    }
   }
 
   public remove(node?: Node): void {
@@ -108,6 +112,12 @@ export class Node extends EventDispatcher<NodeEvents> {
     }
     if (this.children.includes(node)) {
       this.children = this.children.filter(child => child !== node);
+      node.setParent(null);
+      this.dispatchEvent("node_removed", {
+        type: "node_removed",
+        data: { node },
+        source: this,
+      });
       return;
     }
     log.logError("Couldn't remove node, either it doesn't exist or is not a child of the given node.");
