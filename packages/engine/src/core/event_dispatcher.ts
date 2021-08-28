@@ -25,7 +25,7 @@ export class EventDispatcher<EventList> {
 
   public removeEventListener<E extends keyof EventList = keyof EventList, L extends EventList[E] = EventList[E]>(
     event: E,
-    listener: L
+    listener: (data: L) => void
   ): void;
   public removeEventListener(event: string, listener: EngineEventListener): void {
     const listeners = this._listeners.get(event as keyof EventList);

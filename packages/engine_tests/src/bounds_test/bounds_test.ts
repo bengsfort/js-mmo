@@ -7,7 +7,11 @@ import { BoundingBox } from "./bounding_box";
 
 declare global {
   interface Window {
-    NODES: Node2d[];
+    __SCENE__: Scene;
+    __BOX__: typeof BoundingBox;
+    __STATIC_BOX__: BoundingBox;
+    __MOVING_BOX__: BoundingBox;
+    __V2__: typeof Vector2;
   }
 }
 
@@ -39,6 +43,9 @@ function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene();
+  scene.addEventListener("node_added", ev => console.log("External node_added listener on SCENE got payload:", ev));
+  scene.addEventListener("node_removed", ev => console.log("External node_removed listener on SCENE got payload:", ev));
+
   const camera = new Camera("Main", scene);
   scene.background = "#212121";
 
@@ -68,7 +75,11 @@ function main() {
   });
 
   WebRenderer.addScene(scene, camera);
-  window.NODES = [staticBox];
+  window.__SCENE__ = scene;
+  window.__STATIC_BOX__ = staticBox;
+  window.__MOVING_BOX__ = movingBox;
+  window.__BOX__ = BoundingBox;
+  window.__V2__ = Vector2;
 }
 
 main();

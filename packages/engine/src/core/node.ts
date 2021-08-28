@@ -6,7 +6,7 @@ import { makeLogger } from "./logging";
 const log = makeLogger("CORE");
 let idCounter = 0;
 
-interface NodeAddedEvent extends EngineEvent {
+export interface NodeAddedEvent extends EngineEvent {
   type: "node_added";
   data: {
     node: Node;
@@ -14,7 +14,7 @@ interface NodeAddedEvent extends EngineEvent {
   source: Node;
 }
 
-interface NodeRemovedEvent extends EngineEvent {
+export interface NodeRemovedEvent extends EngineEvent {
   type: "node_removed";
   data: {
     node: Node;
@@ -70,60 +70,72 @@ export class Node extends EventDispatcher<NodeEvents> {
   }
 
   public setParent(parent: Node | null): void {
+    // If this is already the parent, early out.
     if (this._parent === parent) {
       return;
     }
 
-    this._parent?.remove(this);
-    this._parent = parent;
-    parent?.addChild(this);
-  }
-
-  public addChild(node: Node): void {
-    if (this.children.includes(node)) {
-      log.logError("Can't re-add a node to it's current parent.");
-      return;
-    }
-    if (node === this) {
-      log.logError("Can't add a node as a child of itself!");
-      return;
-    }
-    if (typeof node.parent !== "undefined") {
-      if (node.parent !== this) node.parent.remove(node);
-    }
-
-    this.dispatchEvent("node_added", {
-      type: "node_added",
-      data: { node },
-      source: this,
-    });
-    this.children.push(node);
-
-    // Should never happen, but to be safe
-    if (node.parent !== this) {
-      node.setParent(this);
-    }
-  }
-
-  public remove(node?: Node): void {
-    if (!node) {
-      this.parent?.remove(this);
-      return;
-    }
-    if (this.children.includes(node)) {
-      this.children = this.children.filter(child => child !== node);
-      node.setParent(null);
-      this.dispatchEvent("node_removed", {
+    // If provided parent is null, remove.
+    if (parent === null) {
+      const oldParent = this._parent as Node;
+      oldParent.children = oldParent.children.filter(node => node !== this) ?? [];
+      this._parent = null;
+      this.removeEventListener("node_added", oldParent.onNodeAdded);
+      this.removeEventListener("node_removed", oldParent.onNodeRemoved);
+      oldParent.dispatchEvent("node_removed", {
         type: "node_removed",
-        data: { node },
-        source: this,
+        data: { node: this },
+        source: oldParent,
       });
       return;
     }
-    log.logError("Couldn't remove node, either it doesn't exist or is not a child of the given node.");
+
+    // If provided parent is a node, add ourselves to it and store the reference.
+    if (this._parent && this._parent !== null) {
+      this.setParent(null);
+    }
+
+    this._parent = parent;
+    parent.children.push(this);
+    parent.dispatchEvent("node_added", {
+      type: "node_added",
+      data: { node: this },
+      source: parent,
+    });
+    this.addEventListener("node_added", parent.onNodeAdded);
+    this.addEventListener("node_removed", parent.onNodeRemoved);
+  }
+
+  public addChild(node: Node): void {
+    node.setParent(this);
+  }
+
+  public remove(node?: Node): void {
+    // If no node provided, remove this from it's parent.
+    if (!node) {
+      this.setParent(null);
+      return;
+    }
+
+    node.setParent(null);
   }
 
   // Overrides
   onActive(): void {}
   onInactive(): void {}
+
+  // Optional subscriptions
+  public onNodeAdded = (ev: NodeAddedEvent) => this._onNodeAdded(ev);
+  private _onNodeAdded(ev: NodeAddedEvent): void {
+    console.log("Node.onNodeAdded", ev);
+    // This is going to allow us to "bubble" the event upwards to the world instance.
+    this.dispatchEvent("node_added", ev);
+  }
+
+  public onNodeRemoved = (ev: NodeRemovedEvent) => this._onNodeRemoved(ev);
+  private _onNodeRemoved(ev: NodeRemovedEvent): void {
+    console.log("Scene.onNodeRemoved", ev);
+    // This is going to allow us to "bubble" the event upwards to the world instance.
+    this.dispatchEvent("node_removed", ev);
+  }
 }

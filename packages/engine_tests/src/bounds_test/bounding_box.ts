@@ -1,4 +1,4 @@
-import { Bounds, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
+import { Bounds, Node2d, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
 import { RectDrawable, RendererConfig, RenderingNode, createRect, RenderObject } from "@js-mmo/renderer";
 
 let counter = 0;
@@ -20,7 +20,7 @@ export class BoundingBox extends RenderObject<RectDrawable> {
     return this._drawable;
   }
 
-  constructor(pos: Vector2, color = "#00f", parent?: SceneObject) {
+  constructor(pos: Vector2, color = "#00f", parent?: Node2d) {
     super(`bounding_box_${counter++}`, parent);
     this.position = pos;
     this._drawable = createRect({
