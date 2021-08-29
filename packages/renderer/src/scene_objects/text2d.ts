@@ -48,8 +48,8 @@ export class Text2d extends RenderObject<TextDrawable> {
     return this._drawable;
   }
 
-  constructor(pos: Vector2, text: string, fontSize = 16, fontFamily = "mono", parent?: Node2d) {
-    super("Text", parent);
+  constructor(pos: Vector2, text: string, fontSize = 16, fontFamily = "mono") {
+    super("Text");
 
     this.position = pos;
     this.text = text;

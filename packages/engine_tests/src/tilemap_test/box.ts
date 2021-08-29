@@ -15,7 +15,7 @@ export class Box extends RenderObject<RectDrawable> {
   }
 
   constructor(pos: Vector2, origin: Vector2, color: string, height: number, width: number, parent?: Node2d) {
-    super(`box`, parent);
+    super(`box`);
     this.position = pos;
     this._bounds = new Bounds(pos, new Vector2(width, height));
     this._drawable = createRect({
@@ -28,5 +28,6 @@ export class Box extends RenderObject<RectDrawable> {
       rotation: this.rotation,
       renderIsometric: false,
     });
+    if (parent) this.setParent(parent);
   }
 }

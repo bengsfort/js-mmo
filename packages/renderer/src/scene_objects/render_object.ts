@@ -31,15 +31,15 @@ export class RenderObject<T extends Drawable<DAttrs> = Drawable<DAttrs>>
       ...this._drawable.data,
       width: bounds.size.x,
       height: bounds.size.y,
-      position: this.position,
+      position: this.bounds.position,
       rotation: this.rotation,
       scale: this.scale,
     };
     return this._drawable;
   }
 
-  constructor(name = "", parent?: Node2d) {
-    super(name, parent);
+  constructor(name = "") {
+    super(name);
 
     // @todo: does this need to use pixels_per_unit?
     this._bounds = new Bounds(this.localPosition, Vector2.One);

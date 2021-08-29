@@ -1,9 +1,10 @@
 // eslint-disable @typescript-eslint/no-explicit-any
 
 import { Camera, RendererConfig, Scene, WebRenderer } from "@js-mmo/renderer";
-import { EngineConfig, GameLoop, InputPlatform, InputSystem, Node2d, Time, Vector2 } from "@js-mmo/engine";
+import { EngineConfig, GameLoop, GameWorld, InputPlatform, InputSystem, Node2d, Time, Vector2 } from "@js-mmo/engine";
 
 import { BoundingBox } from "./bounding_box";
+import { BackgroundBox } from "./background_box";
 
 declare global {
   interface Window {
@@ -32,7 +33,11 @@ function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
   RendererConfig.PIXELS_PER_UNIT = 32;
+  EngineConfig.MAX_CELL_NODES = 1;
+  EngineConfig.WORLD_SIZE = 1000;
   GameLoop.start();
+
+  const worldHalfSize = EngineConfig.WORLD_SIZE / 2;
 
   // Create renderer and add it to the update loop
   InputSystem.registerInputPlatform(InputPlatform.Web);
@@ -43,11 +48,37 @@ function main() {
   WebRenderer.registerForceDraw(drawFps);
 
   const scene = new Scene();
+
   scene.addEventListener("node_added", ev => console.log("External node_added listener on SCENE got payload:", ev));
   scene.addEventListener("node_removed", ev => console.log("External node_removed listener on SCENE got payload:", ev));
 
   const camera = new Camera("Main", scene);
   scene.background = "#212121";
+
+  // const nwBox = new BackgroundBox(
+  //   scene.position.add(Vector2.One.multiplyScalar(-worldHalfSize)),
+  //   worldHalfSize,
+  //   "#f8f8f8",
+  //   scene
+  // );
+  // const neBox = new BackgroundBox(
+  //   scene.position.add(Vector2.One.multiplyScalar(worldHalfSize)),
+  //   worldHalfSize,
+  //   "#f88",
+  //   scene
+  // );
+  // const swBox = new BackgroundBox(
+  //   scene.position.add(new Vector2(-worldHalfSize, -worldHalfSize)),
+  //   worldHalfSize,
+  //   "#ff8",
+  //   scene
+  // );
+  // const seBox = new BackgroundBox(
+  //   scene.position.add(new Vector2(worldHalfSize, -worldHalfSize)),
+  //   worldHalfSize,
+  //   "#88f",
+  //   scene
+  // );
 
   const staticBox = new BoundingBox(
     new Vector2(
@@ -74,7 +105,9 @@ function main() {
     }
   });
 
+  GameWorld.registerActiveScene(scene);
   WebRenderer.addScene(scene, camera);
+
   window.__SCENE__ = scene;
   window.__STATIC_BOX__ = staticBox;
   window.__MOVING_BOX__ = movingBox;

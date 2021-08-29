@@ -17,7 +17,7 @@ export class RotatingBox extends RenderObject<RectDrawable> {
   }
 
   constructor(pos: Vector2, scale: Vector2, rotation: number, speed: number, parent?: SceneObject) {
-    super(`rotating_box_${counter++}`, parent);
+    super(`rotating_box_${counter++}`);
     this.position = pos;
     this.scale = scale;
     this.rotation = rotation;
@@ -32,6 +32,7 @@ export class RotatingBox extends RenderObject<RectDrawable> {
       renderIsometric: false,
     });
     this._speed = speed;
+    if (parent) this.setParent(parent);
   }
 
   update = () => {

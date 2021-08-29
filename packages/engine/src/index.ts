@@ -17,6 +17,7 @@ export { Node2d } from "./core/node_2d";
 export { QueryNode } from "./core/query_node";
 
 // Scenes
+export * as GameWorld from "./world";
 export { Group } from "./scene/group";
 export { SceneObject } from "./scene/scene_object";
 

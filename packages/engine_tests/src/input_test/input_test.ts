@@ -61,7 +61,7 @@ function main() {
   const camera = new Camera();
 
   const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 10);
-  scene.addChild(box);
+  box.setParent(scene);
 
   WebRenderer.addScene(scene, camera);
   window.MOVING_BOX = box;

@@ -12,7 +12,7 @@ export class SceneObject extends Node2d {
   private _deactivating = false;
 
   constructor(name = "", parent?: Node2d) {
-    super(name, parent);
+    super(name);
     this.setActive(true);
   }
 

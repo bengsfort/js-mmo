@@ -54,6 +54,7 @@ export class Node extends EventDispatcher<NodeEvents> {
   }
 
   // Constructor
+  // @todo: Remove parent?
   constructor(name = "", parent?: Node) {
     super();
     this.name = name || this.id.toString();

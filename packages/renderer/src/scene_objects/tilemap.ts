@@ -24,15 +24,8 @@ export class Tilemap extends RenderObject<TilemapDrawable> {
 
   // @todo: pass in the tilemap definition and layer id that you want to render
   // @todo: remove all  the other nonsense
-  constructor(
-    name: string,
-    tilemap: TiledMap,
-    tileset: RuntimeTileset,
-    layer: number,
-    position?: Vector2,
-    parent?: Node2d
-  ) {
-    super(name, parent);
+  constructor(name: string, tilemap: TiledMap, tileset: RuntimeTileset, layer: number, position?: Vector2) {
+    super(name);
     this.map = tilemap;
     if (tilemap.type === TiledLayerType.Object) {
       logger.logError(`Tried passing a tilemap object layer to a tilemap renderer! (${name})`);

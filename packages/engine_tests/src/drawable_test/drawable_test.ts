@@ -51,13 +51,15 @@ async function main() {
 
   const group2 = new Group("normal_sprites", scene);
   group2.position = new Vector2(64, 128);
-  const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false, group2);
+  const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false);
+  normal.setParent(group2);
   const forceDefault = new Sprite2d("force_default", "nonexistent.png", new Vector2(32, 32), false, group2);
 
   forceDefault.origin.set(0.5, 0.5);
   forceDefault.localPosition.set(88, 0);
 
-  const flipped = new Sprite2d("flipped", tile32, new Vector2(32, 32), false, group2);
+  const flipped = new Sprite2d("flipped", tile32, new Vector2(32, 32), false);
+  flipped.setParent(group2);
   flipped.flipX = true;
   flipped.flipY = true;
   flipped.localPosition.set(196, 0);

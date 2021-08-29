@@ -1,4 +1,3 @@
-import { Node2d } from "../core/node_2d";
 import { Bounds } from "../math/bounds";
 import { Vector2 } from "../math/vector2";
 import { NodeTypes } from "../constants";
@@ -25,8 +24,8 @@ export class QueryableObject extends SceneObject implements QueryNode {
     return this._bounds;
   }
 
-  constructor(position: Vector2, size: Vector2, name = `query_node:${++idCounter}`, parent?: Node2d) {
-    super(name, parent);
+  constructor(position: Vector2, size: Vector2, name = `query_node:${++idCounter}`) {
+    super(name);
     this.position = position;
     this._bounds = new Bounds(this.position, size);
   }

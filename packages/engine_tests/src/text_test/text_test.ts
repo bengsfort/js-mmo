@@ -52,7 +52,7 @@ async function main() {
 
   const movingGroup = new TestPlayer("Kikkeli", new Vector2(64, 128), Vector2.One, 20);
   window.__TEST_PLAYER__ = movingGroup;
-  scene.addChild(movingGroup);
+  movingGroup.setParent(scene);
 
   WebRenderer.addScene(scene, camera);
 }

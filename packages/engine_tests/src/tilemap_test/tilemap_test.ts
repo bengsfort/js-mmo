@@ -49,7 +49,8 @@ async function main() {
   if (await TilesetManager.load(TILESET_PATH)) {
     const tileset = TilesetManager.get(TILESET_PATH);
 
-    const map = new Tilemap("BaseLayer", devMap as TiledMap, tileset, 0, Vector2.Zero, scene);
+    const map = new Tilemap("BaseLayer", devMap as TiledMap, tileset, 0, Vector2.Zero);
+    map.setParent(scene);
     window.__TILEMAP__ = map;
   }
 

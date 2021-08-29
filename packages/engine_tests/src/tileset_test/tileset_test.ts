@@ -1,4 +1,4 @@
-import { EngineConfig, GameLoop, Time, Vector2 } from "@js-mmo/engine";
+import { EngineConfig, GameLoop, GameWorld, Time, Vector2 } from "@js-mmo/engine";
 import { Camera, RendererConfig, Scene, Sprite2d, TilesetManager, WebRenderer } from "@js-mmo/renderer";
 
 declare global {
@@ -42,16 +42,21 @@ async function main() {
   window.__TILESET_MANAGER__ = TilesetManager;
   if (await TilesetManager.load("./assets/dev_env_sheet.json")) {
     const { tiles } = TilesetManager.get("./assets/dev_env_sheet.json");
-    const tile = new Sprite2d("tile1", tiles[0], new Vector2(32, 32), false, scene);
-    const tile2 = new Sprite2d("tile2", tiles[1], new Vector2(32, 32), false, scene);
+    const tile = new Sprite2d("tile1", tiles[0], new Vector2(32, 32), false);
+    tile.setParent(scene);
+    const tile2 = new Sprite2d("tile2", tiles[1], new Vector2(32, 32), false);
+    tile2.setParent(scene);
     tile2.localPosition.set(32, 0);
-    const tile3 = new Sprite2d("tile3", tiles[2], new Vector2(32, 32), false, scene);
+    const tile3 = new Sprite2d("tile3", tiles[2], new Vector2(32, 32), false);
+    tile3.setParent(scene);
     tile3.localPosition.set(64, 0);
-    const tile4 = new Sprite2d("tile4", tiles[3], new Vector2(32, 32), false, scene);
+    const tile4 = new Sprite2d("tile4", tiles[3], new Vector2(32, 32), false);
+    tile4.setParent(scene);
     tile4.localPosition.set(96, 0);
     window.__STATIC_SPRITE__ = tile;
   }
 
+  GameWorld.registerActiveScene(scene);
   WebRenderer.addScene(scene, camera);
 }
 

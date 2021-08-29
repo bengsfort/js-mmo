@@ -34,8 +34,8 @@ export class Sprite2d extends RenderObject<SpriteDrawable> {
     return this._drawable;
   }
 
-  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean, parent?: Node2d) {
-    super(name, parent);
+  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean) {
+    super(name);
 
     if (typeof texture === "string") {
       this.texture = ImageManager.get(texture);

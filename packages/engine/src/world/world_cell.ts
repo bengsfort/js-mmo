@@ -1,13 +1,50 @@
+import { QueryableObject } from "../scene/queryable_object";
 import { Vector2 } from "../math/vector2";
 import { Bounds } from "../math/bounds";
+
+interface WorldUnitOpts {
+  node: QueryableObject;
+  layer?: number;
+  cell?: WorldCell;
+}
+
+export class WorldUnit {
+  public layer: number;
+  public node: QueryableObject;
+  public cell?: WorldCell;
+
+  constructor({ layer = 0, node, cell }: WorldUnitOpts) {
+    this.layer = layer;
+    this.node = node;
+    this.cell = cell;
+  }
+
+  includesPoint(point: Vector2): boolean {
+    return this.node.bounds.includesPoint(point);
+  }
+
+  intersects(region: Bounds): boolean {
+    return this.node.bounds.intersects(region);
+  }
+}
 
 // Quadtree
 export class WorldCell {
   public readonly maxChildren: number;
   public boundaries: Bounds;
 
-  public children: Bounds[]; // @todo: change to physics bodies
+  public children: WorldUnit[]; // @todo: change to physics bodies
+  public get root(): WorldCell {
+    if (this._parent !== null) {
+      return this.parent as WorldCell;
+    }
+    return this;
+  }
 
+  public get parent(): WorldCell | null {
+    return this._parent;
+  }
+  private _parent: WorldCell | null = null;
   private _nw?: WorldCell;
   private _ne?: WorldCell;
   private _sw?: WorldCell;
@@ -54,24 +91,25 @@ export class WorldCell {
     return count;
   }
 
-  constructor(pos: Vector2, size: Vector2, maxChildren = 5) {
+  constructor(pos: Vector2, size: Vector2, maxChildren = 5, parent?: WorldCell) {
     this.boundaries = new Bounds(pos, size);
     this.maxChildren = maxChildren;
     this.children = [];
   }
 
   // @todo: implement, use phys bodies not points
-  insert(body: Bounds): boolean {
+  insert(body: WorldUnit): boolean {
     // Ignore objects that don't belong here
     // @todo: what if the `size` of a body pushes into another cell? duplicate? Store in both? fuck.
-    if (!this.includesPoint(body.position)) {
+    if (!this.includesPoint(body.node.bounds.position)) {
       return false;
     }
 
     // If there is space here and there are no subdivisions, add it
-    if (!this._nw && this.children.length < this.maxChildren) {
+    if (!this._nw && this.children.length <= this.maxChildren) {
       this.children.push(body);
-      this.children.sort((a, b) => a.position.y - b.position.y); // sort by position on y axis
+      this.children.sort((a, b) => a.node.bounds.position.y - b.node.bounds.position.y); // sort by position on y axis
+      body.cell = this;
       return true;
     }
 
@@ -89,6 +127,29 @@ export class WorldCell {
     return false;
   }
 
+  remove(body: WorldUnit): boolean {
+    // Ignore objects that don't belong.
+    if (!this.includesPoint(body.node.bounds.position)) {
+      return false;
+    }
+
+    // If there are children in here, check for it + delete.
+    if (!this._nw && this.children.length > 0) {
+      const index = this.children.indexOf(body);
+      if (index === -1) return false;
+      this.children = this.children.filter(b => b !== body);
+      return true;
+    }
+
+    if (this._nw?.remove(body)) return true;
+    if (this._ne?.remove(body)) return true;
+    if (this._sw?.remove(body)) return true;
+    if (this._se?.remove(body)) return true;
+
+    // Otherwise, we can't remove it (this should NEVER occur)
+    return false;
+  }
+
   private subdivide() {
     const centerpoint = this.boundaries.position.copy();
     const quadrantSize = this.boundaries.halfSize.copy();
@@ -97,22 +158,26 @@ export class WorldCell {
     this._nw = new WorldCell(
       new Vector2(centerpoint.x - quadrantOffset.x, centerpoint.y + quadrantOffset.y),
       quadrantSize,
-      this.maxChildren
+      this.maxChildren,
+      this
     );
     this._ne = new WorldCell(
       new Vector2(centerpoint.x + quadrantOffset.x, centerpoint.y + quadrantOffset.y),
       quadrantSize,
-      this.maxChildren
+      this.maxChildren,
+      this
     );
     this._sw = new WorldCell(
       new Vector2(centerpoint.x - quadrantOffset.x, centerpoint.y - quadrantOffset.y),
       quadrantSize,
-      this.maxChildren
+      this.maxChildren,
+      this
     );
     this._se = new WorldCell(
       new Vector2(centerpoint.x + quadrantOffset.x, centerpoint.y - quadrantOffset.y),
       quadrantSize,
-      this.maxChildren
+      this.maxChildren,
+      this
     );
 
     // Remove the references from this one and redistribute
@@ -122,14 +187,20 @@ export class WorldCell {
 
   // Querying
   // Get all children that include provided point
-  queryPoint(point: Vector2): Bounds[] {
+  queryPoint(point: Vector2): QueryableObject[] {
     // Only continue if the point is included.
     // @todo: This check happens twice for children. Figure out a way to better do this...
     if (!this.includesPoint(point)) return [];
 
     // If there are no subdivisions, just check the children of this cell for a hit
     if (!this._nw) {
-      return this.children.filter(child => child.includesPoint(point));
+      const result = [];
+      for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i].includesPoint(point)) {
+          result.push(this.children[i].node);
+        }
+      }
+      return result;
     }
 
     // If there are subdivisions, find the one that includes this point.
@@ -143,18 +214,24 @@ export class WorldCell {
   }
 
   // Get all children within the provided range
-  queryRegion(region: Bounds): Bounds[] {
+  queryRegion(region: Bounds): QueryableObject[] {
     // Only continue if the region is included.
     // @todo: This check happens twice for children. Figure out a way to better do this...
     if (!this.includesRegion(region)) return [];
 
     // If there are no subdivisions, check the children of this cell.
     if (!this._nw) {
-      return this.children.filter(child => child.intersects(region));
+      const result = [];
+      for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i].intersects(region)) {
+          result.push(this.children[i].node);
+        }
+      }
+      return result;
     }
 
     // If there are subdivisions, find the one that includes this point.
-    let hits: Bounds[] = [];
+    let hits: QueryableObject[] = [];
     if (this._nw?.includesRegion(region)) hits = hits.concat(this._nw.queryRegion(region));
     if (this._ne?.includesRegion(region)) hits = hits.concat(this._ne.queryRegion(region));
     if (this._sw?.includesRegion(region)) hits = hits.concat(this._sw.queryRegion(region));
