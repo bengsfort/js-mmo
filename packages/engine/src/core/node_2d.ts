@@ -39,10 +39,10 @@ export class Node2d extends Node {
   }
   get position(): Vector2 {
     if (this.parent) {
-      const parentPos = this.parent.position;
+      const parentPos = this.parent.position.copy();
       return Vector2.Add(this.transform.position, parentPos);
     }
-    return this.transform.position;
+    return this.transform.position.copy();
   }
 
   set rotation(value: number) {

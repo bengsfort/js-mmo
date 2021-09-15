@@ -36,18 +36,6 @@ export class MovingBox extends RenderObject<RectDrawable> {
   }
 
   update = () => {
-    if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
-      this.localPosition.y -= this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveDown)) {
-      this.localPosition.y += this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveLeft)) {
-      this.localPosition.x -= this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveRight)) {
-      this.localPosition.x += this._speed / Time.getDeltaTime();
-    }
     if (InputSystem.inputEventDown(InputEvents.Grow)) {
       this.localScale.x += 0.1;
       this.localScale.y += 0.1;

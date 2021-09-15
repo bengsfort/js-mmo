@@ -28,7 +28,24 @@ const drawFps = () => {
   ctx.textAlign = "left";
   ctx.fillStyle = "#ffffff";
   ctx.font = "16px monospace";
-  ctx.fillText(`Current FPS: ${Time.getCurrentFps().toFixed(2)}`, 16, 48);
+  ctx.fillText(`Current FPS: ${Time.getCurrentFps().toFixed(2)}`, 24, 48);
+  ctx.restore();
+};
+
+const drawCameraPos = (camera: Camera) => () => {
+  if (!debugCanvas) return;
+  const ctx = debugCanvas.getContext("2d") as CanvasRenderingContext2D;
+  ctx.save();
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "16px monospace";
+  ctx.fillText(
+    `Camera pos: (${(camera.position.x / RendererConfig.PIXELS_PER_UNIT).toFixed(2)}, ${(
+      camera.position.y / RendererConfig.PIXELS_PER_UNIT
+    ).toFixed(2)})`,
+    24,
+    64
+  );
   ctx.restore();
 };
 
@@ -63,6 +80,22 @@ function main() {
   const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 10);
   box.setParent(scene);
 
+  GameLoop.registerUpdateHandler(() => {
+    if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
+      camera.localPosition.y -= 16 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveDown)) {
+      camera.localPosition.y += 16 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveLeft)) {
+      camera.localPosition.x -= 16 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveRight)) {
+      camera.localPosition.x += 16 / Time.getDeltaTime();
+    }
+  });
+
+  WebRenderer.registerForceDraw(drawCameraPos(camera));
   WebRenderer.addScene(scene, camera);
   window.MOVING_BOX = box;
 }

@@ -12,7 +12,7 @@ const SceneTree = new Map<number, WorldCell>();
 const SceneListeners = new Map<number, [(data: NodeAddedEvent) => void, (data: NodeRemovedEvent) => void]>();
 const Observations = new Map<Node, WorldUnit>();
 
-// (window as any).__TREES__ = SceneTree;
+(window as any).__TREES__ = SceneTree;
 
 // Utility functions
 function isQueryable(node: Node): boolean {
@@ -76,6 +76,7 @@ function removeNode(scene: Node2d, ev: NodeRemovedEvent) {
 
 // World Control
 export function registerActiveScene(scene: Node2d): void {
+  console.log("Setting base scene position:", scene.position);
   const graph = new WorldCell(scene.position, new Vector2(WORLD_SIZE, WORLD_SIZE), MAX_CELL_NODES);
   SceneTree.set(scene.id, graph);
 
@@ -115,6 +116,7 @@ export function unregisterScene(scene: Node2d): void {
 }
 
 export function refresh(): void {
+  // console.log("Refreshing world units");
   Observations.forEach(unit => {
     if (!unit.cell) return;
 
@@ -134,11 +136,21 @@ export function refresh(): void {
       // console.log("Old cell bounds:", unit.cell.boundaries.min.toLiteral(), unit.cell.boundaries.max.toLiteral());
       unit.cell.remove(unit);
       const root = unit.cell.root;
+      console.log("Re-adding node to root:", root);
       if (root.insert(unit)) {
         console.log("New cell bounds:", unit.cell.boundaries.min.toLiteral(), unit.cell.boundaries.max.toLiteral());
       }
     }
   });
+  SceneTree.forEach(cell =>
+    console.log(
+      "Checking child counts for main tree: (ne, nw, se, sw)",
+      cell.ne?.totalChildCount ?? 0,
+      cell.nw?.totalChildCount ?? 0,
+      cell.se?.totalChildCount ?? 0,
+      cell.sw?.totalChildCount ?? 0
+    )
+  );
 }
 
 // World Querying

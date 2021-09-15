@@ -6,11 +6,12 @@ import { TiledOrientation, Vector2 } from "@js-mmo/engine";
 import { Camera } from "../camera/camera";
 import { Drawable } from "../drawables/drawable";
 import { DAttrs, renderDrawable } from "../drawables/render_drawables";
-import { CLEAR_COLOR, PIXEL_RATIO } from "../renderer_config";
+import { CLEAR_COLOR, PIXEL_RATIO, SHOW_UNIT_GRID } from "../renderer_config";
 import { RenderingNode } from "../drawables/rendering_node";
 import { Scene } from "../scene/scene";
 import { logger } from "../logger";
 import { traverseTree } from "../scene/scene_tree";
+import { drawUnitGrid } from "../drawables/draw_grid";
 
 import { UnsubscribeCallback, bindCanvasToWindowSize, createCanvas } from "./canvas";
 
@@ -51,7 +52,7 @@ const renderLoop = (): void => {
     const cameraScale = Math.max(0, camera?.zoom ?? 1);
 
     // Move scene viewport to camera viewport
-    activeContext.translate(cameraOffset.x, cameraOffset.y);
+    activeContext.translate(-cameraOffset.x, -cameraOffset.y);
     activeContext.rotate(camera?.rotation ?? 0); // @todo, proper implementation
     activeContext.scale(cameraScale, cameraScale);
 
@@ -67,6 +68,11 @@ const renderLoop = (): void => {
 
     activeContext.restore();
   });
+
+  if (SHOW_UNIT_GRID && renderCalls.length > 0) {
+    const [, camera] = renderCalls[0];
+    if (camera) drawUnitGrid(activeContext, camera);
+  }
 
   // Force draws are just constants, so just copy the array and render this frame.
   const tickForceDraw = [...registeredForceDraw];

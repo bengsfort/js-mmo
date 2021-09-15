@@ -35,7 +35,10 @@ export class BackgroundBox extends RenderObject<RectDrawable> {
     });
     this.color = color;
     this._defaultColor = color;
-    this._bounds = new Bounds(pos, new Vector2(size / RendererConfig.PIXEL_RATIO, size / RendererConfig.PIXEL_RATIO));
+    this._bounds = new Bounds(
+      this.position,
+      new Vector2(size / RendererConfig.PIXEL_RATIO, size / RendererConfig.PIXEL_RATIO)
+    );
     if (parent) this.setParent(parent);
   }
 

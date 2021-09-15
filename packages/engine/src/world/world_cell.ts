@@ -95,6 +95,7 @@ export class WorldCell {
     this.boundaries = new Bounds(pos, size);
     this.maxChildren = maxChildren;
     this.children = [];
+    this._parent = parent ?? null;
   }
 
   // @todo: implement, use phys bodies not points
@@ -102,6 +103,13 @@ export class WorldCell {
     // Ignore objects that don't belong here
     // @todo: what if the `size` of a body pushes into another cell? duplicate? Store in both? fuck.
     if (!this.includesPoint(body.node.bounds.position)) {
+      console.log(
+        "BODY DOES NOT EXIST IN THIS CELL (pos, boundsMin, boundsMax, parent)",
+        body.node.bounds.position,
+        this.boundaries.min,
+        this.boundaries.max,
+        this.parent
+      );
       return false;
     }
 
@@ -110,20 +118,35 @@ export class WorldCell {
       this.children.push(body);
       this.children.sort((a, b) => a.node.bounds.position.y - b.node.bounds.position.y); // sort by position on y axis
       body.cell = this;
+      console.log("ADDED TO THIS CELL");
       return true;
     }
 
     // Otherwise, subdivide then add to wherever it belongs
     if (!this._nw) {
+      console.log("SUBDIVIDING CELL");
       this.subdivide();
     }
 
-    if (this._nw?.insert(body)) return true;
-    if (this._ne?.insert(body)) return true;
-    if (this._sw?.insert(body)) return true;
-    if (this._se?.insert(body)) return true;
+    if (this._nw?.insert(body)) {
+      console.log("ADDED TO NW CELL");
+      return true;
+    }
+    if (this._ne?.insert(body)) {
+      console.log("ADDED TO NE CELL");
+      return true;
+    }
+    if (this._sw?.insert(body)) {
+      console.log("ADDED TO SW CELL");
+      return true;
+    }
+    if (this._se?.insert(body)) {
+      console.log("ADDED TO SE CELL");
+      return true;
+    }
 
     // Otherwise, we can't insert it somehow (this should NEVER occur)
+    console.log("Somehow didn't add to anything");
     return false;
   }
 
