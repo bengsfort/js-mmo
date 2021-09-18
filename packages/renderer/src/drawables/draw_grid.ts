@@ -8,7 +8,7 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
   context.save();
 
   const cameraOffset = camera?.getViewPosition(camera.position) ?? Vector2.Zero;
-  const viewport = camera?.getViewportBounds() ?? new Bounds(Vector2.Zero, Vector2.Zero);
+  const viewport = camera?.getViewportBounds() ?? new Bounds(Vector2.Zero, Vector2.One);
 
   const distanceFromOrigin = Vector2.Divide(viewport.position, viewport.size);
   console.log(
@@ -29,10 +29,7 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
 
   const offset = Vector2.Multiply(viewport.size, new Vector2(xStart, yStart));
 
-  context.translate(
-    -viewport.size.x * RendererConfig.PIXELS_PER_UNIT * xStart,
-    -viewport.size.y * RendererConfig.PIXELS_PER_UNIT * yStart
-  );
+  context.translate(-cameraOffset.x, -cameraOffset.y);
   context.rotate(camera?.rotation ?? 0);
   context.scale(scale, scale);
 
@@ -40,6 +37,7 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
   context.font = "12px monospace";
 
   const greaterUnits = Math.max(viewport.size.x * 2, viewport.size.y * 2);
+  const gridBoxSize = new Vector2(viewport.size.x * 2, viewport.size.y * 2);
   for (let i = 0; i < greaterUnits; i++) {
     const x = i * RendererConfig.PIXELS_PER_UNIT;
     const y = i * RendererConfig.PIXELS_PER_UNIT;

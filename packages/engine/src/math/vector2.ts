@@ -157,6 +157,17 @@ export class Vector2 implements V2 {
   }
 
   /**
+   * Subtract another vector from this vector.
+   * @param {Vector2} other The other vector.
+   * @returns Itself.
+   */
+  subtract(other: V2): Vector2 {
+    this.x -= other.x;
+    this.y -= other.y;
+    return this;
+  }
+
+  /**
    * Multiply this vector by another vector.
    * @param {Vector2} other The other vector.
    * @returns {Vector2} Itself.

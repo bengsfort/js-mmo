@@ -23,7 +23,7 @@ export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D, cam
 
   // Position
   const viewPosition = camera?.getViewPosition(position) ?? position;
-  context.translate(viewPosition.x, viewPosition.y);
+  context.translate(-viewPosition.x, -viewPosition.y);
   context.rotate((rotation * Math.PI) / 180);
   context.scale(scale.x, scale.y);
 
