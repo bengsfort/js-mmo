@@ -147,9 +147,9 @@ export const registerDrawable = <T extends DAttrs>(drawable: Drawable<T>) => {
 
 // Private API
 function blurHandler() {
-  pause(true);
+  // pause(true);
 }
 
 function focusHandler() {
-  pause(false);
+  // pause(false);
 }

@@ -22,10 +22,10 @@ export const drawRect = (drawable: DRect, context: CanvasRenderingContext2D, cam
   const orig = new Vector2(origin.x * width, origin.y * height);
 
   // Position
-  const viewPosition = camera?.getViewPosition(position) ?? position;
-  context.translate(-viewPosition.x, -viewPosition.y);
-  context.rotate((rotation * Math.PI) / 180);
-  context.scale(scale.x, scale.y);
+  // const viewPosition = camera?.getViewPosition(position) ?? position;
+  // context.translate(-viewPosition.x, -viewPosition.y);
+  // context.rotate((rotation * Math.PI) / 180);
+  // context.scale(scale.x, scale.y);
 
   // Draw
   context.fillStyle = color;

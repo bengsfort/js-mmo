@@ -11,25 +11,18 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
   const viewport = camera?.getViewportBounds() ?? new Bounds(Vector2.Zero, Vector2.One);
 
   const distanceFromOrigin = Vector2.Divide(viewport.position, viewport.size);
-  console.log(
-    "distance from origin:",
-    distanceFromOrigin.toString(),
-    "viewport",
-    viewport.position.toString(),
-    viewport.size.toString()
-  );
-
   const scale = Math.max(0, camera?.zoom ?? 1);
 
   //   const unitsPerWidth = window.innerWidth / RendererConfig.PIXELS_PER_UNIT;
   //   const unitsPerHeight = window.innerHeight / RendererConfig.PIXELS_PER_UNIT;
 
-  const xStart = Math.floor(distanceFromOrigin.x);
-  const yStart = Math.floor(distanceFromOrigin.y);
+  const xStart = Math.floor(distanceFromOrigin.x * viewport.size.x) - viewport.halfSize.x;
+  const yStart = Math.floor(distanceFromOrigin.y * viewport.size.y) - viewport.halfSize.y;
 
-  const offset = Vector2.Multiply(viewport.size, new Vector2(xStart, yStart));
-
-  context.translate(-cameraOffset.x, -cameraOffset.y);
+  context.translate(
+    -viewport.northWest.x * RendererConfig.PIXELS_PER_UNIT,
+    -viewport.northWest.y * RendererConfig.PIXELS_PER_UNIT
+  );
   context.rotate(camera?.rotation ?? 0);
   context.scale(scale, scale);
 
@@ -38,18 +31,24 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
 
   const greaterUnits = Math.max(viewport.size.x * 2, viewport.size.y * 2);
   const gridBoxSize = new Vector2(viewport.size.x * 2, viewport.size.y * 2);
+
   for (let i = 0; i < greaterUnits; i++) {
-    const x = i * RendererConfig.PIXELS_PER_UNIT;
-    const y = i * RendererConfig.PIXELS_PER_UNIT;
+    const xOffset = xStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
+    const yOffset = yStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
 
     if (i <= viewport.size.x * 2) {
-      context.strokeRect(x, 0, RendererConfig.PIXELS_PER_UNIT, viewport.size.y * RendererConfig.PIXELS_PER_UNIT * 2);
+      context.strokeRect(
+        xOffset - viewport.northWest.x,
+        0,
+        RendererConfig.PIXELS_PER_UNIT,
+        gridBoxSize.y * RendererConfig.PIXELS_PER_UNIT
+      );
     }
     if (i <= viewport.size.y * 2) {
       context.strokeRect(
-        viewport.size.x * xStart,
-        viewport.size.y * yStart + y,
-        viewport.size.x * 2,
+        0,
+        yOffset - viewport.northWest.y,
+        gridBoxSize.x * RendererConfig.PIXELS_PER_UNIT,
         RendererConfig.PIXELS_PER_UNIT
       );
     }
