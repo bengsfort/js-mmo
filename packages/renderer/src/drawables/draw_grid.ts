@@ -10,14 +10,14 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
   const cameraOffset = camera?.getViewPosition(camera.position) ?? Vector2.Zero;
   const viewport = camera?.getViewportBounds() ?? new Bounds(Vector2.Zero, Vector2.One);
 
-  const distanceFromOrigin = Vector2.Divide(viewport.position, viewport.size);
+  const viewportsFromOrigin = Vector2.Divide(viewport.position, viewport.size);
   const scale = Math.max(0, camera?.zoom ?? 1);
 
   //   const unitsPerWidth = window.innerWidth / RendererConfig.PIXELS_PER_UNIT;
   //   const unitsPerHeight = window.innerHeight / RendererConfig.PIXELS_PER_UNIT;
 
-  const xStart = Math.floor(distanceFromOrigin.x * viewport.size.x) - viewport.halfSize.x;
-  const yStart = Math.floor(distanceFromOrigin.y * viewport.size.y) - viewport.halfSize.y;
+  const xStart = Math.floor((viewportsFromOrigin.x - 1) * viewport.size.x) - viewport.halfSize.x;
+  const yStart = Math.floor((viewportsFromOrigin.y - 1) * viewport.size.y) - viewport.halfSize.y;
 
   context.translate(
     -viewport.northWest.x * RendererConfig.PIXELS_PER_UNIT,
