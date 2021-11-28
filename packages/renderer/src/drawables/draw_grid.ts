@@ -16,43 +16,43 @@ export function drawUnitGrid(context: CanvasRenderingContext2D, camera?: Camera)
   //   const unitsPerWidth = window.innerWidth / RendererConfig.PIXELS_PER_UNIT;
   //   const unitsPerHeight = window.innerHeight / RendererConfig.PIXELS_PER_UNIT;
 
-  const xStart = Math.floor((viewportsFromOrigin.x - 1) * viewport.size.x) - viewport.halfSize.x;
-  const yStart = Math.floor((viewportsFromOrigin.y - 1) * viewport.size.y) - viewport.halfSize.y;
+  // const xStart = Math.floor((viewportsFromOrigin.x - 1) * viewport.size.x) - viewport.halfSize.x;
+  // const yStart = Math.floor((viewportsFromOrigin.y - 1) * viewport.size.y) - viewport.halfSize.y;
 
-  context.translate(
-    -viewport.northWest.x * RendererConfig.PIXELS_PER_UNIT,
-    -viewport.northWest.y * RendererConfig.PIXELS_PER_UNIT
-  );
-  context.rotate(camera?.rotation ?? 0);
-  context.scale(scale, scale);
+  // context.translate(
+  //   -viewport.northWest.x * RendererConfig.PIXELS_PER_UNIT,
+  //   -viewport.northWest.y * RendererConfig.PIXELS_PER_UNIT
+  // );
+  // context.rotate(camera?.rotation ?? 0);
+  // context.scale(scale, scale);
 
-  context.strokeStyle = "rgba(0, 255, 0, 0.2)";
-  context.font = "12px monospace";
+  // context.strokeStyle = "rgba(0, 255, 0, 0.2)";
+  // context.font = "12px monospace";
 
-  const greaterUnits = Math.max(viewport.size.x * 2, viewport.size.y * 2);
-  const gridBoxSize = new Vector2(viewport.size.x * 2, viewport.size.y * 2);
+  // const greaterUnits = Math.max(viewport.size.x * 2, viewport.size.y * 2);
+  // const gridBoxSize = new Vector2(viewport.size.x * 2, viewport.size.y * 2);
 
-  for (let i = 0; i < greaterUnits; i++) {
-    const xOffset = xStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
-    const yOffset = yStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
+  // for (let i = 0; i < greaterUnits; i++) {
+  //   const xOffset = xStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
+  //   const yOffset = yStart * RendererConfig.PIXELS_PER_UNIT + i * RendererConfig.PIXELS_PER_UNIT;
 
-    if (i <= viewport.size.x * 2) {
-      context.strokeRect(
-        xOffset - viewport.northWest.x,
-        0,
-        RendererConfig.PIXELS_PER_UNIT,
-        gridBoxSize.y * RendererConfig.PIXELS_PER_UNIT
-      );
-    }
-    if (i <= viewport.size.y * 2) {
-      context.strokeRect(
-        0,
-        yOffset - viewport.northWest.y,
-        gridBoxSize.x * RendererConfig.PIXELS_PER_UNIT,
-        RendererConfig.PIXELS_PER_UNIT
-      );
-    }
-  }
+  //   if (i <= viewport.size.x * 2) {
+  //     context.strokeRect(
+  //       xOffset - viewport.northWest.x,
+  //       0,
+  //       RendererConfig.PIXELS_PER_UNIT,
+  //       gridBoxSize.y * RendererConfig.PIXELS_PER_UNIT
+  //     );
+  //   }
+  //   if (i <= viewport.size.y * 2) {
+  //     context.strokeRect(
+  //       0,
+  //       yOffset - viewport.northWest.y,
+  //       gridBoxSize.x * RendererConfig.PIXELS_PER_UNIT,
+  //       RendererConfig.PIXELS_PER_UNIT
+  //     );
+  //   }
+  // }
 
   //   for (let i = viewport.size.x)
 

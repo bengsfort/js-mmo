@@ -142,15 +142,15 @@ export function refresh(): void {
       }
     }
   });
-  SceneTree.forEach(cell =>
-    console.log(
-      "Checking child counts for main tree: (ne, nw, se, sw)",
-      cell.ne?.totalChildCount ?? 0,
-      cell.nw?.totalChildCount ?? 0,
-      cell.se?.totalChildCount ?? 0,
-      cell.sw?.totalChildCount ?? 0
-    )
-  );
+  // SceneTree.forEach(cell =>
+  // console.log(
+  //   "Checking child counts for main tree: (ne, nw, se, sw)",
+  //   cell.ne?.totalChildCount ?? 0,
+  //   cell.nw?.totalChildCount ?? 0,
+  //   cell.se?.totalChildCount ?? 0,
+  //   cell.sw?.totalChildCount ?? 0
+  // )
+  // );
 }
 
 // World Querying

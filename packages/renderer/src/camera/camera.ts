@@ -23,8 +23,8 @@ export class Camera extends Node2d {
   }
 
   public getViewportBounds(): Bounds {
-    const unitsPerWidth = window.innerWidth / RendererConfig.PIXELS_PER_UNIT;
-    const unitsPerHeight = window.innerHeight / RendererConfig.PIXELS_PER_UNIT;
+    const unitsPerWidth = window.innerWidth / (RendererConfig.PIXELS_PER_UNIT * this.zoom);
+    const unitsPerHeight = window.innerHeight / (RendererConfig.PIXELS_PER_UNIT * this.zoom);
     return new Bounds(this.position, new Vector2(unitsPerWidth, unitsPerHeight));
   }
 }

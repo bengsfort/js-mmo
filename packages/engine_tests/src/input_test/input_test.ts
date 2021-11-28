@@ -48,6 +48,7 @@ function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
   RendererConfig.PIXELS_PER_UNIT = 32;
+  RendererConfig.SHOW_UNIT_GRID = true;
 
   void InputSystem.registerInputPlatform(InputPlatform.Web);
   InputSystem.registerInputMap({
@@ -87,6 +88,12 @@ function main() {
     }
     if (InputSystem.inputEventDown(InputEvents.MoveRight)) {
       camera.localPosition.x += 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.Grow)) {
+      camera.zoom += 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.Shrink)) {
+      camera.zoom -= 1 / Time.getDeltaTime();
     }
   });
 
