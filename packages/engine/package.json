@@ -18,14 +18,8 @@
     "test": "jest",
     "clean": "rimraf {build,tsconfig.tsbuildinfo}"
   },
-  "peerDependencies": {
-    "@js-mmo/renderer": "*"
-  },
-  "dependencies": {
-    "@js-mmo/renderer": "*"
-  },
   "devDependencies": {
-    "@js-mmo/webpack-config-internal": "*",
+    "@js-mmo/webpack-config-internal": "workspace:*",
     "@types/node": "^15.0.2",
     "jest": "^27.0.5",
     "rimraf": "^3.0.2",

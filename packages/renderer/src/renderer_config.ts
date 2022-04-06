@@ -13,6 +13,7 @@ export let ISOMETRIC_PIXELS_PER_UNIT = new Vector2(32, 16);
 export let CLEAR_COLOR = "#000000";
 export let DEBUG_SHOW_ORIGINS = false;
 export let SHOW_UNIT_GRID = false;
+export let SHOW_SCENE_TREE = false;
 
 class RendererConfig {
   static get pixel_ratio(): number {
@@ -55,6 +56,13 @@ class RendererConfig {
   }
   static set show_unit_grid(value: boolean) {
     SHOW_UNIT_GRID = value;
+  }
+
+  static get show_scene_tree(): boolean {
+    return SHOW_SCENE_TREE;
+  }
+  static set show_scene_tree(value: boolean) {
+    SHOW_SCENE_TREE = true;
   }
 }
 

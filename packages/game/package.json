@@ -17,11 +17,11 @@
     "clean": "rimraf {build,tsconfig.tsbuildinfo}"
   },
   "dependencies": {
-    "@js-mmo/engine": "*",
-    "@js-mmo/renderer": "*"
+    "@js-mmo/engine": "workspace:*",
+    "@js-mmo/renderer": "workspace:*"
   },
   "devDependencies": {
-    "@js-mmo/webpack-config-internal": "*",
+    "@js-mmo/webpack-config-internal": "workspace:*",
     "fork-ts-checker-notifier-webpack-plugin": "^4.0.0",
     "fork-ts-checker-webpack-plugin": "^6.2.9",
     "html-webpack-plugin": "^5.3.1",
