@@ -9,7 +9,8 @@
 - [ ] Create physics world class for managing/storing the physics bodies, and inserting them/moving them throughout the physics cells automatically
 - [ ] Add some sort of debug module that can expose important engine related data for some sort of renderer to render.
 - [ ] Refactor main game loop logic/scene graph logic to also utilise physics cells/physics world
-- [ ] Fix broken tests (node2d)
+- [ ] Refactor Node2D referencing.
+- [x] Fix broken tests (node2d)
 
 ### Renderer
 - [ ] Make renderer pull drawables from the new scene graph logic in engine (currently it is self-contained)
