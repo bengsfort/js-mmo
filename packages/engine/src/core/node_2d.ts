@@ -42,7 +42,7 @@ export class Node2d extends Node {
       const parentPos = this.parent.position.copy();
       return Vector2.Add(this.transform.position, parentPos);
     }
-    return this.transform.position.copy();
+    return this.transform.position;
   }
 
   set rotation(value: number) {

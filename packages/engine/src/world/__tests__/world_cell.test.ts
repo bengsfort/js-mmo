@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ * @todo: remove jsdom for this (only used due to debugging)
+ */
+
 import { Vector2 } from "../../math/vector2";
 import { Bounds } from "../../math/bounds";
 import { WorldCell, WorldUnit } from "../world_cell";

@@ -76,6 +76,7 @@ describe("Node2d", () => {
 
     // Move root and check results...
     root.position.set(5, 2);
+    expect(child1.parent).toEqual(root);
     expect(child1.position.x).toEqual(10);
     expect(child1.position.y).toEqual(7);
 
