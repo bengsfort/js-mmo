@@ -6,6 +6,10 @@
   "author": "Matt Bengston <bengsfort@gmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=16.3.0"
+  },
+  "packageManager": "yarn@3.2.0",
   "workspaces": [
     "eslint",
     "webpack",
@@ -15,7 +19,7 @@
     "packages/game"
   ],
   "devDependencies": {
-    "@js-mmo/eslint-config-internal": "*",
+    "@js-mmo/eslint-config-internal": "workspace:*",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.2",
     "eslint": "^7.26.0",
