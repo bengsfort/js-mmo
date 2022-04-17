@@ -1,3 +1,5 @@
+import { realpathSync } from "fs";
+
 import { Vector2 } from "./vector2";
 
 export class Transform {
@@ -5,10 +7,6 @@ export class Transform {
   rotation: number;
   scale: Vector2;
 
-  // Global
-  private _worldPosition: Vector2;
-  private _worldRotation: number;
-  private _worldScale: Vector2;
   // Local
   private _localPosition: Vector2;
   private _localRotation: number;
@@ -17,6 +15,14 @@ export class Transform {
   // Ownership
   private _parent: Transform | null = null;
   private _children: Transform[] = [];
+
+  public get parent(): Transform | null {
+    return this._parent;
+  }
+
+  public get children(): Transform[] {
+    return [...this._children];
+  }
 
   constructor(pos = new Vector2(0, 0), scale = new Vector2(1, 1), rotation = 0) {
     this.position = pos;
@@ -28,15 +34,23 @@ export class Transform {
     this._localScale = scale.copy();
   }
 
-  getPositionRelativeToParent(parent: Transform): Vector2 {
+  public remove(transform: Transform): void {}
+
+  public setParent(parent: Transform | null): void {}
+
+  public hasChild(child: Transform): boolean {
+    return this._children.includes(child);
+  }
+
+  public getPositionRelativeToParent(parent: Transform): Vector2 {
     return Vector2.Add(this.position, parent.position);
   }
 
-  getRotationRelativeToParent(parent: Transform): number {
+  public getRotationRelativeToParent(parent: Transform): number {
     return this.rotation + parent.rotation;
   }
 
-  getScaleRelativeToParent(parent: Transform): Vector2 {
+  public getScaleRelativeToParent(parent: Transform): Vector2 {
     return Vector2.Multiply(this.scale, parent.scale);
   }
 }
