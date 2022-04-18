@@ -684,6 +684,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@js-mmo/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@js-mmo/core@workspace:packages/core"
+  dependencies:
+    "@types/node": ^17.0.24
+    jest: ^27.5.1
+    rimraf: ^3.0.2
+    ts-jest: ^27.1.4
+  languageName: unknown
+  linkType: soft
+
 "@js-mmo/engine-tests@workspace:packages/engine_tests":
   version: 0.0.0-use.local
   resolution: "@js-mmo/engine-tests@workspace:packages/engine_tests"
