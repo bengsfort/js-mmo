@@ -23,13 +23,13 @@
   },
   "devDependencies": {
     "@js-mmo/webpack-config-internal": "workspace:*",
-    "fork-ts-checker-notifier-webpack-plugin": "^4.0.0",
-    "fork-ts-checker-webpack-plugin": "^6.2.9",
-    "html-webpack-plugin": "^5.3.1",
+    "fork-ts-checker-notifier-webpack-plugin": "^6.0.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.6",
+    "html-webpack-plugin": "^5.5.0",
     "rimraf": "^3.0.2",
-    "ts-loader": "^9.1.2",
-    "webpack": "^5.37.0",
-    "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "ts-loader": "^9.2.8",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
   }
 }
