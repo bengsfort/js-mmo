@@ -25,8 +25,9 @@
     "jestrunner.codeLensSelector": "packages/engine/src/**/*.{test,spec}.{js,jsx,ts,tsx}",
     "eslint.alwaysShowStatus": true,
     "eslint.workingDirectories": [
-        "${workspaceFolder}/packages/engine/src",
-        "${workspaceFolder}/packages/game/src",
-        "${workspaceFolder}/packages/renderer/src",
+      "${workspaceFolder}/packages/core/src",
+      "${workspaceFolder}/packages/engine/src",
+      "${workspaceFolder}/packages/game/src",
+      "${workspaceFolder}/packages/renderer/src",
     ]
 }

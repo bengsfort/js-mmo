@@ -3,10 +3,8 @@ export * as EngineConfig from "./engine_config";
 export * from "./constants";
 
 // Math
-export { Vector2 } from "./math/vector2";
 export { Transform } from "./math/transform";
 export { Bounds } from "./math/bounds";
-export * as Math from "./math/math";
 
 // Core
 export { makeLogger, Logger } from "./core/logging";
