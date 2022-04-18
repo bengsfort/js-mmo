@@ -13,10 +13,7 @@
   "workspaces": [
     "eslint",
     "webpack",
-    "packages/engine",
-    "packages/renderer",
-    "packages/engine_tests",
-    "packages/game"
+    "packages/*"
   ],
   "devDependencies": {
     "@js-mmo/eslint-config-internal": "workspace:*",

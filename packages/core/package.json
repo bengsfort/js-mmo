@@ -1,0 +1,27 @@
+{
+  "name": "@js-mmo/core",
+  "version": "0.0.1",
+  "description": "Core schemas and interfaces for the js-mmo.",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bengsfort/js-mmo.git",
+    "directory": "packages/core"
+  },
+  "author": "Matt Bengston <bengsfort@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "tsc -w -d --preserveWatchOutput --project tsconfig.json",
+    "build": "tsc -b tsconfig.json",
+    "test": "jest",
+    "clean": "rimraf {build,tsconfig.tsbuildinfo}",
+    "lint": "../../node_modules/.bin/eslint ./src --fix"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.24",
+    "jest": "^27.5.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.4"
+  }
+}

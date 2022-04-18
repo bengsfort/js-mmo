@@ -1,6 +1,13 @@
+# Artifacts
 **/node_modules
 **/build
 *.tsbuildinfo
+
+# Configs
+.jest.config.js
 .eslintrc.js
 .eslintrc.json
+
+# Packages
+webpack/*
 eslint/*

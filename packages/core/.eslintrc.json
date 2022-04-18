@@ -1,0 +1,16 @@
+{
+  "extends": [
+      "../../.eslintrc.js"
+  ],
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "jest": true
+  },
+  "settings": {
+      "import/resolver": {
+          "typescript": {}
+      }
+  }
+}
