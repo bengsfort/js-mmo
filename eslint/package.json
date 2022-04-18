@@ -23,5 +23,8 @@
   "scripts": {
     "clean": "echo 'Nothing to clean, skipping'",
     "build": "echo 'Nothing to build, skipping'"
+  },
+  "devDependencies": {
+    "eslint-import-resolver-typescript": "^2.7.1"
   }
 }

@@ -8,7 +8,8 @@ import { DAttrs } from "../drawables/render_drawables";
 // @todo: Maybe add a `queryType` for objects of type `Query`. This can be: `collision` or `draw`?
 export class RenderObject<T extends Drawable<DAttrs> = Drawable<DAttrs>>
   extends SceneObject
-  implements RenderingNode<T> {
+  implements RenderingNode<T>
+{
   public readonly type = NodeTypes.Draw;
 
   public set size(value: Vector2) {

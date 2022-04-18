@@ -1,3 +1,6 @@
 **/node_modules
 **/build
 *.tsbuildinfo
+.eslintrc.js
+.eslintrc.json
+eslint/*

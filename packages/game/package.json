@@ -14,7 +14,8 @@
   "scripts": {
     "start": "webpack serve --mode development --env development --config webpack.config.js",
     "build": "webpack --mode production --env production",
-    "clean": "rimraf {build,tsconfig.tsbuildinfo}"
+    "clean": "rimraf {build,tsconfig.tsbuildinfo}",
+    "lint": "../../node_modules/.bin/eslint ./src --fix"
   },
   "dependencies": {
     "@js-mmo/engine": "workspace:*",
