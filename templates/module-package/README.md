@@ -1,0 +1,3 @@
+# js-mmo/{% moduleName %}
+
+{% description %}
