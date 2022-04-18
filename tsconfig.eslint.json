@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.base.json",
+    "extends": "./tsconfig.json",
     "include": [
       "./packages/engine/src/**/*.ts",
       "./packages/engine_tests/src/**/*.ts",
@@ -16,4 +16,3 @@
         }
     }
   }
-  
