@@ -1,6 +1,6 @@
-import { makeLogger } from "./logging";
+import { Log } from "@js-mmo/core";
 
-const { verboseLogInfo } = makeLogger("CORE");
+const { verboseLogInfo } = Log.makeLogger("CORE");
 
 export interface EngineEvent {
   type: string;
