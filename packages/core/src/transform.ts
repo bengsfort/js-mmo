@@ -30,15 +30,16 @@ export class Transform {
     }
 
     const index = this._children.indexOf(transform);
-    if (index > -1) {
+    if (index > -1 && transform.parent === this) {
       this._children.splice(index, 1);
+      transform.setParent(null);
     } else {
       console.warn("Couldn't remove child as it was not found!");
     }
   }
 
   public setParent(parent: Transform | null): void {
-    if (parent === this._parent) return;
+    if (parent === this._parent || parent === this) return;
 
     if (this._parent !== null) {
       this._parent.remove(this);
@@ -49,6 +50,8 @@ export class Transform {
   }
 
   public addChild(child: Transform) {
+    if (child === this) return;
+
     if (!this.hasChild(child)) {
       this._children.push(child);
     }

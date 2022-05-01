@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LogFunction = (...args: any[]) => void;
 
