@@ -1,9 +1,10 @@
+import { Log } from "@js-mmo/core";
+
 import { NodeTypes } from "../constants";
 
 import { EngineEvent, EventDispatcher } from "./event_dispatcher";
-import { makeLogger } from "./logging";
 
-const log = makeLogger("CORE");
+const log = Log.makeLogger("CORE");
 let idCounter = 0;
 
 export interface NodeAddedEvent extends EngineEvent {

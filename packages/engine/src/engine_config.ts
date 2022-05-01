@@ -2,7 +2,7 @@
 export let DEBUG = true;
 export let FIXED_UPDATE_ONLY = false;
 export let TICKS_PER_SECOND = 66;
-export let LOG_VERBOSE = false;
+export let LOG_VERBOSE = false; // @todo: Update to use new logging bit masks
 export let MAX_CELL_NODES = 10;
 export let WORLD_SIZE = 2000;
 export let DEBUG_SCENE_TREE = false;

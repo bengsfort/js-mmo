@@ -12,6 +12,11 @@ const config = {
     "plugin:prettier/recommended", // MAKE SURE PRETTIER IS LAST
   ],
   parser: "@typescript-eslint/parser",
+  settings: {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   env: {
     browser: true,
     commonjs: true,

@@ -1,7 +1,6 @@
 // unused for now
 
-import { Vector2 } from "../math/vector2";
-import { makeLogger } from "../core/logging";
+import { Vector2, Log } from "@js-mmo/core";
 
 import { InputPlatform } from "./platforms";
 import { InputSource } from "./input_source";
@@ -23,7 +22,7 @@ import { WebInputSource } from "./web/web_input";
  * InputManager.on(actionbar_1, () => cast spell);
  */
 
-const log = makeLogger("INPUT");
+const log = Log.makeLogger("INPUT");
 
 const inputEventButtonsMap = new Map<string, string | string[]>();
 let inputSource: InputSource;

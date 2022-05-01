@@ -7,7 +7,6 @@ export { Transform } from "./math/transform";
 export { Bounds } from "./math/bounds";
 
 // Core
-export { makeLogger, Logger } from "./core/logging";
 export { now } from "./core/time_now";
 export * as Time from "./core/time";
 export type { Node } from "./core/node";
