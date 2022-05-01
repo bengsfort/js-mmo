@@ -5,11 +5,6 @@ export class Transform {
   rotation: number;
   scale: Vector2;
 
-  // Local
-  private _localPosition: Vector2;
-  private _localRotation: number;
-  private _localScale: Vector2;
-
   // Ownership
   private _parent: Transform | null = null;
   private _children: Transform[] = [];
@@ -26,29 +21,62 @@ export class Transform {
     this.position = pos;
     this.rotation = rotation;
     this.scale = scale;
-
-    this._localPosition = pos.copy();
-    this._localRotation = rotation;
-    this._localScale = scale.copy();
   }
 
-  public remove(transform: Transform): void {}
+  public remove(transform?: Transform): void {
+    if (!transform) {
+      this._parent?.remove(this);
+      return;
+    }
 
-  public setParent(parent: Transform | null): void {}
+    const index = this._children.indexOf(transform);
+    if (index > -1) {
+      this._children.splice(index, 1);
+    } else {
+      console.warn("Couldn't remove child as it was not found!");
+    }
+  }
+
+  public setParent(parent: Transform | null): void {
+    if (parent === this._parent) return;
+
+    if (this._parent !== null) {
+      this._parent.remove(this);
+    }
+
+    this._parent = parent;
+    parent?.addChild(this);
+  }
+
+  public addChild(child: Transform) {
+    if (!this.hasChild(child)) {
+      this._children.push(child);
+    }
+
+    if (child.parent !== this) {
+      child.setParent(this);
+    }
+  }
 
   public hasChild(child: Transform): boolean {
     return this._children.includes(child);
   }
 
-  public getPositionRelativeToParent(parent: Transform): Vector2 {
-    return Vector2.Add(this.position, parent.position);
+  public getWorldPosition(): Vector2 {
+    if (this._parent) {
+      return Vector2.Add(this.position, this._parent.getWorldPosition());
+    }
+    return this.position.copy();
   }
 
-  public getRotationRelativeToParent(parent: Transform): number {
-    return this.rotation + parent.rotation;
+  public getWorldRotation(): number {
+    return this.rotation + (this._parent?.getWorldRotation() ?? 0);
   }
 
-  public getScaleRelativeToParent(parent: Transform): Vector2 {
-    return Vector2.Multiply(this.scale, parent.scale);
+  public getWorldScale(): Vector2 {
+    if (this._parent) {
+      return Vector2.Multiply(this.scale, this._parent.getWorldScale());
+    }
+    return this.scale.copy();
   }
 }
