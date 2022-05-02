@@ -109,6 +109,15 @@ export class Vector2 implements V2 {
     return new Vector2(vector.x, vector.y).normalize();
   }
 
+  /**
+   * Returns whether or not a var is a Vector2.
+   * @param other The var to check.
+   * @returns If the var is a Vector2.
+   */
+  public static IsInstance(other: unknown): other is Vector2 {
+    return other instanceof Vector2;
+  }
+
   public x = 0;
   public y = 0;
 

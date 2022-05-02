@@ -39,7 +39,7 @@ export class Matrix2D {
   public static compose(pos: Vector2, scale: Vector2): Matrix2D;
   public static compose(x: number, y: number, sx?: number, sy?: number): Matrix2D;
   public static compose(x: number | Vector2, y: number | Vector2, sx = 1, sy = 1): Matrix2D {
-    if (x instanceof Vector2 && y instanceof Vector2) {
+    if (Vector2.IsInstance(x) && Vector2.IsInstance(y)) {
       const pos = x;
       const scale = y;
       return new Matrix2D(scale.x, 0, pos.x, 0, scale.y, pos.y, 0, 0, 1);
