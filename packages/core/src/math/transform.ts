@@ -1,8 +1,8 @@
-import { makeLogger } from "../logging";
+import { Log } from "../logs";
 
 import { Vector2 } from "./vector2";
 
-const log = makeLogger("Transform");
+const { verboseLogWarn } = Log.makeLogger("TRANSFORM");
 
 export class Transform {
   position: Vector2;
@@ -38,7 +38,7 @@ export class Transform {
       this._children.splice(index, 1);
       transform.setParent(null);
     } else {
-      log.verboseLogWarn("Couldn't remove child as it was not found!");
+      verboseLogWarn("Couldn't remove child as it was not found!");
     }
   }
 

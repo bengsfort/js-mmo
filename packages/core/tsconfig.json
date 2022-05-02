@@ -1,9 +1,12 @@
 {
     "extends": "../../tsconfig.base.json",
+    "exclude": [
+      "jest.setup.ts",
+      "build/**/*",
+    ],
     "compilerOptions": {
       "rootDir": "src",
       "outDir": "build",
       "baseUrl": "./src"
     }
   }
-  

@@ -1,4 +1,4 @@
-import { clearLoggingLevel, LoggingLevel } from './src/logging';
+import { Log } from './src/logs';
 
 // Disable verbose logs during tests
-clearLoggingLevel(LoggingLevel.Verbose);
+Log.clearLoggingLevel(Log.LoggingLevel.Verbose);

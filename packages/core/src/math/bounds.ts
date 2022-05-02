@@ -1,4 +1,4 @@
-import { Vector2 } from ".";
+import { Vector2 } from "./vector2";
 
 export class Bounds {
   private _pos: Vector2;
