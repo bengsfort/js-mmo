@@ -1,5 +1,5 @@
 import { Bounds } from "../bounds";
-import { Vector2 } from "../math";
+import { Vector2 } from "../vector2";
 
 describe("Bounds", () => {
   it("should store its position and size", () => {

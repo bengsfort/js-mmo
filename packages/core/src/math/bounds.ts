@@ -1,4 +1,4 @@
-import { Vector2 } from "./math";
+import { Vector2 } from ".";
 
 export class Bounds {
   private _pos: Vector2;

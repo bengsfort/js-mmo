@@ -1,5 +1,5 @@
 import { Transform } from "../transform";
-import { Vector2 } from "../math";
+import { Vector2 } from "../vector2";
 
 describe("Transform", () => {
   it("should have a valid position, rotation, and scale", () => {

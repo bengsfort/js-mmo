@@ -8,6 +8,15 @@ import {
 } from "../logging";
 
 describe("Logging", () => {
+  beforeAll(() => {
+    addLoggingLevel(LOG_ALL);
+  });
+
+  afterAll(() => {
+    // Make sure we dont have logging on other tests.
+    clearLoggingLevel(LOG_ALL);
+  });
+
   describe("Logging Flags", () => {
     it("Should default to all flags", () => {
       expect(LOG_ALL).toEqual(

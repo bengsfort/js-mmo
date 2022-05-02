@@ -1,4 +1,8 @@
-import { Vector2 } from "./math";
+import { makeLogger } from "../logging";
+
+import { Vector2 } from "./vector2";
+
+const log = makeLogger("Transform");
 
 export class Transform {
   position: Vector2;
@@ -34,7 +38,7 @@ export class Transform {
       this._children.splice(index, 1);
       transform.setParent(null);
     } else {
-      console.warn("Couldn't remove child as it was not found!");
+      log.verboseLogWarn("Couldn't remove child as it was not found!");
     }
   }
 
