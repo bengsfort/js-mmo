@@ -1,13 +1,30 @@
+import { EventDispatcher } from "../events";
 import { Log } from "../logs";
 
 import { Vector2 } from "./vector2";
 
 const { verboseLogWarn } = Log.makeLogger("TRANSFORM");
 
-export class Transform {
-  position: Vector2;
-  rotation: number;
-  scale: Vector2;
+interface ChildAddedEvent {
+  parent: Transform;
+  child: Transform;
+}
+
+interface ChildRemovedEvent {
+  parent: Transform;
+  child: Transform;
+}
+
+interface TransformEvents {
+  child_added: ChildAddedEvent;
+  child_removed: ChildRemovedEvent;
+}
+
+export class Transform<OwnerType = unknown> extends EventDispatcher<TransformEvents> {
+  public position: Vector2;
+  public rotation: number;
+  public scale: Vector2;
+  public owner?: OwnerType;
 
   // Ownership
   private _parent: Transform | null = null;
@@ -22,6 +39,8 @@ export class Transform {
   }
 
   constructor(pos = new Vector2(0, 0), scale = new Vector2(1, 1), rotation = 0) {
+    super();
+
     this.position = pos;
     this.rotation = rotation;
     this.scale = scale;
@@ -37,6 +56,10 @@ export class Transform {
     if (index > -1 && transform.parent === this) {
       this._children.splice(index, 1);
       transform.setParent(null);
+      this.dispatchEvent("child_removed", {
+        parent: this,
+        child: transform,
+      });
     } else {
       verboseLogWarn("Couldn't remove child as it was not found!");
     }
@@ -58,6 +81,10 @@ export class Transform {
 
     if (!this.hasChild(child)) {
       this._children.push(child);
+      this.dispatchEvent("child_added", {
+        parent: this,
+        child,
+      });
     }
 
     if (child.parent !== this) {

@@ -108,4 +108,11 @@ describe("Transform", () => {
       expect(relativeScaleBy2.y).toEqual(4);
     });
   });
+
+  describe("Events", () => {
+    const parent = new Transform<string>();
+    parent.owner = "Parent";
+
+    beforeEach(() => {});
+  });
 });
