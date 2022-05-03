@@ -9,6 +9,7 @@ const { verboseLogInfo } = Log.makeLogger("CORE");
 let idCounter = 0;
 
 export interface NodeEvents {
+  on_active: [isActive: boolean, node: Node2D];
   node_added: [parent: Node2D, child: Node2D];
   node_removed: [parent: Node2D, child: Node2D];
 }
@@ -33,7 +34,8 @@ export class Node2D extends EventEmitter<NodeEvents> {
     this.transform.owner = this;
     this.transform.on("child_added", this._onNodeAdded);
     this.transform.on("child_removed", this._onNodeRemoved);
-    this._active = false;
+
+    this._active = true;
   }
 
   // Transform getters
@@ -67,7 +69,7 @@ export class Node2D extends EventEmitter<NodeEvents> {
   }
 
   public getWorldRotation(): number {
-    return this.transform.rotation;
+    return this.transform.getWorldRotation();
   }
 
   // Active
@@ -78,8 +80,9 @@ export class Node2D extends EventEmitter<NodeEvents> {
     if (isActive === this._active) return;
 
     this._active = isActive;
-    if (isActive) this._onActive();
-    else this._onInactive();
+
+    // @todo: We used to have overrides for this instead, so if the event-based approach sucks go back.
+    this.emit("on_active", isActive, this);
   }
 
   // Parenting
@@ -93,27 +96,37 @@ export class Node2D extends EventEmitter<NodeEvents> {
     return this.transform.children.map(transform => transform.owner as Node2D);
   }
 
+  public get childrenCount(): number {
+    return this.transform.children.length;
+  }
+
   public setParent(node: Node2D | null): void {
     this.transform.setParent(node?.transform ?? null);
   }
 
-  public addChild(node: Node2D): void {
-    this.transform.addChild(node.transform);
-    node.transform.on("child_added", this._onNodeAdded);
-    node.transform.on("child_removed", this._onNodeRemoved);
+  public addChild(...nodes: Node2D[]): void {
+    for (let i = 0; i < nodes.length; i++) {
+      this.transform.addChild(nodes[i].transform);
+      // Note: We listen to the transform so we only need one actualy event handler implementation.
+      nodes[i].on("on_active", this._onNodeActive);
+      nodes[i].transform.on("child_added", this._onNodeAdded);
+      nodes[i].transform.on("child_removed", this._onNodeRemoved);
+    }
   }
 
-  public remove(node: Node2D | null): void {
+  public remove(node?: Node2D): void {
+    node?.removeListener("on_active", this._onNodeActive);
     node?.transform.removeListener("child_added", this._onNodeAdded);
     node?.transform.removeListener("child_removed", this._onNodeRemoved);
     this.transform.remove(node?.transform);
   }
 
-  // Overrides
-  protected _onActive(): void {}
-  protected _onInactive(): void {}
-
   // Subscriptions
+  // Note: Most of these are just here to bubble events upwards.
+  private _onNodeActive = (active: boolean, node: Node2D) => {
+    this.emit("on_active", active, node);
+  };
+
   private _onNodeAdded = (ev: ChildAddedEvent) => {
     verboseLogInfo("Node.onNodeAdded", ev);
     // This is going to allow us to "bubble" the event upwards to the world instance.

@@ -144,7 +144,7 @@ describe("Transform", () => {
 
       parent.addChild(child);
       expect(shouldNotTrigger).not.toBeCalled();
-      expect(shouldTrigger).toBeCalledTimes(1);
+      expect(shouldTrigger).toHaveBeenCalledTimes(1);
       expect(shouldTrigger).toHaveBeenLastCalledWith<AddedCb>({
         parent,
         child,
@@ -152,7 +152,7 @@ describe("Transform", () => {
 
       parent2.setParent(parent);
       expect(shouldNotTrigger).not.toBeCalled();
-      expect(shouldTrigger).toBeCalledTimes(2);
+      expect(shouldTrigger).toHaveBeenCalledTimes(2);
       expect(shouldTrigger).toHaveBeenLastCalledWith<AddedCb>({
         parent,
         child: parent2,
@@ -184,7 +184,7 @@ describe("Transform", () => {
       // When removing normally.
       parent.remove(child);
       expect(shouldNotTrigger).not.toBeCalled();
-      expect(shouldTrigger).toBeCalledTimes(1);
+      expect(shouldTrigger).toHaveBeenCalledTimes(1);
       expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
         parent,
         child,
@@ -193,7 +193,7 @@ describe("Transform", () => {
       // When setting parent to null.
       parent2.setParent(null);
       expect(shouldNotTrigger).not.toBeCalled();
-      expect(shouldTrigger).toBeCalledTimes(2);
+      expect(shouldTrigger).toHaveBeenCalledTimes(2);
       expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
         parent,
         child: parent2,
@@ -202,7 +202,7 @@ describe("Transform", () => {
       // When removing self.
       child2.remove();
       expect(shouldNotTrigger).not.toBeCalled();
-      expect(shouldTrigger).toBeCalledTimes(3);
+      expect(shouldTrigger).toHaveBeenCalledTimes(3);
       expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
         parent,
         child: child2,
@@ -218,36 +218,17 @@ describe("Transform", () => {
       parent2.on("child_added", newParentAddedEv);
 
       child.setParent(parent2);
-      expect(oldParentRemovedEv).toBeCalledTimes(1);
+      expect(oldParentRemovedEv).toHaveBeenCalledTimes(1);
       expect(oldParentRemovedEv).toBeCalledWith<[ChildRemovedEvent]>({
         parent,
         child,
       });
 
-      expect(newParentAddedEv).toBeCalledTimes(1);
+      expect(newParentAddedEv).toHaveBeenCalledTimes(1);
       expect(newParentAddedEv).toBeCalledWith<[ChildAddedEvent]>({
         parent: parent2,
         child,
       });
     });
-
-    // @todo Below should be moved to node2d tests.
-    // it("should bubble events upwards from children/grandchildren", () => {
-    //   const nodeAdded = jest.fn();
-    //   const nodeRemoved = jest.fn();
-
-    //   parent.on("child_added", nodeAdded);
-    //   parent.on("child_removed", nodeRemoved);
-
-    //   parent.addChild(parent2);
-    //   expect(nodeAdded).toBeCalledTimes(1);
-
-    //   parent2.addChild(child);
-    //   expect(nodeAdded).toBeCalledTimes(2);
-    //   expect(nodeAdded).toBeCalledWith<[ChildAddedEvent]>({
-    //     parent: parent2,
-    //     child: child,
-    //   });
-    // });
   });
 });

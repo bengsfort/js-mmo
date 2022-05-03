@@ -14,7 +14,8 @@
   "scripts": {
     "start": "tsc -w -d --preserveWatchOutput --project tsconfig.json",
     "build": "tsc -b tsconfig.json",
-    "test": "jest --verbose",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "clean": "rimraf {build,tsconfig.tsbuildinfo}",
     "lint": "../../node_modules/.bin/eslint ./src --fix"
   },
