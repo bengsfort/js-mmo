@@ -1,26 +1,26 @@
-import { EventDispatcher } from "../events";
+import { EventEmitter } from "../events";
 import { Log } from "../logs";
 
 import { Vector2 } from "./vector2";
 
 const { verboseLogWarn } = Log.makeLogger("TRANSFORM");
 
-interface ChildAddedEvent {
+export interface ChildAddedEvent {
   parent: Transform;
   child: Transform;
 }
 
-interface ChildRemovedEvent {
+export interface ChildRemovedEvent {
   parent: Transform;
   child: Transform;
 }
 
 interface TransformEvents {
-  child_added: ChildAddedEvent;
-  child_removed: ChildRemovedEvent;
+  child_added: [ChildAddedEvent];
+  child_removed: [ChildRemovedEvent];
 }
 
-export class Transform<OwnerType = unknown> extends EventDispatcher<TransformEvents> {
+export class Transform<OwnerType = unknown> extends EventEmitter<TransformEvents> {
   public position: Vector2;
   public rotation: number;
   public scale: Vector2;
@@ -56,7 +56,7 @@ export class Transform<OwnerType = unknown> extends EventDispatcher<TransformEve
     if (index > -1 && transform.parent === this) {
       this._children.splice(index, 1);
       transform.setParent(null);
-      this.dispatchEvent("child_removed", {
+      this.emit("child_removed", {
         parent: this,
         child: transform,
       });
@@ -81,7 +81,7 @@ export class Transform<OwnerType = unknown> extends EventDispatcher<TransformEve
 
     if (!this.hasChild(child)) {
       this._children.push(child);
-      this.dispatchEvent("child_added", {
+      this.emit("child_added", {
         parent: this,
         child,
       });

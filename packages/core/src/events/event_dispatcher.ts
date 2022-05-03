@@ -10,6 +10,7 @@ export interface EngineEvent {
 
 export type EngineEventListener<E extends EngineEvent = EngineEvent> = (data: E) => void;
 
+// @deprecated
 export class EventDispatcher<EventList> {
   private _listeners = new Map<keyof EventList, EngineEventListener[]>();
 
@@ -56,13 +57,10 @@ export class EventDispatcher<EventList> {
       return;
     }
 
-    const message = { ...data };
-    message.source = this;
-
     // Make a copy in case things remove themselves as a result of the event
     const copy = listeners.slice(0);
     for (let i = 0; i < copy.length; i++) {
-      copy[i](message);
+      copy[i](data);
     }
   }
 }

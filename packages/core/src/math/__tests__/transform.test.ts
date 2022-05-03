@@ -1,4 +1,4 @@
-import { Transform } from "../transform";
+import { ChildAddedEvent, ChildRemovedEvent, Transform } from "../transform";
 import { Vector2 } from "../vector2";
 
 describe("Transform", () => {
@@ -113,6 +113,104 @@ describe("Transform", () => {
     const parent = new Transform<string>();
     parent.owner = "Parent";
 
-    beforeEach(() => {});
+    const parent2 = new Transform<string>();
+    parent2.owner = "Parent 2";
+
+    const child = new Transform<string>();
+    child.owner = "Child";
+
+    const child2 = new Transform<string>();
+    child2.owner = "Child 2";
+
+    type AddedCb = [ev: ChildAddedEvent];
+    type RemovedCb = [ev: ChildRemovedEvent];
+
+    beforeEach(() => {
+      parent.setParent(null);
+      parent2.setParent(null);
+      child.setParent(null);
+      parent.removeAllListeners();
+      parent2.removeAllListeners();
+      child.removeAllListeners();
+    });
+
+    it("should emit an event when a child is added", () => {
+      const shouldTrigger = jest.fn();
+      const shouldNotTrigger = jest.fn();
+
+      parent.on("child_added", shouldTrigger);
+      child.on("child_added", shouldNotTrigger);
+      parent2.on("child_added", shouldNotTrigger);
+
+      parent.addChild(child);
+      expect(shouldNotTrigger).not.toBeCalled();
+      expect(shouldTrigger).toBeCalledTimes(1);
+      expect(shouldTrigger).toHaveBeenLastCalledWith<AddedCb>({
+        parent,
+        child,
+      });
+
+      parent2.setParent(parent);
+      expect(shouldNotTrigger).not.toBeCalled();
+      expect(shouldTrigger).toBeCalledTimes(2);
+      expect(shouldTrigger).toHaveBeenLastCalledWith<AddedCb>({
+        parent,
+        child: parent2,
+      });
+    });
+
+    it("should emit an event when a child is removed", () => {
+      const shouldTrigger = jest.fn();
+      const shouldNotTrigger = jest.fn();
+
+      parent.addChild(child);
+      parent.addChild(child2);
+      parent.addChild(parent2);
+
+      parent.on("child_removed", shouldTrigger);
+      child.on("child_removed", shouldNotTrigger);
+      child2.on("child_removed", shouldNotTrigger);
+      parent2.on("child_removed", shouldNotTrigger);
+
+      // Added events should not run.
+      parent.on("child_added", shouldNotTrigger);
+      child.on("child_added", shouldNotTrigger);
+      child2.on("child_added", shouldNotTrigger);
+      parent2.on("child_added", shouldNotTrigger);
+
+      expect(shouldTrigger).not.toBeCalled();
+      expect(shouldNotTrigger).not.toBeCalled();
+
+      // When removing normally.
+      parent.remove(child);
+      expect(shouldNotTrigger).not.toBeCalled();
+      expect(shouldTrigger).toBeCalledTimes(1);
+      expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
+        parent,
+        child,
+      });
+
+      // When setting parent to null.
+      parent2.setParent(null);
+      expect(shouldNotTrigger).not.toBeCalled();
+      expect(shouldTrigger).toBeCalledTimes(2);
+      expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
+        parent,
+        child: parent2,
+      });
+
+      // When removing self.
+      child2.remove();
+      expect(shouldNotTrigger).not.toBeCalled();
+      expect(shouldTrigger).toBeCalledTimes(3);
+      expect(shouldTrigger).toHaveBeenLastCalledWith<RemovedCb>({
+        parent,
+        child: child2,
+      });
+    });
+
+    it("should bubble events upwards from children/grandchildren", () => {});
+
+    it("should trigger both events on re-parenting", () => {});
   });
 });

@@ -1,15 +1,18 @@
 import { Log } from "../logs";
-import { EventDispatcher } from "../events";
-import { Transform, Vector2 } from "../math";
+import { EventEmitter } from "../events";
+import { ChildAddedEvent, ChildRemovedEvent, Transform, Vector2 } from "../math";
 
-import type { NodeAddedEvent, NodeEvents, NodeRemovedEvent } from "./node_events";
 import { NodeTypes } from "./node_types";
 
 const { verboseLogInfo } = Log.makeLogger("CORE");
 
 let idCounter = 0;
 
-export class Node2D extends EventDispatcher<NodeEvents> {
+export interface NodeEvents {
+  node_added: [parent: Node2D, child: Node2D];
+  node_removed: [parent: Node2D, child: Node2D];
+}
+export class Node2D extends EventEmitter<NodeEvents> {
   // Properties
   public readonly id: number;
   public readonly type: NodeTypes | string;
@@ -21,12 +24,15 @@ export class Node2D extends EventDispatcher<NodeEvents> {
 
   constructor(name?: string) {
     super();
+
     this.id = idCounter++;
     this.type = NodeTypes.Node;
     this.name = name ?? `Node ${this.id}`;
 
     this.transform = new Transform();
     this.transform.owner = this;
+    this.transform.on("child_added", this._onNodeAdded);
+    this.transform.on("child_removed", this._onNodeRemoved);
     this._active = false;
   }
 
@@ -77,12 +83,30 @@ export class Node2D extends EventDispatcher<NodeEvents> {
   }
 
   // Parenting
+  public get parent(): Node2D | null {
+    return (this.transform.parent?.owner as Node2D) ?? null;
+  }
+
+  public get children(): Node2D[] {
+    if (this.transform.children.length === 0) return [];
+    // @todo: Performance profile this.
+    return this.transform.children.map(transform => transform.owner as Node2D);
+  }
+
   public setParent(node: Node2D | null): void {
     this.transform.setParent(node?.transform ?? null);
   }
 
   public addChild(node: Node2D): void {
     this.transform.addChild(node.transform);
+    node.transform.on("child_added", this._onNodeAdded);
+    node.transform.on("child_removed", this._onNodeRemoved);
+  }
+
+  public remove(node: Node2D | null): void {
+    node?.transform.removeListener("child_added", this._onNodeAdded);
+    node?.transform.removeListener("child_removed", this._onNodeRemoved);
+    this.transform.remove(node?.transform);
   }
 
   // Overrides
@@ -90,17 +114,15 @@ export class Node2D extends EventDispatcher<NodeEvents> {
   protected _onInactive(): void {}
 
   // Subscriptions
-  protected _onNodeAdded = (ev: NodeAddedEvent) => {
-    console.log("Node.onNodeAdded", ev);
+  private _onNodeAdded = (ev: ChildAddedEvent) => {
+    verboseLogInfo("Node.onNodeAdded", ev);
     // This is going to allow us to "bubble" the event upwards to the world instance.
-    this.dispatchEvent("node_added", ev);
+    this.emit("node_added", ev.parent.owner as Node2D, ev.child.owner as Node2D);
   };
 
-  protected _onNodeRemoved = (ev: NodeRemovedEvent) => {
-    console.log("Node.onNodeRemoved", ev);
+  private _onNodeRemoved = (ev: ChildRemovedEvent) => {
+    verboseLogInfo("Node.onNodeRemoved", ev);
     // This is going to allow us to "bubble" the event upwards to the world instance.
-    this.dispatchEvent("node_removed", ev);
+    this.emit("node_removed", ev.parent.owner as Node2D, ev.child.owner as Node2D);
   };
-
-  // parenting..
 }
