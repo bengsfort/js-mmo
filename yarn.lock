@@ -684,7 +684,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-mmo/core@workspace:packages/core":
+"@js-mmo/core-test@workspace:packages/tests/core-test":
+  version: 0.0.0-use.local
+  resolution: "@js-mmo/core-test@workspace:packages/tests/core-test"
+  dependencies:
+    "@js-mmo/core": "workspace:*"
+    "@js-mmo/webpack-config-internal": "workspace:*"
+    "@types/node": ^17.0.24
+    copy-webpack-plugin: ^10.2.4
+    rimraf: ^3.0.2
+    ts-loader: ^9.2.8
+    webpack: ^5.72.0
+    webpack-cli: ^4.9.2
+  languageName: unknown
+  linkType: soft
+
+"@js-mmo/core@workspace:*, @js-mmo/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@js-mmo/core@workspace:packages/core"
   dependencies:
@@ -692,6 +707,7 @@ __metadata:
     jest: ^27.5.1
     rimraf: ^3.0.2
     ts-jest: ^27.1.4
+    typescript: ^4.6.3
   languageName: unknown
   linkType: soft
 

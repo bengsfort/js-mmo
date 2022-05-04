@@ -13,7 +13,8 @@
   "workspaces": [
     "eslint",
     "webpack",
-    "packages/*"
+    "packages/*",
+    "packages/tests/*"
   ],
   "devDependencies": {
     "@js-mmo/eslint-config-internal": "workspace:*",
@@ -39,7 +40,7 @@
     }
   },
   "scripts": {
-    "dev": "yarn workspaces foreach -pivR --from '{@js-mmo/engine,@js-mmo/renderer}' run start",
+    "dev": "yarn workspaces foreach -pivR --from '{@js-mmo/core,@js-mmo/engine,@js-mmo/renderer}' run start",
     "dev:engine": "yarn workspace @js-mmo/engine start",
     "dev:renderer": "yarn workspace @js-mmo/renderer start",
     "engine-tests": "yarn workspace @js-mmo/engine-tests start",
