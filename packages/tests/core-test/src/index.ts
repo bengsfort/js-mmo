@@ -2,12 +2,11 @@ import { throttle } from "./utils/throttle";
 import { FPSCounter } from "./utils/fps-counter";
 import { Root } from "./scene/root";
 
-// declare global {
-//   interface Window {
-//     __SCENE__: Scene;
-//     __CAMERA__: Camera;
-//   }
-// }
+declare global {
+  interface Window {
+    __root__: Root;
+  }
+}
 
 // Constants
 const timer = new FPSCounter();
@@ -69,33 +68,10 @@ async function main() {
   // 2. Bounds?
   // 3. One box with a CHILD box inside that goes from one side to the other, rotating and scaling?
   root = new Root();
+  window.__root__ = root;
 
   // Start loop.
   window.requestAnimationFrame(frameLoop)
-
-  // await ImageManager.preload([box, tile32]);
-
-  // GameLoop.start();
-
-  // GameLoop.registerRenderer(WebRenderer.create());
-  // debugCanvas = WebRenderer.getActiveCanvas();
-  // WebRenderer.registerForceDraw(drawFps);
-
-  // const scene = new Scene("Main", Vector2.Zero);
-  // const camera = new Camera("MainCamera");
-  // window.__SCENE__ = scene;
-  // window.__CAMERA__ = camera;
-
-  // WebRenderer.addScene(scene, camera);
-
-  // const group = new Group("normal_sprites", scene);
-  // group.position = new Vector2(64, 128);
-
-  // const normal = new Sprite2d("static_box", box, new Vector2(32, 32), false);
-  // normal.setParent(group);
-
-  // window.__SCENE__ = scene;
-  // window.__CAMERA__ = camera;
 }
 
 void main();
