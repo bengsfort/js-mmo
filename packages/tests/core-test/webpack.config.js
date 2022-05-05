@@ -9,6 +9,6 @@ const output = {
   filename: '[name].js',
 };
 
-const config = makeWebpackConfig(entry, output, 'development', 3000, "src/index.html");
+const config = makeWebpackConfig(entry, output, 'development', 3000, "src/index.html", "@js-mmo/core-test");
 
 module.exports = config;

@@ -691,7 +691,6 @@ __metadata:
     "@js-mmo/core": "workspace:*"
     "@js-mmo/webpack-config-internal": "workspace:*"
     "@types/node": ^17.0.24
-    copy-webpack-plugin: ^10.2.4
     rimraf: ^3.0.2
     ts-loader: ^9.2.8
     webpack: ^5.72.0

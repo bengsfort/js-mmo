@@ -43,6 +43,7 @@
     "dev": "yarn workspaces foreach -pivR --from '{@js-mmo/core,@js-mmo/engine,@js-mmo/renderer}' run start",
     "dev:engine": "yarn workspace @js-mmo/engine start",
     "dev:renderer": "yarn workspace @js-mmo/renderer start",
+    "dev:core-tests": "yarn workspaces foreach -pivR --from '{@js-mmo/core,@js-mmo/core-test}' run start",
     "engine-tests": "yarn workspace @js-mmo/engine-tests start",
     "run-game": "yarn workspace @js-mmo/game start",
     "lint": "yarn workspaces foreach -pivt run lint",
