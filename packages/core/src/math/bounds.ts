@@ -72,10 +72,10 @@ export class Bounds {
     return this._max.x;
   }
   public get top(): number {
-    return this._max.y;
+    return this._min.y;
   }
   public get bottom(): number {
-    return this._min.y;
+    return this._max.y;
   }
 
   constructor(position: Vector2, size: Vector2) {
@@ -106,7 +106,7 @@ export class Bounds {
 
   // Inclusion + intersections
   public includesPoint(point: Vector2): boolean {
-    return point.x >= this.left && point.y >= this.bottom && point.x <= this.right && point.y <= this.top;
+    return point.x >= this.left && point.y <= this.bottom && point.x <= this.right && point.y >= this.top;
   }
 
   public includesBounds(other: Bounds): boolean {
@@ -114,7 +114,7 @@ export class Bounds {
   }
 
   public intersects(other: Bounds): boolean {
-    return this.left <= other.right && this.right >= other.left && this.bottom <= other.top && this.top >= other.bottom;
+    return this.left <= other.right && this.right >= other.left && this.bottom >= other.top && this.top <= other.bottom;
   }
 
   // Directions

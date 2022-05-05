@@ -30,19 +30,13 @@ export class Square extends Node2D {
     const bounds = this._bounds;
     const worldPos = this.getWorldPosition();
 
-    // This isn't correct -- if this is meant to translate it to the correct position
-    // it is actually just making the position completely wrong. Should this logic be
-    // built into the Bounds struct?
-    // "left, top" should mean that northWest === position.
-    // "center, center" should mean that northWest === position - halfSize
-    // "right, bottom" should mean that northWest === position - size
     let xOffset = 0;
-    if (this.hAlign === "center") xOffset = bounds.halfSize.x;
+    if (this.hAlign === "left") xOffset = bounds.halfSize.x;
     else if (this.hAlign === "right") xOffset = bounds.size.x;
 
     let yOffset = 0;
-    if (this.vAlign === "top") yOffset = -bounds.halfSize.y;
-    else if (this.vAlign === "bottom") xOffset = bounds.halfSize.y;
+    if (this.vAlign === "top") yOffset = bounds.halfSize.y;
+    else if (this.vAlign === "bottom") xOffset = bounds.size.y;
 
     return new Vector2(
       worldPos.x + xOffset,
@@ -59,7 +53,7 @@ export class Square extends Node2D {
     ctx.lineWidth = 1;
 
     const bounds = this.bounds;
-    ctx.strokeRect(bounds.northWest.x, bounds.northWest.y, bounds.size.x, bounds.size.y);
+    ctx.strokeRect(bounds.left, bounds.top, bounds.size.x, bounds.size.y);
 
     ctx.restore();
   }
@@ -70,7 +64,7 @@ export class Square extends Node2D {
     ctx.fillStyle = this.color;
 
     const bounds = this.bounds;
-    ctx.fillRect(bounds.northWest.x, bounds.northWest.y, bounds.size.x, bounds.size.y);
+    ctx.fillRect(bounds.left, bounds.top, bounds.size.x, bounds.size.y);
 
     ctx.restore();
     if (this._debug) this.renderDebug(ctx);

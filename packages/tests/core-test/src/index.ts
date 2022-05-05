@@ -1,6 +1,7 @@
 import { throttle } from "./utils/throttle";
 import { FPSCounter } from "./utils/fps-counter";
 import { Root } from "./scene/root";
+import { updatePerf } from "./scene/ui";
 
 declare global {
   interface Window {
@@ -36,16 +37,6 @@ const resizeCanvas = () => {
   console.log(`Canvas resized to (${width}, ${height})@${ratio}`);
 };
 
-const drawFps = () => {
-  context.save();
-  context.textAlign = "left";
-  context.fillStyle = "#ffffff";
-  context.font = "16px monospace";
-  context.fillText(`Last frame: ${timer.deltaTime().toFixed(2)}ms`, 16, 32);
-  context.fillText(`Current FPS: ${timer.currentFps().toFixed(2)}`, 16, 48);
-  context.restore();
-};
-
 // Main program
 const frameLoop: FrameRequestCallback = (delta) => {
   window.requestAnimationFrame(frameLoop);
@@ -53,7 +44,7 @@ const frameLoop: FrameRequestCallback = (delta) => {
   clearCanvas();
 
   // Debug
-  drawFps();
+  updatePerf(timer);
   root.update(delta);
   root.render(context);
 }

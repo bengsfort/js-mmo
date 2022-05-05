@@ -81,10 +81,10 @@ describe("Bounds", () => {
     const size = new Vector2(10, 10);
     const bounds = new Bounds(pos, size);
 
-    expect(bounds.northEast.toLiteral()).toEqual({ x: 10, y: 10 });
-    expect(bounds.northWest.toLiteral()).toEqual({ x: 0, y: 10 });
-    expect(bounds.southEast.toLiteral()).toEqual({ x: 10, y: 0 });
-    expect(bounds.southWest.toLiteral()).toEqual({ x: 0, y: 0 });
+    expect(bounds.northEast.toLiteral()).toEqual({ x: 10, y: 0 });
+    expect(bounds.northWest.toLiteral()).toEqual({ x: 0, y: 0 });
+    expect(bounds.southEast.toLiteral()).toEqual({ x: 10, y: 10 });
+    expect(bounds.southWest.toLiteral()).toEqual({ x: 0, y: 10 });
   });
 
   it("should return whether or not a given point is included in its bounds", () => {
