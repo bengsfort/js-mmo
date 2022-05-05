@@ -14,6 +14,8 @@ export class Bounds {
 
   // Get/set for main properties
   public set position(value: Vector2) {
+    if (this._pos.equals(value)) return;
+
     this._pos = value;
     this._calculateExtents(value, this._size);
   }
@@ -88,10 +90,14 @@ export class Bounds {
     const min = Vector2.Subtract(pos, half);
     const max = Vector2.Add(pos, half);
 
-    this._ne = new Vector2(max.x, max.y);
-    this._nw = new Vector2(min.x, max.y);
-    this._se = new Vector2(max.x, min.y);
-    this._sw = new Vector2(min.x, min.y);
+    // North = top (min),
+    // South = bottom (max),
+    // West = left (min),
+    // East = right (max)
+    this._ne = new Vector2(max.x, min.y);
+    this._nw = new Vector2(min.x, min.y);
+    this._se = new Vector2(max.x, max.y);
+    this._sw = new Vector2(min.x, max.y);
 
     this._min = min;
     this._max = max;

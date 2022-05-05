@@ -1,5 +1,6 @@
 import { throttle } from "./utils/throttle";
 import { FPSCounter } from "./utils/fps-counter";
+import { Root } from "./scene/root";
 
 // declare global {
 //   interface Window {
@@ -12,6 +13,7 @@ import { FPSCounter } from "./utils/fps-counter";
 const timer = new FPSCounter();
 const canvas = document.getElementById("root") as HTMLCanvasElement;
 const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+let root: Root;
 
 // Utils
 const clearCanvas = () => {
@@ -36,22 +38,25 @@ const resizeCanvas = () => {
 };
 
 const drawFps = () => {
+  context.save();
   context.textAlign = "left";
   context.fillStyle = "#ffffff";
   context.font = "16px monospace";
   context.fillText(`Last frame: ${timer.deltaTime().toFixed(2)}ms`, 16, 32);
   context.fillText(`Current FPS: ${timer.currentFps().toFixed(2)}`, 16, 48);
+  context.restore();
 };
 
 // Main program
-const frameLoop: FrameRequestCallback = (timestamp) => {
+const frameLoop: FrameRequestCallback = (delta) => {
   window.requestAnimationFrame(frameLoop);
   timer.frameStart();
   clearCanvas();
 
   // Debug
   drawFps();
-
+  root.update(delta);
+  root.render(context);
 }
 
 async function main() {
@@ -63,6 +68,7 @@ async function main() {
   // 1. scaled box
   // 2. Bounds?
   // 3. One box with a CHILD box inside that goes from one side to the other, rotating and scaling?
+  root = new Root();
 
   // Start loop.
   window.requestAnimationFrame(frameLoop)
