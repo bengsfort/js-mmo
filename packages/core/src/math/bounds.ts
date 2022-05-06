@@ -131,4 +131,8 @@ export class Bounds {
   public isBelow(point: Vector2): boolean {
     return point.y > this.top;
   }
+
+  public copy(): Bounds {
+    return new Bounds(this._pos, this._size);
+  }
 }

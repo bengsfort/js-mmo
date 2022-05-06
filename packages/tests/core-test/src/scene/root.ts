@@ -1,27 +1,26 @@
 import { Node2D } from "@js-mmo/core";
 import { getShowBounds } from "../utils/debug";
-import { Square } from "../shapes/square";
+import { ScaleTest } from "./root/scale-test";
 
 export class Root extends Node2D {
-  private _square: Square;
+  private _scaleTest: ScaleTest;
 
   constructor() {
     super();
 
-    this._square = new Square(64, 64);
-    this._square.color = "#383838";
-    this._square.position.set(32, 32);
+    this._scaleTest = new ScaleTest(64, 64);
+    this._scaleTest.position.set(128, 128);
+    this.addChild(this._scaleTest);
 
   }
 
   public update(delta: number): void {
     const bounds = getShowBounds();
-    this._square.debug = bounds;
-
-    this._square.update(delta);
+    this._scaleTest.debug = bounds;
+    this._scaleTest.update(delta);
   }
 
   public render(ctx: CanvasRenderingContext2D): void {
-    this._square.render(ctx);
+    this._scaleTest.render(ctx);
   }
 }

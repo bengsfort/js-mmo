@@ -5,43 +5,20 @@ type VerticalAlignment = "top" | "center" | "bottom";
 
 export class Square extends Node2D {
   public color: string | CanvasGradient | CanvasPattern;
-  public hAlign: HorizontalAlignment;
-  public vAlign: VerticalAlignment;
-
   public debug = true;
 
   // Bounds for managing the size of the square
   private _bounds: Bounds;
   public get bounds(): Bounds {
-    this._bounds.position = this._getBoundsOffset();
+    this._bounds.position = this.getWorldPosition();
     return this._bounds;
   }
 
-  constructor(width: number, height: number, hAlign: HorizontalAlignment = "left", vAlign: VerticalAlignment = "top") {
+  constructor(width: number, height: number) {
     super();
-    this.hAlign = hAlign;
-    this.vAlign = vAlign;
+
     this._bounds = new Bounds(this.transform.position, new Vector2(width, height));
-    this._bounds.position = this._getBoundsOffset();
     this.color = "#f0f";
-  }
-
-  private _getBoundsOffset(): Vector2 {
-    const bounds = this._bounds;
-    const worldPos = this.getWorldPosition();
-
-    let xOffset = 0;
-    if (this.hAlign === "left") xOffset = bounds.halfSize.x;
-    else if (this.hAlign === "right") xOffset = bounds.size.x;
-
-    let yOffset = 0;
-    if (this.vAlign === "top") yOffset = bounds.halfSize.y;
-    else if (this.vAlign === "bottom") xOffset = bounds.size.y;
-
-    return new Vector2(
-      worldPos.x + xOffset,
-      worldPos.y + yOffset,
-    );
   }
 
   public update(delta: number): void {}
@@ -63,8 +40,15 @@ export class Square extends Node2D {
 
     ctx.fillStyle = this.color;
 
-    const bounds = this.bounds;
-    ctx.fillRect(bounds.left, bounds.top, bounds.size.x, bounds.size.y);
+    const bounds = this.bounds.copy();
+    const scale = this.getWorldScale();
+    const rotation = this.getWorldRotation();
+
+    ctx.translate(bounds.position.x, bounds.position.y);
+    ctx.rotate((rotation * Math.PI) / 180);
+    ctx.scale(scale.x, scale.y);
+
+    ctx.fillRect(-bounds.halfSize.x, -bounds.halfSize.y, bounds.size.x, bounds.size.y);
 
     ctx.restore();
     if (this.debug) this.renderDebug(ctx);
