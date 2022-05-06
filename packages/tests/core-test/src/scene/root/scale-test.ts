@@ -1,6 +1,6 @@
 import { Vector2, MathUtils, Easing } from "@js-mmo/core";
-import { Square } from "../../shapes/square";
 
+import { Square } from "../../shapes/square";
 
 interface ScaleKeyframe {
   innerScale: number;
@@ -83,7 +83,6 @@ export class ScaleTest extends Square {
       this._outerStartVector.set(this._keyframes[prevFrame].outerScale, this._keyframes[prevFrame].outerScale);
       this._innerEndVector.set(this._keyframes[nextFrame].innerScale, this._keyframes[nextFrame].innerScale);
       this._outerEndVector.set(this._keyframes[nextFrame].outerScale, this._keyframes[nextFrame].outerScale);
-
     }
 
     const keyframe = this._keyframes[this._keyframeIndex];

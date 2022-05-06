@@ -1,4 +1,3 @@
-
 export class FPSCounter {
   private _lastFrameStart = -1;
   private _lastFrameEnd = -1;

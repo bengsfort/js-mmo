@@ -26,4 +26,4 @@ export function throttle<FnType extends (...args: unknown[]) => void>(duration: 
     lastTriggered = now;
     fn(...args);
   };
-};
+}

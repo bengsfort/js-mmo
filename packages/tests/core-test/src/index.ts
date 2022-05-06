@@ -17,7 +17,7 @@ let root: Root;
 
 // Utils
 const clearCanvas = () => {
-  context.fillStyle = '#000000';
+  context.fillStyle = "#000000";
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.fillRect(0, 0, canvas.width, canvas.height);
 };
@@ -38,7 +38,7 @@ const resizeCanvas = () => {
 };
 
 // Main program
-const frameLoop: FrameRequestCallback = (delta) => {
+const frameLoop: FrameRequestCallback = delta => {
   window.requestAnimationFrame(frameLoop);
   timer.frameStart();
   clearCanvas();
@@ -47,9 +47,9 @@ const frameLoop: FrameRequestCallback = (delta) => {
   updatePerf(timer);
   root.update(delta);
   root.render(context);
-}
+};
 
-async function main() {
+function main() {
   // Size canvas correctly
   resizeCanvas();
   window.addEventListener("resize", throttle(250, resizeCanvas));
@@ -62,7 +62,7 @@ async function main() {
   window.__root__ = root;
 
   // Start loop.
-  window.requestAnimationFrame(frameLoop)
+  window.requestAnimationFrame(frameLoop);
 }
 
 void main();

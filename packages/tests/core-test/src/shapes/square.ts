@@ -1,7 +1,4 @@
-import { Bounds, Node2D, Vector2 } from '@js-mmo/core';
-
-type HorizontalAlignment = "left" | "center" | "right";
-type VerticalAlignment = "top" | "center" | "bottom";
+import { Bounds, Node2D, Vector2 } from "@js-mmo/core";
 
 export class Square extends Node2D {
   public color: string | CanvasGradient | CanvasPattern;
@@ -21,7 +18,7 @@ export class Square extends Node2D {
     this.color = "#f0f";
   }
 
-  public update(delta: number): void {}
+  public update(): void {}
 
   public renderDebug(ctx: CanvasRenderingContext2D) {
     ctx.save();

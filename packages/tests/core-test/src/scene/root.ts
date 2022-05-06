@@ -1,5 +1,7 @@
 import { Node2D } from "@js-mmo/core";
+
 import { getShowBounds } from "../utils/debug";
+
 import { ScaleTest } from "./root/scale-test";
 
 export class Root extends Node2D {
@@ -11,7 +13,6 @@ export class Root extends Node2D {
     this._scaleTest = new ScaleTest(64, 64);
     this._scaleTest.position.set(128, 128);
     this.addChild(this._scaleTest);
-
   }
 
   public update(delta: number): void {
