@@ -1,4 +1,5 @@
 import { Node2D } from "@js-mmo/core";
+import { getShowBounds } from "../utils/debug";
 import { Square } from "../shapes/square";
 
 export class Root extends Node2D {
@@ -14,6 +15,9 @@ export class Root extends Node2D {
   }
 
   public update(delta: number): void {
+    const bounds = getShowBounds();
+    this._square.debug = bounds;
+
     this._square.update(delta);
   }
 

@@ -8,7 +8,7 @@ export class Square extends Node2D {
   public hAlign: HorizontalAlignment;
   public vAlign: VerticalAlignment;
 
-  private _debug = true;
+  public debug = true;
 
   // Bounds for managing the size of the square
   private _bounds: Bounds;
@@ -67,6 +67,6 @@ export class Square extends Node2D {
     ctx.fillRect(bounds.left, bounds.top, bounds.size.x, bounds.size.y);
 
     ctx.restore();
-    if (this._debug) this.renderDebug(ctx);
+    if (this.debug) this.renderDebug(ctx);
   }
 }
