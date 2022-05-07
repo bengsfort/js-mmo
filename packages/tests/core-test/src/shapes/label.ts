@@ -28,7 +28,7 @@ export class Label extends Node2D {
     ctx.rotate((rotation * Math.PI) / 180);
     ctx.scale(scale.x, scale.y);
 
-    ctx.fillText(this.text, pos.x, pos.y);
+    ctx.fillText(this.text, 0, 0);
 
     ctx.restore();
   }
