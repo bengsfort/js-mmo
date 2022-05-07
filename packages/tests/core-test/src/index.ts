@@ -42,8 +42,8 @@ const frameLoop: FrameRequestCallback = delta => {
   window.requestAnimationFrame(frameLoop);
   timer.frameStart();
   clearCanvas();
+  context.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
 
-  // Debug
   updatePerf(timer);
   root.update(delta);
   root.render(context);

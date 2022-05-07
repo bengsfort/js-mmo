@@ -18,9 +18,6 @@ export class Square extends Node2D {
     this.color = "#f0f";
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public update(delta: number): void {}
-
   public renderDebug(ctx: CanvasRenderingContext2D) {
     ctx.save();
 

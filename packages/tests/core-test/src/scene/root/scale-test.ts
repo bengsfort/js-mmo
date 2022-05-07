@@ -9,7 +9,6 @@ interface ScaleKeyframe {
   outerTiming(t: number): number;
 }
 
-// @todo add text: "Nested scaling test"
 // @todo add text: "parent %x, child %y"
 export class ScaleTest extends Square {
   private _innerSquare: Square;
@@ -59,14 +58,13 @@ export class ScaleTest extends Square {
     const innerSquare = new Square(width / 2, height / 2);
     innerSquare.position.set(0, 0); // move to center
     innerSquare.color = "#090C9B";
+    this._innerSquare = innerSquare;
 
     this.addChild(innerSquare);
-    this._innerSquare = innerSquare;
   }
 
   public update(delta: number): void {
     this._innerSquare.debug = this.debug;
-    this._innerSquare.update(delta);
 
     // Check if the animation should start
     if (delta >= this._nextKeyframeStart) {
