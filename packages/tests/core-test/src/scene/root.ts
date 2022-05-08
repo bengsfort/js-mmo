@@ -7,6 +7,7 @@ import { ScaleTest } from "./root/scale-test";
 
 export class Root extends Node2D {
   private _scaleLabel: Label;
+  private _scaleValuesLabel: Label;
   private _scaleTest: ScaleTest;
   private _scaleTestTEMP: ScaleTest;
 
@@ -22,9 +23,10 @@ export class Root extends Node2D {
     // This gets placed by `this.resize`
     this._scaleTest = new ScaleTest(64, 64);
     this._scaleLabel = new Label("Scale test", "24px monospace", "#7D5BA6");
+    this._scaleValuesLabel = new Label("", "16px monospace", "#7D5BA6");
     this._scaleTestTEMP = new ScaleTest(64, 64);
 
-    this.addChild(this._scaleTest, this._scaleLabel, this._scaleTestTEMP);
+    this.addChild(this._scaleTest, this._scaleLabel, this._scaleValuesLabel, this._scaleTestTEMP);
     this.resize(this._viewportWidth, this._viewportHeight);
   }
 
@@ -44,7 +46,8 @@ export class Root extends Node2D {
     this._viewportHeight = height;
 
     this._scaleTest.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2));
-    this._scaleLabel.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2) - (64 + 16));
+    this._scaleLabel.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2) - (64 + 16 + 24));
+    this._scaleValuesLabel.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2) - (64 + 16));
     this._scaleTestTEMP.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(2, 2));
   }
 
@@ -54,12 +57,14 @@ export class Root extends Node2D {
     this._scaleTestTEMP.debug = bounds;
 
     this._scaleTest.update(delta);
+    this._scaleValuesLabel.text = this._scaleTest.getLabel();
     this._scaleTestTEMP.update(delta);
   }
 
   public render(ctx: CanvasRenderingContext2D): void {
     this._scaleTest.render(ctx);
     this._scaleLabel.render(ctx);
+    this._scaleValuesLabel.render(ctx);
     this._scaleTestTEMP.render(ctx);
   }
 }

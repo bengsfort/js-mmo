@@ -63,6 +63,10 @@ export class ScaleTest extends Square {
     this.addChild(innerSquare);
   }
 
+  public getLabel(): string {
+    return `parent: ${this.scale.x.toFixed(2)}x, child: ${this._innerSquare.scale.x.toFixed(2)}x`;
+  }
+
   public update(delta: number): void {
     this._innerSquare.debug = this.debug;
 
