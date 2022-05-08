@@ -9,7 +9,6 @@ interface ScaleKeyframe {
   outerTiming(t: number): number;
 }
 
-// @todo add text: "parent %x, child %y"
 export class ScaleTest extends Square {
   private _innerSquare: Square;
 
