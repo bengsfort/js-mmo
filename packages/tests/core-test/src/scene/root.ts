@@ -3,13 +3,12 @@ import { Node2D } from "@js-mmo/core";
 import { Label } from "../shapes/label";
 import { getShowBounds } from "../utils/debug";
 
+import { RotateTest } from "./root/rotate-test";
 import { ScaleTest } from "./root/scale-test";
 
 export class Root extends Node2D {
-  private _scaleLabel: Label;
-  private _scaleValuesLabel: Label;
   private _scaleTest: ScaleTest;
-  private _scaleTestTEMP: ScaleTest;
+  private _rotateTest: RotateTest;
 
   private _viewportWidth: number;
   private _viewportHeight: number;
@@ -22,11 +21,9 @@ export class Root extends Node2D {
 
     // This gets placed by `this.resize`
     this._scaleTest = new ScaleTest(64, 64);
-    this._scaleLabel = new Label("Scale test", "24px monospace", "#7D5BA6");
-    this._scaleValuesLabel = new Label("", "16px monospace", "#7D5BA6");
-    this._scaleTestTEMP = new ScaleTest(64, 64);
+    this._rotateTest = new RotateTest(64, 64);
 
-    this.addChild(this._scaleTest, this._scaleLabel, this._scaleValuesLabel, this._scaleTestTEMP);
+    this.addChild(this._scaleTest, this._rotateTest);
     this.resize(this._viewportWidth, this._viewportHeight);
   }
 
@@ -46,25 +43,20 @@ export class Root extends Node2D {
     this._viewportHeight = height;
 
     this._scaleTest.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2));
-    this._scaleLabel.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2) - (64 + 16 + 24));
-    this._scaleValuesLabel.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(1, 2) - (64 + 16));
-    this._scaleTestTEMP.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(2, 2));
+    this._rotateTest.position.set(this._getLeftColumnCenter(), this._getLeftColumnRowCenter(2, 2));
   }
 
   public update(delta: number): void {
-    const bounds = getShowBounds();
-    this._scaleTest.debug = bounds;
-    this._scaleTestTEMP.debug = bounds;
+    // const bounds = getShowBounds();
+    // this._scaleTest.debug = bounds;
+    // this._scaleTestTEMP.debug = bounds;
 
     this._scaleTest.update(delta);
-    this._scaleValuesLabel.text = this._scaleTest.getLabel();
-    this._scaleTestTEMP.update(delta);
+    this._rotateTest.update(delta);
   }
 
   public render(ctx: CanvasRenderingContext2D): void {
     this._scaleTest.render(ctx);
-    this._scaleLabel.render(ctx);
-    this._scaleValuesLabel.render(ctx);
-    this._scaleTestTEMP.render(ctx);
+    this._rotateTest.render(ctx);
   }
 }

@@ -1,6 +1,13 @@
-import { Vector2, MathUtils, Easing } from "@js-mmo/core";
+import { Vector2, Easing, Node2D } from "@js-mmo/core";
 
+import { Label } from "../../shapes/label";
 import { Square } from "../../shapes/square";
+
+import { KeyframeAnimation } from "./keyframe-animation";
+
+const LABEL_COLOR = "#7D5BA6";
+const OUTER_COLOR = "#3C3744";
+const INNER_COLOR = "#090C9B";
 
 interface ScaleKeyframe {
   innerScale: number;
@@ -9,38 +16,33 @@ interface ScaleKeyframe {
   outerTiming(t: number): number;
 }
 
-export class ScaleTest extends Square {
+const keyframes: ScaleKeyframe[] = [
+  {
+    innerScale: 1,
+    outerScale: 1,
+    innerTiming: Easing.smootherstep,
+    outerTiming: Easing.easeIn,
+  },
+  {
+    innerScale: 1,
+    outerScale: 2,
+    innerTiming: Easing.smoothstep,
+    outerTiming: Easing.smootherstep,
+  },
+  {
+    innerScale: 0.5,
+    outerScale: 2,
+    innerTiming: Easing.smootherstep,
+    outerTiming: Easing.smootherstep,
+  },
+];
+
+export class ScaleTest extends Node2D {
+  private _titleLabel: Label;
+  private _valuesLabel: Label;
+  private _outerSquare: Square;
   private _innerSquare: Square;
-
-  // Animation Config
-  private readonly _animationTime = 300;
-  private readonly _intervalDelay = 1000;
-  private readonly _keyframes: ScaleKeyframe[] = [
-    {
-      innerScale: 1,
-      outerScale: 1,
-      innerTiming: Easing.smootherstep,
-      outerTiming: Easing.easeIn,
-    },
-    {
-      innerScale: 1,
-      outerScale: 2,
-      innerTiming: Easing.smoothstep,
-      outerTiming: Easing.smootherstep,
-    },
-    {
-      innerScale: 0.5,
-      outerScale: 2,
-      innerTiming: Easing.smootherstep,
-      outerTiming: Easing.smootherstep,
-    },
-  ];
-
-  // Animation state
-  private _keyframeIndex = 0;
-  private _animationStepStarted = -1;
-  private _animationStepEnds = -1;
-  private _nextKeyframeStart = -1;
+  private _animation: KeyframeAnimation<ScaleKeyframe>;
 
   // Animation references
   private _innerStartVector = Vector2.Zero;
@@ -49,60 +51,69 @@ export class ScaleTest extends Square {
   private _outerEndVector = Vector2.Zero;
 
   constructor(width: number, height: number) {
-    super(width, height);
+    super("ScaleTest");
 
-    this.color = "#3C3744";
+    this._animation = new KeyframeAnimation<ScaleKeyframe>(keyframes, 300, 1000);
+    this._animation.on("new_keyframe", this._onNewKeyframe);
+
+    // Make labels
+    this._valuesLabel = new Label("", "16px monospace", LABEL_COLOR);
+    this._valuesLabel.position.set(0, -1 * (64 + 16));
+    this._titleLabel = new Label("Scale test", "24px monospace", LABEL_COLOR);
+    this._titleLabel.position.set(0, -1 * (64 + 16 + 24));
+    this.addChild(this._valuesLabel, this._titleLabel);
+
+    // Make outer square
+    const outerSquare = new Square(width, height);
+    outerSquare.position.set(0, 0); // move to center
+    outerSquare.color = OUTER_COLOR;
+    this._outerSquare = outerSquare;
 
     // Make inner square
     const innerSquare = new Square(width / 2, height / 2);
     innerSquare.position.set(0, 0); // move to center
-    innerSquare.color = "#090C9B";
+    innerSquare.color = INNER_COLOR;
     this._innerSquare = innerSquare;
 
-    this.addChild(innerSquare);
+    // Add them to the hierarchy
+    outerSquare.addChild(innerSquare);
+    this.addChild(outerSquare);
   }
 
+  private _onNewKeyframe = (previous: ScaleKeyframe, next: ScaleKeyframe): void => {
+    this._innerStartVector.set(previous.innerScale, previous.innerScale);
+    this._outerStartVector.set(previous.outerScale, previous.outerScale);
+    this._innerEndVector.set(next.innerScale, next.innerScale);
+    this._outerEndVector.set(next.outerScale, next.outerScale);
+  };
+
   public getLabel(): string {
-    return `parent: ${this.scale.x.toFixed(2)}x, child: ${this._innerSquare.scale.x.toFixed(2)}x`;
+    return `parent: ${this._outerSquare.scale.x.toFixed(2)}x, child: ${this._innerSquare.scale.x.toFixed(2)}x`;
   }
 
   public update(delta: number): void {
-    this._innerSquare.debug = this.debug;
+    this._animation.update(delta);
 
-    // Check if the animation should start
-    if (delta >= this._nextKeyframeStart) {
-      this._animationStepStarted = delta;
-      this._animationStepEnds = delta + this._animationTime;
-      this._nextKeyframeStart = delta + this._animationTime + this._intervalDelay;
-
-      // Cache animation targets
-      const prevFrame = this._keyframeIndex;
-      const nextFrame = (this._keyframeIndex + 1) % this._keyframes.length;
-      this._keyframeIndex = nextFrame;
-
-      this._innerStartVector.set(this._keyframes[prevFrame].innerScale, this._keyframes[prevFrame].innerScale);
-      this._outerStartVector.set(this._keyframes[prevFrame].outerScale, this._keyframes[prevFrame].outerScale);
-      this._innerEndVector.set(this._keyframes[nextFrame].innerScale, this._keyframes[nextFrame].innerScale);
-      this._outerEndVector.set(this._keyframes[nextFrame].outerScale, this._keyframes[nextFrame].outerScale);
-    }
-
-    const keyframe = this._keyframes[this._keyframeIndex];
+    const keyframe = this._animation.getCurrFrame();
+    const t = this._animation.getKeyframeTime();
 
     // If we are finished with the animation, dont do anything.
-    if (delta >= this._animationStepEnds) {
-      this.scale.set(keyframe.outerScale, keyframe.outerScale);
+    if (t >= 1) {
+      this._outerSquare.scale.set(keyframe.outerScale, keyframe.outerScale);
       this._innerSquare.scale.set(keyframe.innerScale, keyframe.innerScale);
-      return;
+    } else {
+      // Animate
+      this._outerSquare.scale = Vector2.Lerp(this._outerStartVector, this._outerEndVector, keyframe.outerTiming(t));
+      this._innerSquare.scale = Vector2.Lerp(this._innerStartVector, this._innerEndVector, keyframe.innerTiming(t));
     }
 
-    // Animate
-    const t = MathUtils.transformRange(delta, this._animationStepStarted, this._animationStepEnds);
-    this.scale = Vector2.Lerp(this._outerStartVector, this._outerEndVector, keyframe.outerTiming(t));
-    this._innerSquare.scale = Vector2.Lerp(this._innerStartVector, this._innerEndVector, keyframe.innerTiming(t));
+    this._valuesLabel.text = this.getLabel();
   }
 
   public render(ctx: CanvasRenderingContext2D): void {
-    super.render(ctx);
+    this._outerSquare.render(ctx);
     this._innerSquare.render(ctx);
+    this._valuesLabel.render(ctx);
+    this._titleLabel.render(ctx);
   }
 }

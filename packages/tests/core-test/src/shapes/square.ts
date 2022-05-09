@@ -2,7 +2,7 @@ import { Bounds, Node2D, Vector2 } from "@js-mmo/core";
 
 export class Square extends Node2D {
   public color: string | CanvasGradient | CanvasPattern;
-  public debug = true;
+  public debug = false;
 
   // Bounds for managing the size of the square
   private _bounds: Bounds;
