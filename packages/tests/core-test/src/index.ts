@@ -34,6 +34,8 @@ const resizeCanvas = () => {
 
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
   context.fillRect(0, 0, width, height);
+  root?.resize(width, height);
+
   console.log(`Canvas resized to (${width}, ${height})@${ratio}`);
 };
 
