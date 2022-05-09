@@ -20,4 +20,18 @@ describe("MathUtils", () => {
       expect(MathUtils.transformRange(50, 0, 100)).toEqual(0.5);
     });
   });
+
+  describe("lerp", () => {
+    it("should linearly interpolate between two values", () => {
+      expect(MathUtils.lerp(-10, 10, 0.5)).toEqual(0);
+      expect(MathUtils.lerp(0, 10, 0)).toEqual(0);
+      expect(MathUtils.lerp(0, 10, 1)).toEqual(10);
+      expect(MathUtils.lerp(10, 20, 0.25)).toEqual(12.5);
+    });
+
+    it("should still lerp larger values to smaller values", () => {
+      expect(MathUtils.lerp(10, -10, 0.5)).toEqual(0);
+      expect(MathUtils.lerp(100, 50, 0.25)).toEqual(87.5);
+    });
+  });
 });
