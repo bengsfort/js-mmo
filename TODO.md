@@ -1,5 +1,20 @@
 # Todo
 
+## Short term
+
+### Core
+- [ ] Update `Bounds` so that it also takes transforms into account (rotation + scale)
+- [ ] Update `Bounds` to be more of a base class
+    - Extending it for new shapes should be as simple as extending and overriding a class method
+
+### Engine
+
+- [ ] Update constants/engine flags to be simple namespaced properties
+    - ie: `EngineConstants.Render.ShowBounds = true`, `EngineConstants.Engine.TicksPerSecond = 66`
+- [ ] Add Raycasting module
+
+*Note: Below may be inaccurate*
+
 ## Short Term
 
 ### Engine

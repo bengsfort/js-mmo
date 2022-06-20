@@ -1,6 +1,6 @@
 import { Bounds, Node2D, Vector2 } from "@js-mmo/core";
 
-import { Label } from "../shapes/label";
+import { Square } from "../shapes/square";
 import { getShowBounds } from "../utils/debug";
 
 import { RotateTest } from "./root/rotate-test";
@@ -36,8 +36,26 @@ export class Root extends Node2D {
       new Vector2(this._viewportWidth * 0.5, this._viewportHeight)
     );
 
-    this.addChild(this._scaleTest, this._rotateTest);
+    this.addChild(this._scaleTest, this._rotateTest, this._translateTest);
     this.resize(this._viewportWidth, this._viewportHeight);
+  }
+
+  private _drawBounds(ctx: CanvasRenderingContext2D, bounds: Bounds): void {
+    ctx.save();
+    ctx.strokeStyle = "yellow";
+    ctx.strokeRect(bounds.northWest.x, bounds.northWest.y, bounds.size.x, bounds.size.y);
+    ctx.restore();
+  }
+
+  private _recursiveGetBounds(node: Node2D, result: Bounds[] = []): Bounds[] {
+    if (node instanceof Square) {
+      result.push(node.bounds);
+    }
+    node.children.forEach(child => {
+      const childrenBounds = this._recursiveGetBounds(child);
+      result.push(...childrenBounds);
+    });
+    return result;
   }
 
   private _getRowCenter(row: number, numRows: number): number {
@@ -64,10 +82,6 @@ export class Root extends Node2D {
   }
 
   public update(delta: number): void {
-    // const bounds = getShowBounds();
-    // this._scaleTest.debug = bounds;
-    // this._scaleTestTEMP.debug = bounds;
-
     this._scaleTest.update(delta);
     this._rotateTest.update(delta);
     this._translateTest.update(delta);
@@ -77,5 +91,12 @@ export class Root extends Node2D {
     this._scaleTest.render(ctx);
     this._rotateTest.render(ctx);
     this._translateTest.render(ctx);
+
+    if (getShowBounds()) {
+      const bounds = [this._leftCol, this._rightCol, ...this._recursiveGetBounds(this)];
+      bounds.forEach(child => {
+        this._drawBounds(ctx, child);
+      });
+    }
   }
 }

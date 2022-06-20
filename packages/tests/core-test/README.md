@@ -6,8 +6,8 @@ Very very basic test implementation of the core pieces of the engine. This packa
 
 The goal of this package is to verify that the foundations of the engine are working correctly, that is:
 
-- Nodes (active/inactive states, parenting, etc.)
-- Transforms (positioning, scaling, rotation, world space calculations)
+- Nodes (active/inactive states, parenting, etc.) ✅
+- Transforms (positioning, scaling, rotation, world space calculations) ✅
 - Bounds (click detection, extents, etc.)
 
 ## Scripts
