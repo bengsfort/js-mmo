@@ -62,14 +62,18 @@ export class RotateTest extends Node2D {
 
     // Make outer square
     const outerSquare = new Square(width, height);
+    outerSquare.bounds.debugColor = `#ff0`;
     outerSquare.position.set(0, 0); // move to center
     outerSquare.color = OUTER_COLOR;
+    outerSquare.name = "Rotation Test Outer Square";
     this._outerSquare = outerSquare;
 
     // Make inner square
     const innerSquare = new Square(width / 2, height / 2);
     innerSquare.position.set(0, 0); // move to center
+    outerSquare.bounds.debugColor = `#0ff`;
     innerSquare.color = INNER_COLOR;
+    innerSquare.name = "Rotation Test Inner Square";
     this._innerSquare = innerSquare;
 
     // Add them to the hierarchy

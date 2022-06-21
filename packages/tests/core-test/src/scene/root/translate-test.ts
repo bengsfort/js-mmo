@@ -41,12 +41,14 @@ export class TranslateTest extends Node2D {
     const outerSquare = new Square(width, height);
     outerSquare.position.set(0, 0); // move to center
     outerSquare.color = OUTER_COLOR;
+    outerSquare.name = "Translate Test Outer Square";
     this._outerSquare = outerSquare;
 
     // Make inner square
     const innerSquare = new Square(width / 2, height / 2);
     innerSquare.position.set(0, 0); // move to center
     innerSquare.color = INNER_COLOR;
+    innerSquare.name = "Translate Test Inner Square";
     this._innerSquare = innerSquare;
 
     // Add them to the hierarchy
@@ -61,7 +63,7 @@ export class TranslateTest extends Node2D {
   }
 
   public update(timeframe: number): void {
-    this._innerSquare.position.set((Math.cos(timeframe * 0.005) * this._parentWidth) / 4, 0);
+    // this._innerSquare.position.set((Math.cos(timeframe * 0.005) * this._parentWidth) / 4, 0);
     this._outerSquare.position.set(0, (Math.sin(timeframe * 0.001) * this._parentHeight) / 2);
 
     this._valuesLabel.text = this.getLabel();

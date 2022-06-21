@@ -1,20 +1,37 @@
+import { Node2D } from "../objects";
 import { Vector2 } from "../math/vector2";
 import { Transform } from "../math/transform";
 
 export abstract class Bounds {
   public transform?: Transform;
   public size: Vector2;
-  public position: Vector2;
+  public offset: Vector2;
+  public debugColor = "#f0f";
+
+  // @todo: Same as below. This feels gross.
+  public get position(): Vector2 {
+    return Vector2.Add(this.transform?.getWorldPosition() ?? new Vector2(), this.offset);
+  }
+
+  // @todo: Perform all transformations LOCALLY instead of globally.
 
   // Primitive operations
+  // @todo: This feels gross having to have both.
+  // transformed is necessary for the Bounds to have the correct position,
+  // however halfSize is necessary if we want to draw things using the canvas API
+  // built-ins (such as translate, rotate, etc.)
   public get halfSize(): Vector2 {
     return Vector2.MultiplyScalar(this.size, 0.5);
   }
   public get min(): Vector2 {
-    return Vector2.Subtract(this.position, this.halfSize);
+    const point = this.position;
+    point.subtract(this.halfSize);
+    return point;
   }
   public get max(): Vector2 {
-    return Vector2.Add(this.position, this.halfSize);
+    const point = this.position;
+    point.add(this.halfSize);
+    return point;
   }
 
   // Directions
@@ -25,14 +42,14 @@ export abstract class Bounds {
     return new Vector2(this.max.x, this.min.y);
   }
   public get southWest(): Vector2 {
-    return this.max;
+    return new Vector2(this.min.x, this.max.y);
   }
   public get southEast(): Vector2 {
-    return new Vector2(this.min.x, this.max.y);
+    return this.max;
   }
 
   constructor(position: Vector2, size: Vector2, transform?: Transform) {
-    this.position = position;
+    this.offset = position;
     this.size = size;
     this.transform = transform;
   }
@@ -59,13 +76,19 @@ export abstract class Bounds {
     const points = this.getPoints();
 
     ctx.save();
-    ctx.strokeStyle = "yellow";
+    ctx.strokeStyle = this.debugColor;
+    ctx.beginPath();
 
+    // Draw from the origin of the shape
+    ctx.moveTo(this.position.x, this.position.y);
     for (let i = 0; i < points.length; i++) {
-      ctx.moveTo(points[i].x, points[i].y);
-      ctx.lineTo(points[(i + 1) % points.length].x, points[(i + 1) % points.length].y);
+      ctx.lineTo(points[i % points.length].x, points[i % points.length].y);
+      ctx.strokeText(`${i}`, points[i % points.length].x, points[i % points.length].y);
     }
+    ctx.lineTo(points[0].x, points[0].y);
 
+    ctx.stroke();
+    ctx.closePath();
     ctx.restore();
   }
 

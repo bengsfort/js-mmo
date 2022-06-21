@@ -67,12 +67,16 @@ export class ScaleTest extends Node2D {
     const outerSquare = new Square(width, height);
     outerSquare.position.set(0, 0); // move to center
     outerSquare.color = OUTER_COLOR;
+    outerSquare.bounds.debugColor = "#f00";
+    outerSquare.name = "Scale Test Outer Square";
     this._outerSquare = outerSquare;
 
     // Make inner square
     const innerSquare = new Square(width / 2, height / 2);
     innerSquare.position.set(0, 0); // move to center
     innerSquare.color = INNER_COLOR;
+    innerSquare.bounds.debugColor = "#0f0";
+    innerSquare.name = "Scale Test Inner Square";
     this._innerSquare = innerSquare;
 
     // Add them to the hierarchy

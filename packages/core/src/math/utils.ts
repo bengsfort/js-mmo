@@ -29,3 +29,11 @@ export const transformRange = (value: number, oldMin: number, oldMax: number, ne
  * @returns The lerped value.
  */
 export const lerp = (start: number, end: number, t: number): number => start + (end - start) * t;
+
+/**
+ * Converts rotation in degrees to radians.
+ *
+ * @param degrees The starting value.
+ * @return The converted value.
+ */
+export const convertDegreesToRadians = (degrees: number) => degrees * (Math.PI / 180);

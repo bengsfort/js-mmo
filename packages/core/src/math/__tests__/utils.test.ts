@@ -34,4 +34,13 @@ describe("MathUtils", () => {
       expect(MathUtils.lerp(100, 50, 0.25)).toEqual(87.5);
     });
   });
+
+  describe("convertDegreesToRadians", () => {
+    it("should convert degrees to radians", () => {
+      expect(MathUtils.convertDegreesToRadians(0)).toEqual(0);
+      expect(MathUtils.convertDegreesToRadians(90)).toEqual(Math.PI / 2);
+      expect(MathUtils.convertDegreesToRadians(180)).toEqual(Math.PI);
+      expect(MathUtils.convertDegreesToRadians(270)).toEqual(Math.PI * 1.5);
+    });
+  });
 });

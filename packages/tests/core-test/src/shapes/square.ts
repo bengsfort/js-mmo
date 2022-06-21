@@ -1,33 +1,17 @@
-import { Bounds, Node2D, Vector2 } from "@js-mmo/core";
+import { Bounds, Node2D, RectBounds, Vector2 } from "@js-mmo/core";
 
 export class Square extends Node2D {
   public color: string | CanvasGradient | CanvasPattern;
   public debug = false;
 
   // Bounds for managing the size of the square
-  private _bounds: Bounds;
-  public get bounds(): Bounds {
-    this._bounds.position = this.getWorldPosition();
-    return this._bounds;
-  }
+  public readonly bounds: RectBounds;
 
   constructor(width: number, height: number) {
     super();
 
-    this._bounds = new Bounds(this.transform.position, new Vector2(width, height));
+    this.bounds = new RectBounds(this.transform.position, new Vector2(width, height), this.transform);
     this.color = "#f0f";
-  }
-
-  public renderDebug(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-
-    ctx.strokeStyle = "#0f0";
-    ctx.lineWidth = 1;
-
-    const bounds = this.bounds;
-    ctx.strokeRect(bounds.left, bounds.top, bounds.size.x, bounds.size.y);
-
-    ctx.restore();
   }
 
   public render(ctx: CanvasRenderingContext2D): void {
@@ -35,7 +19,7 @@ export class Square extends Node2D {
 
     ctx.fillStyle = this.color;
 
-    const bounds = this.bounds.copy();
+    const bounds = this.bounds;
     const scale = this.getWorldScale();
     const rotation = this.getWorldRotation();
 
@@ -46,6 +30,5 @@ export class Square extends Node2D {
     ctx.fillRect(-bounds.halfSize.x, -bounds.halfSize.y, bounds.size.x, bounds.size.y);
 
     ctx.restore();
-    if (this.debug) this.renderDebug(ctx);
   }
 }

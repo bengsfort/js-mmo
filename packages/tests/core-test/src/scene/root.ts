@@ -1,4 +1,4 @@
-import { Bounds, Node2D, Vector2 } from "@js-mmo/core";
+import { Bounds, Node2D, RectBounds, Vector2 } from "@js-mmo/core";
 
 import { Square } from "../shapes/square";
 import { getShowBounds } from "../utils/debug";
@@ -30,21 +30,14 @@ export class Root extends Node2D {
     this._translateTest = new TranslateTest(64, 64, 32, 16);
 
     // Setup columns
-    this._leftCol = new Bounds(new Vector2(0, 0), new Vector2(this._viewportWidth * 0.5, this._viewportHeight));
-    this._rightCol = new Bounds(
+    this._leftCol = new RectBounds(new Vector2(0, 0), new Vector2(this._viewportWidth * 0.5, this._viewportHeight));
+    this._rightCol = new RectBounds(
       new Vector2(this._viewportWidth * 0.5, 0),
       new Vector2(this._viewportWidth * 0.5, this._viewportHeight)
     );
 
     this.addChild(this._scaleTest, this._rotateTest, this._translateTest);
     this.resize(this._viewportWidth, this._viewportHeight);
-  }
-
-  private _drawBounds(ctx: CanvasRenderingContext2D, bounds: Bounds): void {
-    ctx.save();
-    ctx.strokeStyle = "yellow";
-    ctx.strokeRect(bounds.northWest.x, bounds.northWest.y, bounds.size.x, bounds.size.y);
-    ctx.restore();
   }
 
   private _recursiveGetBounds(node: Node2D, result: Bounds[] = []): Bounds[] {
@@ -71,9 +64,9 @@ export class Root extends Node2D {
     const halfHeight = height * 0.5;
     const halfWidth = width * 0.5;
 
-    this._leftCol.position = new Vector2(halfWidth * 0.5, halfHeight);
+    this._leftCol.offset = new Vector2(halfWidth * 0.5, halfHeight);
     this._leftCol.size = new Vector2(halfWidth, height);
-    this._rightCol.position = new Vector2(halfWidth + 0.5 * halfWidth, halfHeight);
+    this._rightCol.offset = new Vector2(halfWidth + 0.5 * halfWidth, halfHeight);
     this._rightCol.size = new Vector2(halfWidth, halfHeight);
 
     this._scaleTest.position.set(this._leftCol.position.x, this._getRowCenter(1, 2));
@@ -95,7 +88,7 @@ export class Root extends Node2D {
     if (getShowBounds()) {
       const bounds = [this._leftCol, this._rightCol, ...this._recursiveGetBounds(this)];
       bounds.forEach(child => {
-        this._drawBounds(ctx, child);
+        child.drawDebug(ctx);
       });
     }
   }
