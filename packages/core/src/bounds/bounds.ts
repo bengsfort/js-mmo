@@ -8,30 +8,19 @@ export abstract class Bounds {
   public offset: Vector2;
   public debugColor = "#f0f";
 
-  // @todo: Same as below. This feels gross.
   public get position(): Vector2 {
     return Vector2.Add(this.transform?.getWorldPosition() ?? new Vector2(), this.offset);
   }
 
-  // @todo: Perform all transformations LOCALLY instead of globally.
-
   // Primitive operations
-  // @todo: This feels gross having to have both.
-  // transformed is necessary for the Bounds to have the correct position,
-  // however halfSize is necessary if we want to draw things using the canvas API
-  // built-ins (such as translate, rotate, etc.)
   public get halfSize(): Vector2 {
     return Vector2.MultiplyScalar(this.size, 0.5);
   }
   public get min(): Vector2 {
-    const point = this.position;
-    point.subtract(this.halfSize);
-    return point;
+    return Vector2.Subtract(this.offset, this.halfSize);
   }
   public get max(): Vector2 {
-    const point = this.position;
-    point.add(this.halfSize);
-    return point;
+    return Vector2.Add(this.offset, this.halfSize);
   }
 
   // Directions

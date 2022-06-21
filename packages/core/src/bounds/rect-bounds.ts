@@ -4,24 +4,34 @@ import { Bounds } from "./bounds";
 
 export class RectBounds extends Bounds {
   public getPoints(): Vector2[] {
+    const points = [this.northWest, this.northEast, this.southEast, this.southWest];
+
     // If no rotation, just return the shape corners
     if (!this.transform) {
-      return [this.northWest, this.northEast, this.southEast, this.southWest];
+      return points;
     }
 
-    // @todo: Transform locally THEN convert to global
-    // - offset
-    // - rotation
-    // - scale
-    // - THEN add global values to that (except scale which is multiplicative)
-    // - use the global values to do stuff
+    const globalPos = this.transform.getWorldPosition();
+    const globalRotation = this.transform.getWorldRotation();
+    const globalScale = this.transform.getWorldScale();
 
-    return [
-      this._rotatePoint(this.northWest, this.transform.getWorldRotation()),
-      this._rotatePoint(this.northEast, this.transform.getWorldRotation()),
-      this._rotatePoint(this.southEast, this.transform.getWorldRotation()),
-      this._rotatePoint(this.southWest, this.transform.getWorldRotation()),
-    ];
+    return points.map(point => {
+      // Apply rotation
+      const radians = MathUtils.convertDegreesToRadians(globalRotation);
+      const cos = Math.cos(radians);
+      const sin = Math.sin(radians);
+      point.x = point.x * cos - point.y * sin;
+      point.y = point.x * sin + point.y * cos;
+
+      // Apply scale
+      point.multiply(globalScale);
+
+      // Apply offset
+      point.x += globalPos.x;
+      point.y += globalPos.y;
+
+      return point;
+    });
   }
 
   public includesPoint(point: Vector2): boolean {
