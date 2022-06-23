@@ -32,7 +32,8 @@ export class Player extends SceneObject {
   protected _nameplate: Nameplate;
 
   constructor(name: string, pos: Vector2) {
-    super(name, pos, Vector2.One, 0);
+    super(name);
+    this.position = pos;
 
     this.character = new Character(name, CharacterStatus.Friendly);
     this._nameplate = new Nameplate(this.character);

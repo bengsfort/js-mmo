@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "include": [
+      "./jest.setup.ts",
+      "./src/**/*.ts",
+    ],
+    "compilerOptions": {
+      "rootDir": ".",
+      "outDir": "build",
+      "baseUrl": "./src"
+    }
+  }

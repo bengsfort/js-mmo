@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+        html, body {
+          font-size: 16px;
+          padding: 0;
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          color: #fff;
+        }
+        canvas {
+          width: 100%;
+          height: 100%;
+          background-color: black;
+        }
+        #ui {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+        /* Metrics */
+        #perf-metrics {
+          position: absolute;
+          top: 1rem;
+          left: 1rem;
+          pointer-events: none;
+        }
+        .perf-info {
+          font-family: monospace, Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 1rem;
+          line-height: 1.2;
+          font-weight: 300;
+          color: #fff;
+        }
+        .perf-info span {
+          font-weight: 600;
+        }
+        /* Command list */
+        #commands {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          text-align: right;
+        }
+        #commands h4 {
+          font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+          margin-top: 0;
+          margin-bottom: 0.2rem;
+        }
+        #commands ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          font-family: monospace, Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 1rem;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="ui">
+      <div id="perf-metrics">
+        <div class="perf-info">Last frame: <span id="frame-ms">0</span>ms</div>
+        <div class="perf-info">Frames/sec: <span id="fps">0</span></div>
+      </div>
+      <div id="commands">
+        <h4>Commands</h4>
+        <ul>
+          <li>__debug.showBounds(boolean)</li>
+        </ul>
+      </div>
+    </div>
+    <canvas id="root"></canvas>
+  </body>
+</html>

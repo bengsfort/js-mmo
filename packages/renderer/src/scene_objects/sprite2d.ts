@@ -1,27 +1,29 @@
-import { Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
+import { Bounds, Node2d, SceneObject, Vector2 } from "@js-mmo/engine";
 
 import { SpriteDrawable, createSprite } from "../drawables/sprite/sprite";
 import { ImageManager } from "../asset_management/image_manager";
 import { NodeTypes } from "../../../engine/build";
 import { RenderingNode } from "../drawables/rendering_node";
 
-export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawable> {
+import { RenderObject } from "./render_object";
+
+export class Sprite2d extends RenderObject<SpriteDrawable> {
   public readonly type = NodeTypes.Draw;
 
   public texture: ImageBitmap;
-  public size = Vector2.Zero;
   public origin = Vector2.Zero;
   public flipX = false;
   public flipY = false;
 
-  private _drawable: SpriteDrawable;
+  protected _drawable: SpriteDrawable;
 
   public get drawable(): SpriteDrawable {
+    const bounds = this.bounds;
     this._drawable.data = {
       ...this._drawable.data,
       image: this.texture,
-      width: this.size.x,
-      height: this.size.y,
+      width: bounds.size.x,
+      height: bounds.size.y,
       position: this.position,
       rotation: this.rotation,
       origin: this.origin,
@@ -32,8 +34,8 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
     return this._drawable;
   }
 
-  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean, parent?: Node2d) {
-    super(name, Vector2.Zero, Vector2.One, 0, parent);
+  constructor(name = "", texture: string | ImageBitmap, size: Vector2, isometric?: boolean) {
+    super(name);
 
     if (typeof texture === "string") {
       this.texture = ImageManager.get(texture);
@@ -44,11 +46,12 @@ export class Sprite2d extends SceneObject implements RenderingNode<SpriteDrawabl
       this.texture = texture;
     }
 
-    this.size = size;
+    // @todo: does this need to use pixels_per_unit?
+    this._bounds = new Bounds(this.position, size);
     this._drawable = createSprite({
       image: this.texture,
-      width: this.size.x,
-      height: this.size.y,
+      width: size.x,
+      height: size.y,
       position: this.position,
       origin: this.origin,
       rotation: this.rotation,

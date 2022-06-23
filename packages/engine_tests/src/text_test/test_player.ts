@@ -11,13 +11,18 @@ export class TestPlayer extends SceneObject {
   private _text: Text2d;
 
   constructor(name: string, pos: Vector2, scale: Vector2, speed = 20) {
-    super(name, pos, scale, 0);
+    super(name);
+    this.position = pos;
+    this.scale = scale;
+
     this._speed = speed;
-    const boxSprite = new Sprite2d(`${name}-box`, box, new Vector2(32, 32), false, this);
+    const boxSprite = new Sprite2d(`${name}-box`, box, new Vector2(32, 32), false);
+    boxSprite.setParent(this);
     boxSprite.origin = new Vector2(0.5, 0.5);
     boxSprite.localPosition = new Vector2(0, 10);
 
-    const text = new Text2d(new Vector2(0, -8), name, 16, "monospace", this);
+    const text = new Text2d(new Vector2(0, -8), name, 16, "monospace");
+    text.setParent(this);
     text.align = TextAlign.Center;
     text.color = "#30e";
     text.fontWeight = "bold";

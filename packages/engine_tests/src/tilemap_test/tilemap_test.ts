@@ -43,13 +43,14 @@ async function main() {
   scene.position = new Vector2(0, 0);
   window.__SCENE__ = scene;
 
-  const cam = new IsometricCamera("Main Camera", new Vector2(0, 0), Vector2.One, 0, scene);
+  const cam = new IsometricCamera("Main Camera", scene);
   window.__CAMERA__ = cam;
 
   if (await TilesetManager.load(TILESET_PATH)) {
     const tileset = TilesetManager.get(TILESET_PATH);
 
-    const map = new Tilemap("BaseLayer", devMap as TiledMap, tileset, 0, Vector2.Zero, scene);
+    const map = new Tilemap("BaseLayer", devMap as TiledMap, tileset, 0, Vector2.Zero);
+    map.setParent(scene);
     window.__TILEMAP__ = map;
   }
 

@@ -10,24 +10,26 @@ describe("Node2d", () => {
   it("should pass position and scale to it's transform", () => {
     const pos = new Vector2(5, 5);
     const scale = new Vector2(1.5, 1.5);
-    const node = new Node2d("root", pos, scale);
+    const node = new Node2d("root");
+    node.position = pos;
+    node.scale = scale;
     expect(node).toHaveProperty("transform");
 
     // Check shorthand
-    expect(node.localPosition).toEqual(pos);
-    expect(node.localScale).toEqual(scale);
+    expect(node.localPosition.toLiteral()).toEqual(pos.toLiteral());
+    expect(node.localScale.toLiteral()).toEqual(scale.toLiteral());
 
     // Check longhand
     const transform = node.transform;
-    expect(transform.position).toEqual(pos);
-    expect(transform.scale).toEqual(scale);
+    expect(transform.position.toLiteral()).toEqual(pos.toLiteral());
+    expect(transform.scale.toLiteral()).toEqual(scale.toLiteral());
   });
 
   it("should contain references for children and parent nodes", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", Vector2.Zero, Vector2.One, 0, root);
-    const child2 = new Node2d("child2", Vector2.Zero, Vector2.One, 0, child1);
-    const child3 = new Node2d("child3", Vector2.Zero, Vector2.One, 0, child1);
+    const child1 = new Node2d("child1", root);
+    const child2 = new Node2d("child2", child1);
+    const child3 = new Node2d("child3", child1);
 
     // Check root...
     expect(root.parent).toBeUndefined();
@@ -54,7 +56,9 @@ describe("Node2d", () => {
 
   it("should return transform vectors relative to parents", () => {
     const root = new Node2d("root");
-    const child1 = new Node2d("child1", new Vector2(5, 5), new Vector2(1.5, 1.5), 0, root);
+    const child1 = new Node2d("child1", root);
+    child1.position.set(5, 5);
+    child1.scale.set(1.5, 1.5);
 
     // Check that no parent still returns correctly
     expect(root.position.x).toEqual(0);
@@ -72,6 +76,7 @@ describe("Node2d", () => {
 
     // Move root and check results...
     root.position.set(5, 2);
+    expect(child1.parent).toEqual(root);
     expect(child1.position.x).toEqual(10);
     expect(child1.position.y).toEqual(7);
 
@@ -85,5 +90,26 @@ describe("Node2d", () => {
     child1.rotation = 10;
     expect(child1.localRotation).toEqual(10);
     expect(child1.rotation).toEqual(15);
+  });
+
+  it("should update local transforms when global transform is updated", () => {
+    const root = new Node2d("root");
+    const child1 = new Node2d("child1", root);
+    expect(root.position.toLiteral()).toEqual({ x: 0, y: 0 });
+    expect(child1.position.toLiteral()).toEqual({ x: 0, y: 0 });
+
+    root.position.set(5, 5);
+    expect(root.position.toLiteral()).toEqual({ x: 5, y: 5 });
+    expect(root.localPosition.toLiteral()).toEqual({ x: 5, y: 5 });
+    expect(child1.position.toLiteral()).toEqual({ x: 5, y: 5 });
+    expect(child1.localPosition.toLiteral()).toEqual({ x: 0, y: 0 });
+
+    child1.position.set(0, 0);
+    expect(root.position.toLiteral()).toEqual({ x: 5, y: 5 });
+    expect(root.localPosition.toLiteral()).toEqual({ x: 5, y: 5 });
+    expect(child1.position.toLiteral()).toEqual({ x: 0, y: 0 });
+    expect(child1.localPosition.toLiteral()).toEqual({ x: -5, y: -5 });
+
+    child1.localPosition.set(-2.5, -2.5);
   });
 });

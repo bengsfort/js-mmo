@@ -1,13 +1,19 @@
 // eslint-disable @typescript-eslint/no-explicit-any
 
-import { Camera, RendererConfig, Scene, WebRenderer } from "@js-mmo/renderer";
-import { EngineConfig, GameLoop, InputPlatform, InputSystem, Node2d, Time, Vector2 } from "@js-mmo/engine";
+import { Camera, RendererConfig, Scene, Text2d, WebRenderer } from "@js-mmo/renderer";
+import { EngineConfig, GameLoop, GameWorld, InputPlatform, InputSystem, Node2d, Time, Vector2 } from "@js-mmo/engine";
 
 import { BoundingBox } from "./bounding_box";
+import { BackgroundBox } from "./background_box";
 
 declare global {
   interface Window {
-    NODES: Node2d[];
+    __SCENE__: Scene;
+    __CAMERA__: Camera;
+    __BOX__: typeof BoundingBox;
+    __STATIC_BOX__: BoundingBox;
+    __MOVING_BOX__: BoundingBox;
+    __V2__: typeof Vector2;
   }
 }
 
@@ -28,7 +34,11 @@ function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
   RendererConfig.PIXELS_PER_UNIT = 32;
+  EngineConfig.MAX_CELL_NODES = 50;
+  EngineConfig.WORLD_SIZE = 64;
   GameLoop.start();
+
+  const worldHalfSize = EngineConfig.WORLD_SIZE / 2;
 
   // Create renderer and add it to the update loop
   InputSystem.registerInputPlatform(InputPlatform.Web);
@@ -38,28 +48,39 @@ function main() {
   debugCanvas = WebRenderer.getActiveCanvas();
   WebRenderer.registerForceDraw(drawFps);
 
-  const scene = new Scene();
-  const camera = new Camera("Main", Vector2.Zero, Vector2.One, 0, scene);
+  const scene = new Scene("Main", new Vector2(0, 0));
+
+  scene.addEventListener("node_added", ev => console.log("External node_added listener on SCENE got payload:", ev));
+  scene.addEventListener("node_removed", ev => console.log("External node_removed listener on SCENE got payload:", ev));
+
+  const camera = new Camera("Main", scene);
+  camera.zoom = 1;
   scene.background = "#212121";
 
-  //   const root = new RotatingBox(new Vector2(64, 128), new Vector2(1, 1), 45, 15);
-  //   scene.addChild(root);
+  window.__CAMERA__ = camera;
 
-  //   const nodes = [root];
-  //   for (let i = 0; i < 10; i++) {
-  //     console.log("Node", i, "making the following its parent", nodes[i]);
-  //     nodes.push(new RotatingBox(new Vector2(32, 32), new Vector2(1.2, 1.2), 0, i - 5, nodes[i]));
-  //   }
-
-  const staticBox = new BoundingBox(
-    new Vector2(
-      debugCanvas.clientWidth / RendererConfig.PIXEL_RATIO / 2,
-      debugCanvas.clientHeight / RendererConfig.PIXEL_RATIO / 2
-    ),
-    "#00f",
+  const nwBox = new BackgroundBox(Vector2.One.multiplyScalar(-worldHalfSize / 2), worldHalfSize, "#f8f8f8", scene);
+  const neBox = new BackgroundBox(
+    scene.position.add(Vector2.One.multiplyScalar(worldHalfSize / 2)),
+    worldHalfSize,
+    "#f88",
     scene
   );
-  const movingBox = new BoundingBox(new Vector2(0, 0), "#3a0", scene, 128);
+  const swBox = new BackgroundBox(
+    scene.position.add(new Vector2(-worldHalfSize / 2, -worldHalfSize / 2)),
+    worldHalfSize,
+    "#ff8",
+    scene
+  );
+  const seBox = new BackgroundBox(
+    scene.position.add(new Vector2(worldHalfSize / 2, -worldHalfSize / 2)),
+    worldHalfSize,
+    "#88f",
+    scene
+  );
+
+  const staticBox = new BoundingBox(new Vector2(0, 0), "#00f", scene);
+  const movingBox = new BoundingBox(new Vector2(0, 0), "#3a0", scene);
 
   GameLoop.registerUpdateHandler(() => {
     const worldPos = camera.worldFromScreen(InputSystem.getPointerCoords());
@@ -76,8 +97,14 @@ function main() {
     }
   });
 
+  GameWorld.registerActiveScene(scene);
   WebRenderer.addScene(scene, camera);
-  window.NODES = [staticBox];
+
+  window.__SCENE__ = scene;
+  window.__STATIC_BOX__ = staticBox;
+  window.__MOVING_BOX__ = movingBox;
+  window.__BOX__ = BoundingBox;
+  window.__V2__ = Vector2;
 }
 
 main();

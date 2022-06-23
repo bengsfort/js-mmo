@@ -2,10 +2,9 @@ export const NOOP = () => {};
 
 export enum NodeTypes {
   Node,
-  Physics,
+  Query,
   Draw,
   Scene,
-  Layer,
   Group,
   Camera,
 }

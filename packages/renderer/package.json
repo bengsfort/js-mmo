@@ -14,10 +14,14 @@
   "scripts": {
     "start": "tsc -w -d --preserveWatchOutput",
     "build": "tsc -b",
-    "clean": "rimraf {build,tsconfig.tsbuildinfo}"
+    "clean": "rimraf {build,tsconfig.tsbuildinfo}",
+    "lint": "../../node_modules/.bin/eslint ./src --fix"
+  },
+  "peerDependencies": {
+    "@js-mmo/engine": "workspace:*"
   },
   "dependencies": {
-    "@js-mmo/engine": "*"
+    "@js-mmo/engine": "workspace:*"
   },
   "devDependencies": {
     "rimraf": "^3.0.2"

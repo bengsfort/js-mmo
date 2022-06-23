@@ -1,3 +1,4 @@
+import * as GameWorld from "./world";
 import * as Time from "./core/time";
 import { FIXED_UPDATE_ONLY, TICKS_PER_SECOND } from "./engine_config";
 import { inputSystemLoop } from "./input/input_system";
@@ -76,6 +77,7 @@ export function update(timestamp = 0): void {
   // Sample input first
   inputSystemLoop();
   // Then go on to our custom handlers
+  GameWorld.refresh();
   const handlers = [...updateHandlers.values(), ...postUpdateHandlers.values(), renderHandler];
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i]) handlers[i](timestamp);

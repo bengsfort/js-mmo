@@ -1,12 +1,10 @@
-import { InputSystem, NodeTypes, SceneObject, Time, Vector2 } from "@js-mmo/engine";
-import { RectDrawable, RenderingNode, createRect } from "@js-mmo/renderer";
+import { InputSystem, Time, Vector2 } from "@js-mmo/engine";
+import { RectDrawable, createRect, RenderObject } from "@js-mmo/renderer";
 
 import { InputEvents } from "./input_events";
 
-export class MovingBox extends SceneObject implements RenderingNode<RectDrawable> {
-  public type = NodeTypes.Draw;
-
-  private _drawable: RectDrawable;
+export class MovingBox extends RenderObject<RectDrawable> {
+  protected _drawable: RectDrawable;
   private _speed: number;
 
   public get drawable(): RectDrawable {
@@ -20,7 +18,9 @@ export class MovingBox extends SceneObject implements RenderingNode<RectDrawable
   }
 
   constructor(pos: Vector2, scale: Vector2, speed = 20) {
-    super("MovingBox", pos, scale, 0);
+    super("MovingBox");
+    this.position = pos;
+    this.scale = scale;
     this._drawable = createRect({
       position: this.position,
       width: 32,
@@ -36,18 +36,6 @@ export class MovingBox extends SceneObject implements RenderingNode<RectDrawable
   }
 
   update = () => {
-    if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
-      this.localPosition.y -= this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveDown)) {
-      this.localPosition.y += this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveLeft)) {
-      this.localPosition.x -= this._speed / Time.getDeltaTime();
-    }
-    if (InputSystem.inputEventDown(InputEvents.MoveRight)) {
-      this.localPosition.x += this._speed / Time.getDeltaTime();
-    }
     if (InputSystem.inputEventDown(InputEvents.Grow)) {
       this.localScale.x += 0.1;
       this.localScale.y += 0.1;

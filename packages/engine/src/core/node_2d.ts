@@ -3,15 +3,46 @@ import { Vector2 } from "../math/vector2";
 
 import { Node } from "./node";
 
-// @todo: See notes in node.ts. Do we need to re-think this?
+/**
+ * @todo: Better recursion and tracking of local vs. global transforms (scale, pos, rotation).
+ * Realistically, we should try to opt for a single position vector instance.
+ *
+ * This would mean removing the possibility to update position via something like:
+ * ```
+ * node.position = new Vector2(5, 5);
+ * ```
+ *
+ * Additionally, we need to update it so that for example updaing the global position via
+ * `node.position.set()` or similar, would actually update its global position. This
+ * would have to be done via:
+ *
+ * ```
+ * this.localPosition = this.parent.position - newGlobalPosition
+ * ```
+ *
+ * How we do this? Unsure. Either:
+ *
+ * - Remove `set`
+ * - Make all transform getters return the actual vector2 instance?
+ *  + This has complications when it comes to, for example, global `position`.
+ *  + Those complications mainly revolve around the fact we need to have some
+ *    api for actually updating an _instance_ of the vector2, and have those
+ *    changes reflected also in the local position. We can maybe do this by
+ *    improving the transform API, or adding a new `Position` api that extends
+ *    Vector2 and includes a `local` vector2, so it can update that whenever
+ *    `set` or any of the other match functions get called.
+ *  + Another option would be to add an event system to vector2, but that feels gross.
+ * - Force all transform getters to return a copy, and essentially force moving things via
+ *   built-in functions like `translate(x, y)`, `scale(x, y)`, etc.
+ */
 export class Node2d extends Node {
   public readonly transform: Transform;
 
-  public parent: Node2d | undefined;
-  public children: Node[] = [];
+  public get parent(): Node2d | undefined {
+    if (this._parent) return this._parent as Node2d;
+  }
 
-  // Add a matrix here?
-  // Do the parent/child operations on the matrix instead of the vectors
+  public children: Node[] = [];
 
   // Getters
   set localPosition(value: Vector2) {
@@ -40,7 +71,7 @@ export class Node2d extends Node {
   }
   get position(): Vector2 {
     if (this.parent) {
-      const parentPos = this.parent.position;
+      const parentPos = this.parent.position.copy();
       return Vector2.Add(this.transform.position, parentPos);
     }
     return this.transform.position;
@@ -72,8 +103,8 @@ export class Node2d extends Node {
   }
 
   // Constructor
-  constructor(name = "", pos = Vector2.Zero, scale = Vector2.One, rot = 0, parent?: Node2d) {
+  constructor(name = "", parent?: Node2d) {
     super(name, parent);
-    this.transform = new Transform(pos, scale, rot);
+    this.transform = new Transform(Vector2.Zero, Vector2.One, 0);
   }
 }

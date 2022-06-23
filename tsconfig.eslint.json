@@ -1,19 +1,24 @@
 {
-    "extends": "./tsconfig.base.json",
+    "extends": "./tsconfig.json",
     "include": [
       "./packages/engine/src/**/*.ts",
       "./packages/engine_tests/src/**/*.ts",
       "./packages/renderer/src/**/*.ts",
       "./packages/game/src/**/*.ts",
+      "./packages/core/src/**/*.ts",
+      // Tests
+      "./packages/tests/core-test/src/**/*.ts",
       "types/**/*"
     ],
-    "exclude": ["**/node_modules", "**/build"],
     "compilerOptions": {
         "paths": {
-            "@js-mmo/engine": [ "./packages/engine/src" ],
-            "@js-mmo/renderer": [ "./packages/renderer/src" ],
-            "@js-mmo/game": [ "./packages/game/src" ],
+          "@js-mmo/engine": [ "./packages/engine/src" ],
+          "@js-mmo/renderer": [ "./packages/renderer/src" ],
+          "@js-mmo/game": [ "./packages/game/src" ],
+          "@js-mmo/core": [ "./packages/core/src" ],
+          // Tests
+          "@js-mmo/core-tests": [ "./packages/tests/core-test/src" ],
         }
-    }
+    },
+    "exclude": ["**/node_modules", "**/build"],
   }
-  

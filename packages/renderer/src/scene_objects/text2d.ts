@@ -1,10 +1,12 @@
-import { Node2d, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
+import { Bounds, Node2d, NodeTypes, SceneObject, Vector2 } from "@js-mmo/engine";
 
 import { FontStretch, FontStyle, FontWeights, TextAlign, TextBaseline } from "../drawables/text/text_internal";
 import { RenderingNode } from "../drawables/rendering_node";
 import { createText, TextDrawable } from "../drawables/text/text";
 
-export class Text2d extends SceneObject implements RenderingNode<TextDrawable> {
+import { RenderObject } from "./render_object";
+
+export class Text2d extends RenderObject<TextDrawable> {
   public readonly type = NodeTypes.Draw;
 
   public text: string;
@@ -22,7 +24,7 @@ export class Text2d extends SceneObject implements RenderingNode<TextDrawable> {
   public outline?: string | undefined;
   public outlineWidth?: number | undefined;
 
-  private _drawable: TextDrawable;
+  protected _drawable: TextDrawable;
   public get drawable(): TextDrawable {
     this._drawable.data = {
       ...this._drawable.data,
@@ -46,13 +48,16 @@ export class Text2d extends SceneObject implements RenderingNode<TextDrawable> {
     return this._drawable;
   }
 
-  constructor(pos: Vector2, text: string, fontSize = 16, fontFamily = "mono", parent?: Node2d) {
-    super("Text", pos, Vector2.One, 0, parent);
+  constructor(pos: Vector2, text: string, fontSize = 16, fontFamily = "mono") {
+    super("Text");
 
+    this.position = pos;
     this.text = text;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
 
+    // @todo: The size should be dynamic, and calculated using `CanvasRenderingContext2d.measureText()`.
+    this._bounds = new Bounds(this.position, Vector2.One.multiplyScalar(32));
     this._drawable = createText({
       text,
       fontSize,

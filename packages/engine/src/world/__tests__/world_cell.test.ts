@@ -1,8 +1,20 @@
+/**
+ * @jest-environment jsdom
+ * @todo: remove jsdom for this (only used due to debugging)
+ */
+
 import { Vector2 } from "../../math/vector2";
-import { Bounds } from "../bounds";
-import { WorldCell } from "../world_cell";
+import { Bounds } from "../../math/bounds";
+import { WorldCell, WorldUnit } from "../world_cell";
+import { QueryableObject } from "../../scene/queryable_object";
 
 describe("WorldCell", () => {
+  function makeWorldUnitFromBounds(bounds: Bounds): WorldUnit {
+    return new WorldUnit({
+      node: new QueryableObject(bounds.position, bounds.size),
+    });
+  }
+
   it("should create a cell with the given position and size", () => {
     const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
     expect(cell).toBeInstanceOf(WorldCell);
@@ -18,9 +30,15 @@ describe("WorldCell", () => {
     const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
     expect(cell.totalChildCount).toEqual(0);
 
-    const inRegion1 = new Bounds(Vector2.One, Vector2.One);
-    const inRegion2 = new Bounds(new Vector2(-5, -3), Vector2.One);
-    const outsideRegion = new Bounds(new Vector2(-12, -13), new Vector2(2, 2));
+    const inRegion1 = new WorldUnit({
+      node: new QueryableObject(Vector2.One, Vector2.One),
+    });
+    const inRegion2 = new WorldUnit({
+      node: new QueryableObject(new Vector2(-5, -3), Vector2.One),
+    });
+    const outsideRegion = new WorldUnit({
+      node: new QueryableObject(new Vector2(-12, -13), new Vector2(2, 2)),
+    });
 
     expect(cell.insert(inRegion1)).toEqual(true);
     expect(cell.totalChildCount).toEqual(1);
@@ -37,10 +55,10 @@ describe("WorldCell", () => {
     const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 4);
     expect(cell.totalChildCount).toEqual(0);
 
-    const nw = new Bounds(new Vector2(-5, 3), Vector2.One);
-    const ne = new Bounds(new Vector2(3, 6), Vector2.One);
-    const sw = new Bounds(new Vector2(-8, -7), Vector2.One);
-    const se = new Bounds(new Vector2(6, -9), Vector2.One);
+    const nw = makeWorldUnitFromBounds(new Bounds(new Vector2(-5, 3), Vector2.One));
+    const ne = makeWorldUnitFromBounds(new Bounds(new Vector2(3, 6), Vector2.One));
+    const sw = makeWorldUnitFromBounds(new Bounds(new Vector2(-8, -7), Vector2.One));
+    const se = makeWorldUnitFromBounds(new Bounds(new Vector2(6, -9), Vector2.One));
 
     cell.insert(nw);
     cell.insert(ne);
@@ -50,7 +68,7 @@ describe("WorldCell", () => {
     expect(cell.children.length).toEqual(4);
     expect(cell.totalChildCount).toEqual(4);
 
-    const nw2 = new Bounds(new Vector2(-6, 7), Vector2.One);
+    const nw2 = makeWorldUnitFromBounds(new Bounds(new Vector2(-6, 7), Vector2.One));
     cell.insert(nw2);
 
     expect(cell.totalCellCount).toEqual(5); // this cell + 4 children
@@ -63,10 +81,10 @@ describe("WorldCell", () => {
     // min: -1, -1; max: 1, 1
     const cell = new WorldCell(Vector2.Zero, new Vector2(2, 2), 1);
 
-    const nw = new Bounds(new Vector2(-0.75, 0.75), Vector2.One);
-    const ne = new Bounds(new Vector2(0.5, 0.5), Vector2.One);
-    const sw = new Bounds(new Vector2(-0.5, -0.5), Vector2.One);
-    const se = new Bounds(new Vector2(0.5, -0.5), Vector2.One);
+    const nw = makeWorldUnitFromBounds(new Bounds(new Vector2(-0.75, 0.75), Vector2.One));
+    const ne = makeWorldUnitFromBounds(new Bounds(new Vector2(0.5, 0.5), Vector2.One));
+    const sw = makeWorldUnitFromBounds(new Bounds(new Vector2(-0.5, -0.5), Vector2.One));
+    const se = makeWorldUnitFromBounds(new Bounds(new Vector2(0.5, -0.5), Vector2.One));
 
     expect(cell.insert(nw)).toEqual(true);
     expect(cell.totalChildCount).toEqual(1);
@@ -106,7 +124,7 @@ describe("WorldCell", () => {
     expect(cell.se?.totalChildCount).toEqual(1);
 
     // Make sure children can subdivide similarly
-    const nw_se = new Bounds(new Vector2(-0.25, 0.25), Vector2.One);
+    const nw_se = makeWorldUnitFromBounds(new Bounds(new Vector2(-0.25, 0.25), Vector2.One));
     expect(cell.insert(nw_se)).toEqual(true);
     expect(cell.totalChildCount).toEqual(5);
     expect(cell.totalActiveCellCount).toEqual(5);
@@ -117,6 +135,26 @@ describe("WorldCell", () => {
     expect(cell.nw?.totalCellCount).toEqual(5);
     expect(cell.nw?.nw?.totalChildCount).toEqual(1);
     expect(cell.nw?.se?.totalChildCount).toEqual(1);
+  });
+
+  it("should remove a point", () => {
+    // -10, -10 : 10, 10
+    const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 3);
+
+    const nwBody1 = makeWorldUnitFromBounds(new Bounds(new Vector2(-5, 5), Vector2.One));
+    const nwBody2 = makeWorldUnitFromBounds(new Bounds(new Vector2(-7.5, 7.5), new Vector2(2, 2)));
+
+    cell.insert(nwBody1);
+    cell.insert(nwBody2);
+
+    expect(cell.totalChildCount).toEqual(2);
+    expect(cell.children).toContain(nwBody2);
+
+    expect(cell.remove(nwBody2)).toEqual(true);
+    expect(cell.totalChildCount).toEqual(1);
+    expect(cell.children).not.toContain(nwBody2);
+
+    expect(cell.remove(nwBody2)).toEqual(false);
   });
 
   it("should return if a point or range is within it's boundaries", () => {
@@ -133,11 +171,11 @@ describe("WorldCell", () => {
     // -10, -10 : 10, 10
     const cell = new WorldCell(Vector2.Zero, new Vector2(20, 20), 2);
 
-    const nwBody1 = new Bounds(new Vector2(-5, 5), Vector2.One);
-    const nwBody2 = new Bounds(new Vector2(-7.5, 7.5), new Vector2(2, 2));
-    const nwBody3 = new Bounds(new Vector2(-2.5, 2.5), Vector2.One);
+    const nwBody1 = makeWorldUnitFromBounds(new Bounds(new Vector2(-5, 5), Vector2.One));
+    const nwBody2 = makeWorldUnitFromBounds(new Bounds(new Vector2(-7.5, 7.5), new Vector2(2, 2)));
+    const nwBody3 = makeWorldUnitFromBounds(new Bounds(new Vector2(-2.5, 2.5), Vector2.One));
 
-    const neBody1 = new Bounds(new Vector2(2.5, 5), Vector2.One);
+    const neBody1 = makeWorldUnitFromBounds(new Bounds(new Vector2(2.5, 5), Vector2.One));
 
     cell.insert(nwBody1);
     cell.insert(nwBody2);

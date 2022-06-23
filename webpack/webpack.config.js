@@ -6,7 +6,7 @@ const DEFAULT_OUTPUT = {
     filename: '[name].js',
 };
 
-const makeWebpackConfig = (entry, output = DEFAULT_OUTPUT, mode = 'development', devPort = 3000, templateName = "src/template.html") => ({
+const makeWebpackConfig = (entry, output = DEFAULT_OUTPUT, mode = 'development', devPort = 3000, templateName = "src/template.html", displayName = '@js-mmo/game') => ({
   mode,
   context: process.cwd(),
   resolve: {
@@ -18,7 +18,7 @@ const makeWebpackConfig = (entry, output = DEFAULT_OUTPUT, mode = 'development',
     new HtmlWebpackPlugin({
       inject: true,
       template: templateName,
-      title: '@js-mmo/game',
+      title: displayName,
     }),
   ],
   module: {

@@ -15,7 +15,8 @@ import { MovingBox } from "./moving_box";
 
 declare global {
   interface Window {
-    MOVING_BOX: SceneObject;
+    __SCENE__: Scene;
+    __MOVING_BOX__: SceneObject;
   }
 }
 
@@ -28,7 +29,18 @@ const drawFps = () => {
   ctx.textAlign = "left";
   ctx.fillStyle = "#ffffff";
   ctx.font = "16px monospace";
-  ctx.fillText(`Current FPS: ${Time.getCurrentFps().toFixed(2)}`, 16, 48);
+  ctx.fillText(`Current FPS: ${Time.getCurrentFps().toFixed(2)}`, 24, 48);
+  ctx.restore();
+};
+
+const drawCameraPos = (camera: Camera) => () => {
+  if (!debugCanvas) return;
+  const ctx = debugCanvas.getContext("2d") as CanvasRenderingContext2D;
+  ctx.save();
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "16px monospace";
+  ctx.fillText(`Camera pos: (${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)})`, 24, 64);
   ctx.restore();
 };
 
@@ -36,6 +48,7 @@ function main() {
   EngineConfig.LOG_VERBOSE = false;
   EngineConfig.FIXED_UPDATE_ONLY = false;
   RendererConfig.PIXELS_PER_UNIT = 32;
+  RendererConfig.SHOW_UNIT_GRID = true;
 
   void InputSystem.registerInputPlatform(InputPlatform.Web);
   InputSystem.registerInputMap({
@@ -61,10 +74,34 @@ function main() {
   const camera = new Camera();
 
   const box = new MovingBox(new Vector2(0, 0), new Vector2(1, 1), 10);
-  scene.addChild(box);
+  box.setParent(scene);
 
+  GameLoop.registerUpdateHandler(() => {
+    if (InputSystem.inputEventDown(InputEvents.MoveUp)) {
+      camera.localPosition.y -= 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveDown)) {
+      camera.localPosition.y += 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveLeft)) {
+      camera.localPosition.x -= 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.MoveRight)) {
+      camera.localPosition.x += 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.Grow)) {
+      camera.zoom += 1 / Time.getDeltaTime();
+    }
+    if (InputSystem.inputEventDown(InputEvents.Shrink)) {
+      camera.zoom -= 1 / Time.getDeltaTime();
+    }
+  });
+
+  WebRenderer.registerForceDraw(drawCameraPos(camera));
   WebRenderer.addScene(scene, camera);
-  window.MOVING_BOX = box;
+
+  window.__MOVING_BOX__ = box;
+  window.__SCENE__ = scene;
 }
 
 main();
