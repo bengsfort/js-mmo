@@ -9,7 +9,7 @@ export abstract class Bounds {
   public debugColor = "#f0f";
 
   public get position(): Vector2 {
-    return Vector2.Add(this.transform?.getWorldPosition() ?? new Vector2(), this.offset);
+    return this.transform?.getWorldPosition() ?? this.offset;
   }
 
   // Primitive operations

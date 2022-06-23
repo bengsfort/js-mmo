@@ -63,7 +63,7 @@ export class TranslateTest extends Node2D {
   }
 
   public update(timeframe: number): void {
-    // this._innerSquare.position.set((Math.cos(timeframe * 0.005) * this._parentWidth) / 4, 0);
+    this._innerSquare.position.set((Math.cos(timeframe * 0.005) * this._parentWidth) / 4, 0);
     this._outerSquare.position.set(0, (Math.sin(timeframe * 0.001) * this._parentHeight) / 2);
 
     this._valuesLabel.text = this.getLabel();

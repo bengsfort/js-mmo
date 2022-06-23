@@ -16,18 +16,18 @@ export class RectBounds extends Bounds {
     const globalScale = this.transform.getWorldScale();
 
     return points.map(point => {
-      // Apply scale
-      point.multiply(globalScale);
-
       // Apply rotation
       const radians = MathUtils.convertDegreesToRadians(globalRotation);
       const cos = Math.cos(radians);
       const sin = Math.sin(radians);
       point.set(point.x * cos - point.y * sin, point.x * sin + point.y * cos);
 
+      // Apply scale
+      point.multiply(globalScale);
+
       // Apply offset
-      point.x += globalPos.x;
-      point.y += globalPos.y;
+      point.x += globalPos.x - this.offset.x;
+      point.y += globalPos.y - this.offset.y;
 
       return point;
     });
